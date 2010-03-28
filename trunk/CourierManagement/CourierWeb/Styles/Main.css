@@ -1,0 +1,284 @@
+﻿body 
+{
+    padding: 20px;
+    background: #FFFFFF;
+}
+
+html
+{
+    font-family:Verdana;
+    font-size: 11px;
+    color: #343434;
+}
+
+/******************************************************/
+
+.formInputCaption
+{
+    font-weight:bold;
+    font-size: 10px;
+    color: #555555;
+}
+
+.formInputText
+{
+    border: solid 1px #A0A0A0;
+    border-right: solid 1px #C0C0C0;
+    border-bottom: solid 1px #C0C0C0;
+    height: 16px;
+}
+
+.formInputTextError
+{
+    border: solid 1px #ff6c6c;
+    border-right: solid 1px #ff7f7f;
+    border-bottom: solid 1px #ff7f7f;
+    background: #fdf1f1;
+    height: 16px;
+}
+
+.formInputTextReadOnly
+{
+    border: solid 1px #E0E0E0;
+    background: #F2F2F2;
+    height: 16px;
+}
+
+.formInputTextArea
+{
+    border: solid 1px #A0A0A0;
+    border-right: solid 1px #C0C0C0;
+    border-bottom: solid 1px #C0C0C0;
+}
+
+.formInputDescription
+{
+    color: #777777;
+}
+
+.formInputButton
+{
+    border: solid 1px #808080;
+    border-top: solid 1px #C0C0C0;
+    border-left: solid 1px #C0C0C0;
+    background: #e3f61c;
+    font-weight:bold;
+    font-size:11px;
+    color: #343434;
+    height: 22px;
+    padding-left:8px;
+    padding-right:8px;
+}
+
+.formInputButton[disabled]
+{
+    border: solid 1px #808080;
+    border-top: solid 1px #C0C0C0;
+    border-left: solid 1px #C0C0C0;
+    background: #808080;
+    font-weight: bold;
+    font-size: 11px;
+    color: #343434;
+    height: 22px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.formInputButtonSmall
+{
+    border: solid 1px #808080;
+    border-top: solid 1px #C0C0C0;
+    border-left: solid 1px #C0C0C0;
+    background: #e3f61c;
+    font-weight:bold;
+    font-size:11px;
+    color: #343434;
+    height: 18px;
+}
+
+.formInputSection
+{
+    margin: 2px;
+    border: solid 1px #E0E0E0;
+    padding:5px;
+}
+
+.formInputRow
+{
+    padding-top: 2px;
+    padding-bottom: 4px;
+}
+
+.formInputButtonsRow
+{
+   border-top: solid 2px #E9E9E9;
+   margin-top:8px;
+   margin-bottom:6px;
+   padding-top: 8px;
+   padding-left: 8px;
+}
+
+.validationMessage
+{
+    color: #EE0000;
+}
+
+.errorMessage
+{
+    color: #EE0000;
+}
+
+.mainErrorMessage
+{
+	display: block;
+    padding: 5px;
+    border: solid 1px #CC3300;
+    background: #FFDACF;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+	
+}
+
+.loadingErrorMessage
+{
+    color: #EE0000;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.notifyMessage
+{
+	display: block;
+    padding: 5px;
+    border: solid 1px #009900;
+    background: #E9FFE9;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+
+}
+
+.number
+{
+	text-align: right;	
+}
+
+
+/******************************************************/
+
+.title
+{
+    font-size: 22px;
+    font-weight:bold;
+    color: #34303e;
+    margin-bottom: 15px;
+    text-align:center;
+}
+
+.frame
+{
+    width: 980px;
+    background: url(../Images/FrameBottom.gif) bottom repeat-x;
+}
+
+.sideBorders
+{
+    border-left: solid 1px #d2d2d2;
+    border-right: solid 1px #d2d2d2;
+}
+
+.frameTopLeft
+{
+    width: 14px;
+    height: 16px;
+    font-size: 1px;
+    background: url(../Images/FrameTopLeft.gif) no-repeat;
+}
+
+.frameTopRight
+{
+    width: 14px;
+    height: 16px;
+    font-size: 1px;
+    background: url(../Images/FrameTopRight.gif) right no-repeat;
+}
+
+.frameTop
+{
+    font-size: 1px;
+    background: url(../Images/FrameTop.gif) repeat-x;
+}
+
+.frameBottomLeft
+{
+    width: 14px;
+    height: 16px;
+    font-size: 1px;
+    background: url(../Images/FrameBottomLeft.gif) no-repeat;
+}
+
+.frameBottomRight
+{
+    width: 14px;
+    height: 16px;
+    font-size: 1px;
+    background: url(../Images/FrameBottomRight.gif) no-repeat;
+}
+
+.stepTitle
+{
+    background:#eeeeee;
+    margin: 1px;
+    margin-top:0;
+    padding-left: 5px;
+}
+
+.stepTitle .stepTitleValue
+{
+    font-size: 12px;
+    font-weight: bold;
+    color: #34303e;
+    padding-bottom: 2px;
+}
+
+.stepTitle .stepTitleDescription
+{
+    font-size: 11px;
+    padding-bottom: 8px;
+}
+
+.stepContent
+{
+    padding: 2px;
+}
+
+.sectionTitle
+{
+	font-size: 12px;
+    font-weight: bold;
+    color: #34303e;
+    padding-bottom: 2px;
+}
+
+.adminAddItemLine
+{
+	background: #F6F6F6;
+}
+
+.comment
+{
+	padding-left: 30px;	
+}
+
+/*************************/
+
+.rightAlignment
+{
+    position: absolute; 
+    right: 0; 
+    padding-right:5px;
+    text-align: right;
+}
