@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DALCourier", "DALCourier\DALCourier.csproj", "{CC03150D-9143-4342-8B52-BB37726F7113}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourierLibrary", "CourierLibrary\CourierLibrary.csproj", "{8A040063-CF19-4EDE-93AC-A6BF7E46F813}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CourierWeb", "..\..\..\..\Documents\Visual Studio 2008\Projects\CourierManagement\CourierWeb\", "{228ADDF0-71E9-44D4-8025-CC4126D3CA4B}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "3.5"
+		Debug.AspNetCompiler.VirtualPath = "/CourierWeb"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\Documents\Visual Studio 2008\Projects\CourierManagement\CourierWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\CourierWeb\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/CourierWeb"
+		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\Documents\Visual Studio 2008\Projects\CourierManagement\CourierWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\CourierWeb\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "24413"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC03150D-9143-4342-8B52-BB37726F7113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC03150D-9143-4342-8B52-BB37726F7113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC03150D-9143-4342-8B52-BB37726F7113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC03150D-9143-4342-8B52-BB37726F7113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A040063-CF19-4EDE-93AC-A6BF7E46F813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A040063-CF19-4EDE-93AC-A6BF7E46F813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A040063-CF19-4EDE-93AC-A6BF7E46F813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A040063-CF19-4EDE-93AC-A6BF7E46F813}.Release|Any CPU.Build.0 = Release|Any CPU
+		{228ADDF0-71E9-44D4-8025-CC4126D3CA4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{228ADDF0-71E9-44D4-8025-CC4126D3CA4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{228ADDF0-71E9-44D4-8025-CC4126D3CA4B}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{228ADDF0-71E9-44D4-8025-CC4126D3CA4B}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
