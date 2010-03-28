@@ -13,7 +13,7 @@ using System.Threading;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-public partial class Default : System.Web.UI.Page
+public partial class Login : System.Web.UI.Page
 {
     private string strSelectOperator = "- select operator -";
     private string strErrInvalidLoginDetails = "Invalid login details.";
@@ -22,13 +22,21 @@ public partial class Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         pnlErrorMessage.Visible = false;
-        btnLogin.Attributes.Add("onClick", "return valSubmit();"); 
+        btnLogin.Attributes.Add("onClick", "return valSubmit();");
+        tbPassword.TextChanged += new EventHandler(tbPassword_TextChanged);
+        btnLogin.Enabled = false;
 
         if (!Page.IsPostBack)
         {
             LoadOperators();
         }
     }
+
+    void tbPassword_TextChanged(object sender, EventArgs e)
+    {
+        btnLogin.Enabled = tbPassword.Text.Trim().Length > 6 && ddlOperators.SelectedValue != "";
+    }
+
     /// <summary>
     /// Loads opeator names in ddlSalesOperator.
     /// </summary>
