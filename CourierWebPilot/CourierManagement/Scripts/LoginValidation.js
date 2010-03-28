@@ -1,7 +1,8 @@
 ﻿function valSubmit() {
     var doc = document.forms[0];
     var msg = "";
-    alert(doc.dllOperators.Options[0].value);
+    alert('1 ' + document.getElementById('dllOperators').Options[0].value);
+    alert('2 ' + doc.dllOperators.Options[0].value);
     if (doc.ddlOperators.selectedIndex == 0) {
         msg += "Please choose operator username.n";
     }
@@ -14,5 +15,5 @@
     } else {
         alert(msg);
         return false;
-    } 
+    }
 }

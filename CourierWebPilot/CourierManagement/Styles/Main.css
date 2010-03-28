@@ -70,6 +70,20 @@ html
     padding-right:8px;
 }
 
+.formInputButton[disabled]
+{
+    border: solid 1px #808080;
+    border-top: solid 1px #C0C0C0;
+    border-left: solid 1px #C0C0C0;
+    background: #808080;
+    font-weight: bold;
+    font-size: 11px;
+    color: #343434;
+    height: 22px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
 .formInputButtonSmall
 {
     border: solid 1px #808080;
@@ -161,6 +175,7 @@ html
     font-weight:bold;
     color: #34303e;
     margin-bottom: 15px;
+    text-align:center;
 }
 
 .frame
@@ -256,4 +271,14 @@ html
 .comment
 {
 	padding-left: 30px;	
+}
+
+/*************************/
+
+.rightAlignment
+{
+    position: absolute; 
+    right: 0; 
+    padding-right:5px;
+    text-align: right;
 }
