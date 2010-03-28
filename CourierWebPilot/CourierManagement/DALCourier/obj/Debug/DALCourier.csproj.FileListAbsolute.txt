@@ -1,0 +1,10 @@
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\WebSite1\DALCourier\bin\Debug\DALCourier.dll
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\WebSite1\DALCourier\bin\Debug\DALCourier.pdb
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\WebSite1\DALCourier\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\WebSite1\DALCourier\obj\Debug\DALCourier.dll
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\WebSite1\DALCourier\obj\Debug\DALCourier.pdb
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\CourierWeb\DALCourier\bin\Debug\DALCourier.dll
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\CourierWeb\DALCourier\bin\Debug\DALCourier.pdb
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\CourierWeb\DALCourier\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\CourierWeb\DALCourier\obj\Debug\DALCourier.dll
+C:\Users\MMarinov\Documents\Visual Studio 2008\Projects\CourierWeb\DALCourier\obj\Debug\DALCourier.pdb
