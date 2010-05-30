@@ -21,9 +21,7 @@
 
         public CrawlingManager()
         {
-            SeedList.GetTheList();
-
-            ResetFolders();
+           
         }
 
         private static void WriteLog(object o)
@@ -53,6 +51,10 @@
         /// <param name="p"></param>
         public void StartSpider()
         {
+            SeedList.GetTheList();
+
+            ResetFolders();
+
             timer = new System.Threading.Timer(new System.Threading.TimerCallback((WriteLog)), null, 200, 3000);
 
             spider = new MMarinov.WebCrawler.Indexer.Spider();

@@ -10,10 +10,10 @@ namespace MMarinov.WebCrawler.Indexer
 
         public static void GetTheList()
         {
-            //if (DownloadFile())
-            //{
-            //    ExtractZipArchive();
-            //}
+            if (DownloadFile())
+            {
+                ExtractZipArchive();
+            }
 
             FetchFromCVS();
         }
