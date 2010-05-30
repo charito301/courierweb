@@ -17,6 +17,6 @@ namespace MMarinov.WebCrawler
         /// <summary>
         /// Regex pattern that matches sequence of empty spaces
         /// </summary>
-        public static readonly string MatchEmptySpacesPattern = @"\s+";
+        public static readonly string MatchEmptySpacesPattern = @"\s+"; 
     }
 }
