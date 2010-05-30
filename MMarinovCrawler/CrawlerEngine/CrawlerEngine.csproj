@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{18B63C5A-851E-430B-80FA-6D48F23753F0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MMarinov.WebCrawler</RootNamespace>
+    <AssemblyName>CrawlerEngine</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FontBox-0.1.0-dev, Version=0.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\FontBox-0.1.0-dev.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.GNU.Classpath, Version=0.30.0.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58" />
+    <Reference Include="IKVM.Runtime, Version=0.30.0.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58" />
+    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
+    <Reference Include="PDFBox-0.7.3, Version=0.0.0.0, Culture=neutral" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UltraID3Lib, Version=0.9.6.6, Culture=neutral, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common.cs" />
+    <Compile Include="Indexer\Documents\Mp3Document.cs" />
+    <Compile Include="Indexer\SeedList.cs" />
+    <Compile Include="Indexer\Catalog.cs" />
+    <Compile Include="Indexer\File.cs" />
+    <Compile Include="Preferences.cs" />
+    <Compile Include="Stemming\IStemming.cs" />
+    <Compile Include="Stemming\NoStemming.cs" />
+    <Compile Include="Stemming\PorterStemmer.cs" />
+    <Compile Include="StopWords\IStopper.cs" />
+    <Compile Include="StopWords\StopWords.cs" />
+    <Compile Include="Indexer\Word.cs" />
+    <Compile Include="Indexer\CrawlingManager.cs" />
+    <Compile Include="Indexer\Documents\Document.cs" />
+    <Compile Include="Indexer\Documents\DocumentFactory.cs" />
+    <Compile Include="Indexer\Documents\PdfDocument.cs" />
+    <Compile Include="Indexer\Documents\HtmlDocument.cs" />
+    <Compile Include="Report\ProgressEventArgs.cs" />
+    <Compile Include="Indexer\RobotsTxt.cs" />
+    <Compile Include="Indexer\Spider.cs" />
+    <Compile Include="Indexer\Documents\TextDocument.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\Logger.cs" />
+    <Compile Include="Report\Reporting.cs" />
+    <Compile Include="ThreadedGenerics\TDictionary.cs" />
+    <Compile Include="ThreadedGenerics\TList.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLLs\IKVM.GNU.Classpath.dll" />
+    <Content Include="DLLs\IKVM.Runtime.dll" />
+    <Content Include="DLLs\Ionic.Zip.dll" />
+    <Content Include="DLLs\PDFBox-0.7.3.dll" />
+    <Content Include="DLLs\UltraID3Lib.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
