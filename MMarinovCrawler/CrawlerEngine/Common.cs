@@ -8,7 +8,7 @@ namespace MMarinov.WebCrawler
     public static class Common
     {
         public static readonly char[] Separators = new char[] { ' ', '|', '&', '^', '@', '!', '?', '`', '~', '_', '/', '\"', ',', '\'', ';', ':', '.', '(', ')', '[', ']', '<', '>', '%', '*', '$', '+', '-', '=', '#', '*', '€', '£' };
-        
+
         /// <summary>
         /// Regex pattern that matches sequence of www a digit(may not occur) and a dot
         /// </summary>
@@ -17,6 +17,17 @@ namespace MMarinov.WebCrawler
         /// <summary>
         /// Regex pattern that matches sequence of empty spaces
         /// </summary>
-        public static readonly string MatchEmptySpacesPattern = @"\s+"; 
+        public static readonly string MatchEmptySpacesPattern = @"\s+";
+
+        public const string ErrorLogsFolder = "\\ErrorLogs";
+        public const string MessageLogsFolder = "\\MessageLogs";
+
+        public static readonly string ErrorLog = ErrorLogsFolder + "\\ErrorLog.txt";
+        public static readonly string ErrorWebLog = ErrorLogsFolder + "\\ErrorWebLog.txt";
+        public static readonly string ErrorWebTimeoutLog = ErrorLogsFolder + "\\ErrorWebTimeoutLog.txt";
+        public static readonly string ErrorWebProtocolLog = ErrorLogsFolder + "\\ErrorWebProtocolLog.txt";
+
+        public static readonly string MessagesLog = MessageLogsFolder + "\\MessagesLog.txt";
+        public static readonly string IndexedLinksLog = MessageLogsFolder + "\\IndexedLinksLog.txt";
     }
 }

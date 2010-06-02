@@ -53,7 +53,7 @@ namespace MMarinov.WebCrawler.Indexer
                 _csvFilename = zipFileNew.FileName;
                 zipFileNew.Extract(Preferences.WorkingPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
 
-                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + Preferences.WorkingPath + "\\" + _csvFilename + " extracted at " + System.DateTime.Now);
+                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + Preferences.WorkingPath + "\\" + _csvFilename + " extracted at " + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm"), Report.EventTypes.Other);
             }
         }
 
@@ -72,7 +72,7 @@ namespace MMarinov.WebCrawler.Indexer
                 System.Net.WebClient client = new System.Net.WebClient();
                 client.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler(client_DownloadFileCompleted);
                 client.DownloadFile(uriZip, _zipFilename);
-                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + _zipFilename + " downloaded at " + System.DateTime.Now);
+                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + _zipFilename + " downloaded at " + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm"), Report.EventTypes.Other);
 
                 return true;
             }

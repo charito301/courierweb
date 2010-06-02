@@ -20,12 +20,15 @@ namespace MMarinov.WebCrawler.Indexer
         //private object _GlobalURLsToVisitSyncObj = new object();
         //private object _GlobalVisitedURLsSyncObj = new object();
 
-        private volatile bool _shouldStop = false;
-        private System.Threading.Thread[] ThreadArray;
+        private int _spiderIndex = 0;
+        private System.Threading.Thread thread;
         //private System.Threading.EventWaitHandle _threadWaitHandle = new System.Threading.AutoResetEvent(false);
 
         private ThreadedGenerics.TList<string> _visitedLinks = new ThreadedGenerics.TList<string>();
         private ThreadedGenerics.TList<string> _externalLinks = new ThreadedGenerics.TList<string>();
+
+        private static Int64 _totalCrawledLinks = 0;
+        private static Int64 _totalSuccessfulLinks = 0;
 
         /// <summary></summary>
         private MMarinov.WebCrawler.Indexer.Catalog _Catalog;
@@ -59,47 +62,35 @@ namespace MMarinov.WebCrawler.Indexer
         }
         #endregion
 
-        public Spider()
+        public Spider(int spiderIndex)
         {
-            ThreadArray = new System.Threading.Thread[Preferences.ThreadsCount];
-
-            _shouldStop = false;
+            _spiderIndex = spiderIndex;
 
             try
             {
-                for (int i = 0; i < Preferences.ThreadsCount; i++)
-                {
-                    ThreadArray[i] = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(this.BuildCatalog));
-                    ThreadArray[i].Name = "SpiderThread " + i;
-                    ThreadArray[i].Start((object)i);
+                thread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(this.BuildCatalog));
+                thread.Start((object)spiderIndex);
 
-                    ProgressEvent(new ProgressEventArgs(EventTypes.Start, i + " : Crawling started in " + DateTime.Now));
-                }
+                ProgressEvent(new ProgressEventArgs(EventTypes.Start, "[Spider " + _spiderIndex + "] : Crawling started in " + DateTime.Now));
             }
             catch (System.Exception e)
             {
-                ProgressEvent(new ProgressEventArgs(new System.Exception("Error while creating Threads: ", e)));
+                ProgressEvent(new ProgressEventArgs(new System.Exception("Error while creating Spider: " + _spiderIndex, e)));
             }
         }
 
-        public void KillThreads()
+        public void KillThread()
         {
-            _shouldStop = true;
+            CrawlingManager.ShouldStopThreads = true;
 
-            ProgressEvent(new ProgressEventArgs(EventTypes.End, "Killing threads..."));
+            ProgressEvent(new ProgressEventArgs(EventTypes.End, "Killing spider ... " + _spiderIndex));
 
-            System.Threading.Thread.Sleep(1000);
-
-            for (int i = 0; i < Preferences.ThreadsCount; i++)
+            if (thread.IsAlive)
             {
-                if (ThreadArray[i].IsAlive)
-                {
-                    ThreadArray[i].Abort();
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, "Thread " + i + " killed"));
-                }
-            }
+                thread.Abort();
 
-            System.Threading.Thread.Sleep(1000);
+                ProgressEvent(new ProgressEventArgs(EventTypes.End, "Spider " + _spiderIndex + " killed"));
+            }
         }
 
         /// <summary>
@@ -113,7 +104,7 @@ namespace MMarinov.WebCrawler.Indexer
         {
             Uri startPageUri;
 
-            while (!_shouldStop)
+            while (!CrawlingManager.ShouldStopThreads)
             {
                 startPageUri = null;
 
@@ -123,14 +114,14 @@ namespace MMarinov.WebCrawler.Indexer
                 //    {
                 if (GlobalURLsToVisit.Count == 0)
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, (int)threadID + " : Empty GlobalURLsToVisit at: " + DateTime.Now));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "] : Empty GlobalURLsToVisit at: " + DateTime.Now));
 
                     StopThreadsOnEmptyURLsList();
 
                     continue;
                 }
 
-                ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, (int)threadID + " : Get from GlobalURLsToVisit: " + GlobalURLsToVisit[0]));
+                //ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, (int)threadID + " : Get from GlobalURLsToVisit: " + GlobalURLsToVisit[0]));
                 GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
 
                 startPageUri = new Uri(GlobalURLsToVisit[0]);
@@ -140,7 +131,7 @@ namespace MMarinov.WebCrawler.Indexer
 
                 if (startPageUri != null)
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, (int)threadID + " : Crawling website: " + startPageUri.AbsoluteUri));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.Start, "[Spider " + (int)threadID + "] : Crawling website: " + startPageUri.AbsoluteUri));
 
                     InitListsAndPreferences();
 
@@ -153,14 +144,16 @@ namespace MMarinov.WebCrawler.Indexer
                     _Catalog.MergeResultsRange();
 
                     _Catalog.SaveWebSiteFilesToDB();
+
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "]: GlobalCatalog => Words(" + CrawlingManager.GlobalCatalog.Words.Count + ") Files(" + CrawlingManager.GlobalCatalog.Files.Count + ")"));
                 }
                 else
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, (int)threadID + " : No more tasks - wait for a signal "));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "] : No more tasks - wait for a signal "));
                 }
             }
 
-            ProgressEvent(new ProgressEventArgs(EventTypes.End, (int)threadID + " Crawling finished at: " + DateTime.Now));
+            ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "] Crawling finished at: " + DateTime.Now));
         }
 
         private void InitListsAndPreferences()
@@ -181,22 +174,19 @@ namespace MMarinov.WebCrawler.Indexer
         {
             int nonWorkingThreads = 0;
 
-            foreach (System.Threading.Thread thread in ThreadArray)
+            if (!thread.IsAlive)
             {
-                if (!thread.IsAlive)
-                {
-                    nonWorkingThreads++;
-                }
+                nonWorkingThreads++;
             }
 
             if (nonWorkingThreads == Preferences.ThreadsCount)
             {
-                _shouldStop = true;
+                CrawlingManager.ShouldStopThreads = true;
 
-                KillThreads();
+                KillThread();
             }
 
-            return _shouldStop;
+            return CrawlingManager.ShouldStopThreads;
         }
 
         private void MergeExternalGlobalLinks()
@@ -266,8 +256,8 @@ namespace MMarinov.WebCrawler.Indexer
         }
 
         /// <summary>
-        ///GETS THE FIRST DOCUMENT, AND STARTS THE SPIDER! -- create the 'root' document 
-        // RECURSIVE CALL TO 'Process()' STARTS HERE
+        ///GETS THE FIRST DOCUMENT, AND STARTS THE SPIDER!
+        // RECURSIVE CALL
         /// </summary>
         protected int ProcessUri(Uri uri, int level)
         {
@@ -282,6 +272,7 @@ namespace MMarinov.WebCrawler.Indexer
             if (_Robot.Allowed(uri) && !_visitedLinks.Contains(url))
             {
                 _visitedLinks.Add(url);
+                _totalCrawledLinks++;
 
                 Document downloadDocument = Download(uri);
                 if (null != downloadDocument)
@@ -299,6 +290,8 @@ namespace MMarinov.WebCrawler.Indexer
                         }
 
                         wordcount = AddToCatalog(downloadDocument);
+
+                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, ++_totalSuccessfulLinks + ": " + url + "(" + wordcount + " words cat. in local)"));
                     }
                 }
 
@@ -353,14 +346,14 @@ namespace MMarinov.WebCrawler.Indexer
             System.Net.ServicePointManager.MaxServicePointIdleTime = 2000;
 
             // Open the requested URL
-            System.Net.HttpWebRequest req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(uri.AbsoluteUri);
-            req.UnsafeAuthenticatedConnectionSharing = true;
-            req.AllowAutoRedirect = true;
-            req.MaximumAutomaticRedirections = 3;
-            req.UserAgent = Preferences.UserAgent; //"Mozilla/6.0 (MSIE 6.0; Windows NT 5.1; MMarinov.NET)";
-            req.KeepAlive = true;
-            req.Method = System.Net.WebRequestMethods.Http.Get;
-            req.Timeout = Preferences.RequestTimeout * 1000;
+            System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(uri.AbsoluteUri);
+            webRequest.UnsafeAuthenticatedConnectionSharing = true;
+            webRequest.AllowAutoRedirect = true;
+            webRequest.MaximumAutomaticRedirections = 3;
+            webRequest.UserAgent = Preferences.UserAgent; //"Mozilla/6.0 (MSIE 6.0; Windows NT 5.1; MMarinov.NET)";
+            webRequest.KeepAlive = true;
+            webRequest.Method = System.Net.WebRequestMethods.Http.Get;
+            webRequest.Timeout = Preferences.RequestTimeout * 1000;
 
             // Get the stream from the returned web response
             System.Net.HttpWebResponse webResponse = null;
@@ -368,11 +361,11 @@ namespace MMarinov.WebCrawler.Indexer
 
             try
             {
-                webResponse = (System.Net.HttpWebResponse)req.GetResponse();
+                webResponse = (System.Net.HttpWebResponse)webRequest.GetResponse();
             }
             catch (System.Net.WebException ex)
             {   //remote url not found, 404; remote url forbidden, 403
-                ProgressEvent(new ProgressEventArgs(new Exception(uri.AbsoluteUri, ex), true));
+                ProgressEvent(new ProgressEventArgs(new Exception(uri.AbsoluteUri, ex), ex.Status));
             }
             finally
             {

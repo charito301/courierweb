@@ -35,10 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FontBox-0.1.0-dev, Version=0.0.0.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLLs\FontBox-0.1.0-dev.dll</HintPath>
-    </Reference>
+    <Reference Include="FontBox-0.1.0-dev, Version=0.0.0.0, Culture=neutral" />
     <Reference Include="IKVM.GNU.Classpath, Version=0.30.0.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58" />
     <Reference Include="IKVM.Runtime, Version=0.30.0.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58" />
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL" />
@@ -88,6 +85,7 @@
     <Compile Include="ThreadedGenerics\TList.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DLLs\FontBox-0.1.0-dev.dll" />
     <Content Include="DLLs\IKVM.GNU.Classpath.dll" />
     <Content Include="DLLs\IKVM.Runtime.dll" />
     <Content Include="DLLs\Ionic.Zip.dll" />

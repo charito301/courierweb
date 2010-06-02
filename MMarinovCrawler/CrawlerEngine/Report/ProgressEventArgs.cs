@@ -25,7 +25,7 @@ namespace MMarinov.WebCrawler.Report
     {
         private EventTypes _eventType;
         private string _Message = null;
-        private bool _isWebException = false;
+        private System.Net.WebExceptionStatus _webExStatus = System.Net.WebExceptionStatus.Success;
        
         public ProgressEventArgs(EventTypes eventType, string message)
         {
@@ -40,10 +40,10 @@ namespace MMarinov.WebCrawler.Report
             _Message = Logger.FormatErrorMsg(ex);
         }
 
-        public ProgressEventArgs(Exception ex, bool isWebException)
+        public ProgressEventArgs(Exception ex, System.Net.WebExceptionStatus status)
         {
             this._eventType = EventTypes.Error;
-            _isWebException = isWebException;
+            _webExStatus = status;
 
             _Message = Logger.FormatErrorMsg(ex);
         }
@@ -58,9 +58,9 @@ namespace MMarinov.WebCrawler.Report
             get { return this._Message; }
         }
 
-        public bool IsWebException
+        public System.Net.WebExceptionStatus WebExStatus
         {
-            get { return _isWebException; }
+            get { return _webExStatus; }
         }
 
     }

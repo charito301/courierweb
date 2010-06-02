@@ -31,18 +31,18 @@ namespace MMarinov.WebCrawler.UI
 
         void timerRefresh_Tick(object sender, EventArgs e)
         {
-            //don't work
-            if (errorMessage != "")
-            {
-                Report.Logger.ErrorLog(new Exception(errorMessage));
-                errorMessage = "";
-            }
+            ////don't work
+            //if (errorMessage != "")
+            //{
+            //    Report.Logger.ErrorLog(new Exception(errorMessage));
+            //    errorMessage = "";
+            //}
 
-            if (logMessage != "")
-            {
-                Report.Logger.MessageLog(logMessage);
-                logMessage = "";
-            }
+            //if (logMessage != "")
+            //{
+            //    Report.Logger.MessageLog(logMessage);
+            //    logMessage = "";
+            //}
         }
 
         protected void btnCrawl_Click(object sender, EventArgs e)
@@ -54,18 +54,18 @@ namespace MMarinov.WebCrawler.UI
             btnStopCrawl.Enabled = true;
         }
 
-        void CrawlingManager_CrawlerEvent(MMarinov.WebCrawler.Report.EventTypes eventType, string message)
+        void CrawlingManager_CrawlerEvent(Report.ProgressEventArgs pea)
         {
             //tbLog.Text += message;
             //UpdatePanel1.Update();
 
-            if (eventType == MMarinov.WebCrawler.Report.EventTypes.Error)
+            if (pea.EventType == MMarinov.WebCrawler.Report.EventTypes.Error)
             {
-                errorMessage += message;
+                errorMessage += pea.Message;
             }
             else
             {
-                logMessage += message;
+                logMessage += pea.Message;
             }
         }
 

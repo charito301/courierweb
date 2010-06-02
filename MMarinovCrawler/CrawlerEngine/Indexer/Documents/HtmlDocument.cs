@@ -401,16 +401,18 @@ namespace MMarinov.WebCrawler.Indexer
                 try
                 {
                     Uri address = new Uri(link);
-                    if (address.Authority == this.Uri.Authority)
+                    string authority = Regex.Replace(address.Authority, Common.MatchWwwDigitDotPattern, "");
+
+                    if (authority == this.Uri.Authority)
                     {
                         if (!linksLocal.Contains(address.PathAndQuery))
                         {
                             linksLocal.Add(address.PathAndQuery); //gets only the relative link
                         }
                     }
-                    else if (!linksExternal.Contains(HTTP + address.Authority))
+                    else if (!linksExternal.Contains(HTTP + authority))
                     {
-                        linksExternal.Add(HTTP + Regex.Replace(address.Authority, Common.MatchWwwDigitDotPattern, ""));
+                        linksExternal.Add(HTTP + authority);
                     }
                 }
                 catch

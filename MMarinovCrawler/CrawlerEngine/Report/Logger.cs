@@ -7,7 +7,7 @@
     {
         public static void ErrorLog(System.Exception ex)
         {
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + "\\WebCrawlerErrorLog.txt", true))
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + Common.ErrorLog, true))
             {
                 try
                 {
@@ -20,9 +20,27 @@
             }
         }
 
-        public static void ErrorLog(string msg)
+        public static void ErrorLog(string msg, System.Net.WebExceptionStatus exStatus)
         {
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + "\\WebCrawlerErrorLog.txt", true))
+            string txtFile = "";
+
+            switch (exStatus)
+            {
+                case System.Net.WebExceptionStatus.ProtocolError:
+                    txtFile = Common.ErrorWebProtocolLog;
+                    break;
+                case System.Net.WebExceptionStatus.Timeout:
+                    txtFile = Common.ErrorWebTimeoutLog;
+                    break;
+                case System.Net.WebExceptionStatus.Success:
+                    txtFile = Common.ErrorLog;
+                    break;
+                default:
+                    txtFile = Common.ErrorWebLog;
+                    break;
+            }
+
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + txtFile, true))
             {
                 try
                 {
@@ -35,24 +53,21 @@
             }
         }
 
-        public static void ErrorWebLog(string msg)
+        public static void MessageLog(string msg, Report.EventTypes eventType)
         {
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + "\\WebCrawlerErrorWebLog.txt", true))
-            {
-                try
-                {
-                    wr.Write(msg);
-                }
-                finally
-                {
-                    wr.Close();
-                }
-            }
-        }
+            string txtFile = "";
 
-        public static void MessageLog(string msg)
-        {
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + "\\WebCrawlerMessageLog.txt", true))
+            switch (eventType)
+            {
+                case Report.EventTypes.Crawling:
+                    txtFile = Common.IndexedLinksLog;
+                    break;
+                default:
+                    txtFile = Common.MessagesLog;
+                    break;
+            }
+
+            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + txtFile, true))
             {
                 try
                 {
@@ -67,13 +82,12 @@
 
         public static string FormatMessage(string msg)
         {
-            string str = System.Environment.NewLine + "------LOG------" + System.DateTime.Now + "------" + System.Environment.NewLine;
-            return str + msg + System.Environment.NewLine + "-------------------------------";
+            return System.Environment.NewLine + "--" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "-- " + msg + System.Environment.NewLine;
         }
 
         public static string FormatErrorMsg(System.Exception ex)
         {
-            string str = System.Environment.NewLine + "------ERROR------" + System.DateTime.Now + "------" + System.Environment.NewLine;
+            string str = System.Environment.NewLine + "--" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "-- ";
 
             while (ex != null)
             {
@@ -81,7 +95,7 @@
                 ex = ex.InnerException;
             }
 
-            return str + System.Environment.NewLine + "------------------------------------";
+            return str + System.Environment.NewLine;
         }
     }
 }
