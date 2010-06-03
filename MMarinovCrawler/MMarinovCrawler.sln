@@ -25,7 +25,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MMWebCrawler", "MMWebCrawle
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "33122"
+		VWDPort = "3164"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMarinovCrawler", "WpfApplication1\MMarinovCrawler.csproj", "{19037456-B6C6-4E37-B64B-792AA2750E7A}"

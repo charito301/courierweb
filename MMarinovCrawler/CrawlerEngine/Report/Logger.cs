@@ -5,89 +5,95 @@
     /// </summary>
     public class Logger
     {
-        public static void ErrorLog(System.Exception ex)
+        private static System.IO.StreamWriter swErrors;
+        private static System.IO.StreamWriter swMessage;
+        private static System.IO.StreamWriter swWebErrors;
+        private static System.IO.StreamWriter swTimeoutEx;
+        private static System.IO.StreamWriter swProtocolEx;
+        private static System.IO.StreamWriter swIndexedWebsites;
+
+        // constructor for static resources
+        static Logger()
         {
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + Common.ErrorLog, true))
+            OpenFile(Preferences.WorkingPath + Common.ErrorLog, swErrors);
+            OpenFile(Preferences.WorkingPath + Common.ErrorWebLog, swWebErrors);
+            OpenFile(Preferences.WorkingPath + Common.ErrorWebProtocolLog, swProtocolEx);
+            OpenFile(Preferences.WorkingPath + Common.ErrorWebTimeoutLog, swTimeoutEx);
+            OpenFile(Preferences.WorkingPath + Common.IndexedLinksLog, swIndexedWebsites);
+            OpenFile(Preferences.WorkingPath + Common.MessagesLog, swMessage);
+        }
+
+        private static void OpenFile(string filename, System.IO.StreamWriter sw)
+        {
+            // if the file doesn't exist, create it
+            if (!System.IO.File.Exists(filename))
             {
-                try
+                System.IO.FileStream fs = System.IO.File.Create(filename);
+                fs.Close();
+            }
+
+            // open up the streamwriter for writing..
+            sw = System.IO.File.AppendText(filename);
+        }
+
+        private static void WriteToFile(string message, System.IO.StreamWriter sw)
+        {
+            try
+            {
+                lock (sw)
                 {
-                    wr.Write(FormatErrorMsg(ex));
-                }
-                finally
-                {
-                    wr.Close();
+                    sw.Write(message);
+                    sw.Flush();
                 }
             }
+            catch { }
+        }
+
+        public static void ErrorLog(System.Exception ex)
+        {
+            WriteToFile(FormatErrorMsg(ex), swErrors);
         }
 
         public static void ErrorLog(string msg, System.Net.WebExceptionStatus exStatus)
         {
-            string txtFile = "";
-
             switch (exStatus)
             {
                 case System.Net.WebExceptionStatus.ProtocolError:
-                    txtFile = Common.ErrorWebProtocolLog;
+                    WriteToFile(msg, swProtocolEx);
                     break;
                 case System.Net.WebExceptionStatus.Timeout:
-                    txtFile = Common.ErrorWebTimeoutLog;
+                    WriteToFile(msg, swTimeoutEx);
                     break;
                 case System.Net.WebExceptionStatus.Success:
-                    txtFile = Common.ErrorLog;
+                    WriteToFile(msg, swErrors);
                     break;
                 default:
-                    txtFile = Common.ErrorWebLog;
+                    WriteToFile(msg, swWebErrors);
                     break;
-            }
-
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + txtFile, true))
-            {
-                try
-                {
-                    wr.Write(msg);
-                }
-                finally
-                {
-                    wr.Close();
-                }
-            }
+            }           
         }
 
         public static void MessageLog(string msg, Report.EventTypes eventType)
         {
-            string txtFile = "";
-
             switch (eventType)
             {
                 case Report.EventTypes.Crawling:
-                    txtFile = Common.IndexedLinksLog;
+                    WriteToFile(msg, swIndexedWebsites);
                     break;
                 default:
-                    txtFile = Common.MessagesLog;
+                    WriteToFile(msg, swMessage);
                     break;
-            }
-
-            using (System.IO.StreamWriter wr = new System.IO.StreamWriter(Preferences.WorkingPath + txtFile, true))
-            {
-                try
-                {
-                    wr.Write(FormatMessage(msg));
-                }
-                finally
-                {
-                    wr.Close();
-                }
             }
         }
 
         public static string FormatMessage(string msg)
         {
-            return System.Environment.NewLine + "--" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "-- " + msg + System.Environment.NewLine;
+            return System.Environment.NewLine + "--" + System.DateTime.Now.ToString(Common.DateFormat) + "-- " + msg + System.Environment.NewLine;
         }
 
         public static string FormatErrorMsg(System.Exception ex)
         {
-            string str = System.Environment.NewLine + "--" + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm") + "-- ";
+            string str = System.Environment.NewLine + "--" + System.DateTime.Now.ToString(Common.DateFormat) + "-- ";
 
             while (ex != null)
             {

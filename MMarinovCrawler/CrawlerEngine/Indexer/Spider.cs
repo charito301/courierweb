@@ -15,10 +15,8 @@ namespace MMarinov.WebCrawler.Indexer
 
         #region Private fields
 
-        //private object _externalLinksSyncObj = new object();
-        //private object _visitedLinksSyncObj = new object();
-        //private object _GlobalURLsToVisitSyncObj = new object();
-        //private object _GlobalVisitedURLsSyncObj = new object();
+        private object _GlobalURLsToVisitSyncObj = new object();
+        private object _GlobalVisitedURLsSyncObj = new object();
 
         private int _spiderIndex = 0;
         private System.Threading.Thread thread;
@@ -65,17 +63,21 @@ namespace MMarinov.WebCrawler.Indexer
         public Spider(int spiderIndex)
         {
             _spiderIndex = spiderIndex;
+        }
 
+        public void StartThread()
+        {
             try
             {
                 thread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(this.BuildCatalog));
-                thread.Start((object)spiderIndex);
+                thread.Name = "[Spider " + _spiderIndex + "]";
+                thread.Start((object)_spiderIndex);
 
-                ProgressEvent(new ProgressEventArgs(EventTypes.Start, "[Spider " + _spiderIndex + "] : Crawling started in " + DateTime.Now));
+                ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + " started in " + DateTime.Now));
             }
             catch (System.Exception e)
             {
-                ProgressEvent(new ProgressEventArgs(new System.Exception("Error while creating Spider: " + _spiderIndex, e)));
+                ProgressEvent(new ProgressEventArgs(new System.Exception("Error while creating " + thread.Name, e)));
             }
         }
 
@@ -83,13 +85,13 @@ namespace MMarinov.WebCrawler.Indexer
         {
             CrawlingManager.ShouldStopThreads = true;
 
-            ProgressEvent(new ProgressEventArgs(EventTypes.End, "Killing spider ... " + _spiderIndex));
+            ProgressEvent(new ProgressEventArgs(EventTypes.End, "Killing spider ... " + thread.Name));
 
             if (thread.IsAlive)
             {
                 thread.Abort();
 
-                ProgressEvent(new ProgressEventArgs(EventTypes.End, "Spider " + _spiderIndex + " killed"));
+                ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " killed"));
             }
         }
 
@@ -108,30 +110,30 @@ namespace MMarinov.WebCrawler.Indexer
             {
                 startPageUri = null;
 
-                //lock (_GlobalVisitedURLsSyncObj)
-                //{
-                //    lock (_GlobalURLsToVisitSyncObj)
-                //    {
-                if (GlobalURLsToVisit.Count == 0)
+                lock (GlobalURLsToVisit)
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "] : Empty GlobalURLsToVisit at: " + DateTime.Now));
+                    lock (GlobalVisitedURLs)
+                    {
+                        if (GlobalURLsToVisit.Count == 0)
+                        {
+                            ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " : Empty GlobalURLsToVisit at: " + DateTime.Now));
 
-                    StopThreadsOnEmptyURLsList();
+                            StopThreadsOnEmptyURLsList();
 
-                    continue;
+                            continue;
+                        }
+
+                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " : Get from GlobalURLsToVisit: " + GlobalURLsToVisit[0]));
+                        GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
+
+                        startPageUri = new Uri(GlobalURLsToVisit[0]);
+                        GlobalURLsToVisit.RemoveAt(0);
+                    }
                 }
-
-                //ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, (int)threadID + " : Get from GlobalURLsToVisit: " + GlobalURLsToVisit[0]));
-                GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
-
-                startPageUri = new Uri(GlobalURLsToVisit[0]);
-                GlobalURLsToVisit.RemoveAt(0);
-                //    }
-                //}
 
                 if (startPageUri != null)
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.Start, "[Spider " + (int)threadID + "] : Crawling website: " + startPageUri.AbsoluteUri));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + " : Crawling website: " + startPageUri.AbsoluteUri));
 
                     InitListsAndPreferences();
 
@@ -145,15 +147,15 @@ namespace MMarinov.WebCrawler.Indexer
 
                     _Catalog.SaveWebSiteFilesToDB();
 
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "]: GlobalCatalog => Words(" + CrawlingManager.GlobalCatalog.Words.Count + ") Files(" + CrawlingManager.GlobalCatalog.Files.Count + ")"));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": GlobalCatalog => Words(" + CrawlingManager.GlobalCatalog.Words.Count + ") Files(" + CrawlingManager.GlobalCatalog.Files.Count + ")"));
                 }
                 else
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "] : No more tasks - wait for a signal "));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " : No more tasks - wait for a signal "));
                 }
             }
 
-            ProgressEvent(new ProgressEventArgs(EventTypes.End, "[Spider " + (int)threadID + "] Crawling finished at: " + DateTime.Now));
+            ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " Crawling finished at: " + DateTime.Now));
         }
 
         private void InitListsAndPreferences()
@@ -191,10 +193,6 @@ namespace MMarinov.WebCrawler.Indexer
 
         private void MergeExternalGlobalLinks()
         {
-            //lock (_externalLinksSyncObj)
-            //{
-            //    lock (_GlobalURLsToVisitSyncObj)
-            //    {
             foreach (string link in _externalLinks)
             {
                 if (!GlobalVisitedURLs.Contains(link) && !GlobalURLsToVisit.Contains(link))
@@ -202,8 +200,6 @@ namespace MMarinov.WebCrawler.Indexer
                     GlobalURLsToVisit.Add(link);
                 }
             }
-            //    }
-            //}
         }
 
         /// <summary>
@@ -212,8 +208,6 @@ namespace MMarinov.WebCrawler.Indexer
         /// <param name="sourceList">The list whose values need to be merged.</param>
         private void MergeExternalLinks(System.Collections.Generic.List<string> sourceList)
         {
-            //lock (_externalLinksSyncObj)
-            //{
             foreach (string str in sourceList)
             {
                 if (!_externalLinks.Contains(str))
@@ -221,7 +215,6 @@ namespace MMarinov.WebCrawler.Indexer
                     _externalLinks.Add(str);
                 }
             }
-            //}
         }
 
         /// <summary>
@@ -254,7 +247,7 @@ namespace MMarinov.WebCrawler.Indexer
                     break;
             }
         }
-
+        string oldUrl = "";
         /// <summary>
         ///GETS THE FIRST DOCUMENT, AND STARTS THE SPIDER!
         // RECURSIVE CALL
@@ -268,6 +261,17 @@ namespace MMarinov.WebCrawler.Indexer
 
             int wordcount = 0;
             string url = uri.AbsoluteUri;
+
+            if (uri.IsAbsoluteUri)
+            {
+                if (uri.Authority != oldUrl)
+                {
+                }
+                if (uri.AbsoluteUri == "http://google.co.in/")
+                {
+                }
+            }
+            oldUrl = uri.Authority;
 
             if (_Robot.Allowed(uri) && !_visitedLinks.Contains(url))
             {
@@ -291,7 +295,7 @@ namespace MMarinov.WebCrawler.Indexer
 
                         wordcount = AddToCatalog(downloadDocument);
 
-                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, ++_totalSuccessfulLinks + ": " + url + "(" + wordcount + " words cat. in local)"));
+                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " " + ++_totalSuccessfulLinks + ": " + url + "(" + wordcount + " words cat. in local)"));
                     }
                 }
 

@@ -1,7 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="MMarinov.WebCrawler.UI._Default" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit.HTMLEditor"
-    TagPrefix="cc2" %>
 <%@ Register Assembly="System.Web.DynamicData, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
     Namespace="System.Web.DynamicData" TagPrefix="cc1" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -11,8 +9,6 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <asp:ScriptManager ID="ScriptManager1" runat="server">
-    </asp:ScriptManager>
     <div style="height: 500px;">
         <asp:Label ID="Label1" runat="server" Text="Web Crawler:" Font-Size="Large"></asp:Label>
         <br />
@@ -24,16 +20,9 @@
         <table width="100%" style="height: 80%">
             <tr>
                 <td>
-                    <asp:UpdatePanel ID="UpdatePanel1" runat="Server" UpdateMode="Conditional" ChildrenAsTriggers="true">
-                        <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="tbLog" />
-                        </Triggers>
-                        <ContentTemplate>
                             <asp:TextBox ID="tbLog" runat="server" TextMode="MultiLine" Height="95%" Width="95%">
                             </asp:TextBox>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
-                </td>
+                   </td>
                 <td>
                     <asp:TextBox ID="tbErrorLog" runat="server" TextMode="MultiLine" Height="95%" Width="95%">
                     </asp:TextBox>

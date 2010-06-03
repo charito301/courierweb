@@ -12,12 +12,12 @@ namespace MMarinov.WebCrawler
         /// <summary>
         /// Regex pattern that matches sequence of www a digit(may not occur) and a dot
         /// </summary>
-        public static readonly string MatchWwwDigitDotPattern = @"^www\d{0,1}\.";
+        public const string MatchWwwDigitDotPattern = @"^www\d{0,1}\.";
 
         /// <summary>
         /// Regex pattern that matches sequence of empty spaces
         /// </summary>
-        public static readonly string MatchEmptySpacesPattern = @"\s+";
+        public const string MatchEmptySpacesPattern = @"\s+";
 
         public const string ErrorLogsFolder = "\\ErrorLogs";
         public const string MessageLogsFolder = "\\MessageLogs";
@@ -29,5 +29,13 @@ namespace MMarinov.WebCrawler
 
         public static readonly string MessagesLog = MessageLogsFolder + "\\MessagesLog.txt";
         public static readonly string IndexedLinksLog = MessageLogsFolder + "\\IndexedLinksLog.txt";
+
+        public const string DateFormat = "dd/MM/yyyy HH:mm";
+        public const string HTTP = "http://";
+
+        public static string GetHttpAuthority(Uri uri)
+        {
+            return HTTP + System.Text.RegularExpressions.Regex.Replace(uri.Authority, Common.MatchWwwDigitDotPattern, "");
+        }
     }
 }

@@ -28,14 +28,13 @@ namespace MMarinov.WebCrawler.Indexer
             {
                 string fileContent = System.Text.RegularExpressions.Regex.Replace(readFile.ReadToEnd(), @"\d+,", "");
                 string[] links = fileContent.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                const string HTTP = "http://";
-
+                
                 System.Collections.Generic.List<string> linkList = links.ToList<string>();
                 linkList.ForEach(url =>
                 {
                     try
                     {
-                        Spider.GlobalURLsToVisit.Add(HTTP + System.Text.RegularExpressions.Regex.Replace(new System.Uri(HTTP + url).Authority, Common.MatchWwwDigitDotPattern, ""));
+                        Spider.GlobalURLsToVisit.Add(Common.GetHttpAuthority(new System.Uri(Common.HTTP + url)));
                     }
                     catch
                     {
@@ -53,7 +52,7 @@ namespace MMarinov.WebCrawler.Indexer
                 _csvFilename = zipFileNew.FileName;
                 zipFileNew.Extract(Preferences.WorkingPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
 
-                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + Preferences.WorkingPath + "\\" + _csvFilename + " extracted at " + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm"), Report.EventTypes.Other);
+                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + Preferences.WorkingPath + "\\" + _csvFilename + " extracted at " + System.DateTime.Now.ToString(Common.DateFormat), Report.EventTypes.Other);
             }
         }
 
@@ -72,7 +71,7 @@ namespace MMarinov.WebCrawler.Indexer
                 System.Net.WebClient client = new System.Net.WebClient();
                 client.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler(client_DownloadFileCompleted);
                 client.DownloadFile(uriZip, _zipFilename);
-                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + _zipFilename + " downloaded at " + System.DateTime.Now.ToString("dd/MM/yyyy HH:mm"), Report.EventTypes.Other);
+                MMarinov.WebCrawler.Report.Logger.MessageLog("Zip file " + _zipFilename + " downloaded at " + System.DateTime.Now.ToString(Common.DateFormat), Report.EventTypes.Other);
 
                 return true;
             }

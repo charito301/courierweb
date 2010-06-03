@@ -46,15 +46,21 @@ namespace MMarinov.WebCrawler.Indexer
 
         }
 
-        public override bool GetResponse(System.Net.HttpWebResponse webresponse)
+        public override bool GetResponse(System.Net.HttpWebResponse webResponse)
         {
             System.IO.StreamReader stream = null;
 
             try
             {
-                stream = new System.IO.StreamReader(webresponse.GetResponseStream(), System.Text.Encoding.ASCII);
+                stream = new System.IO.StreamReader(webResponse.GetResponseStream(), System.Text.Encoding.ASCII);
                 {
-                    this.Uri = webresponse.ResponseUri; // we *may* have been redirected... and we want the *final* URL
+                    if (webResponse.ResponseUri != this.Uri)
+                    {
+                        this.Uri = webResponse.ResponseUri; // we *may* have been redirected... and we want the *final* URL
+
+                        base.AddURLtoGlobalVisited(this.Uri);
+                    }
+
                     _All = stream.ReadToEnd();
                     this.Title = System.IO.Path.GetFileNameWithoutExtension(this.Uri.AbsoluteUri);
 

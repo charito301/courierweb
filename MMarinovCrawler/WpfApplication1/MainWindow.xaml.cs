@@ -21,10 +21,8 @@ namespace MMarinov.WebCrawler.UI
     {
         private MMarinov.WebCrawler.Indexer.CrawlingManager manager = null;
         private System.Threading.Timer timer;
-        private string errorMessage = "";
-        private string logMessage = "";
         private Int64 elapsedSec = 0;
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -46,7 +44,7 @@ namespace MMarinov.WebCrawler.UI
             btnStart.IsEnabled = false;
             btnStop.IsEnabled = true;
 
-            lblStartTime.Content = "Started on " + DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            lblStartTime.Content = "Started on " + DateTime.Now.ToString(Common.DateFormat);
             Cursor = Cursors.Arrow;
         }
 
@@ -93,7 +91,7 @@ namespace MMarinov.WebCrawler.UI
             System.Windows.Threading.DispatcherPriority.Normal,
             (Action)(() =>
             {
-                if (tbx.LineCount > 5000)
+                if (tbx.LineCount > 1000)
                 {
                     tbx.Text = "";
                 }

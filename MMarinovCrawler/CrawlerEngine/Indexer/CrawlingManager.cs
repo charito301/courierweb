@@ -25,7 +25,7 @@
 
         public CrawlingManager()
         {
-
+           
         }
 
         private static void WriteLog(object o)
@@ -87,6 +87,7 @@
                 {
                     spiderArray[i] = new Spider(i);
                     spiderArray[i].SpiderProgressEvent += new MMarinov.WebCrawler.Report.SpiderProgressEventHandler(OnProgressEvent);
+                    spiderArray[i].StartThread();
                 }
             }
             catch (System.Exception e)
@@ -155,8 +156,9 @@
                 mail.From = new System.Net.Mail.MailAddress("WebCrawler@Service.com", "WebCrawler Service");
                 mail.Subject = "Crawling Report";
                 mail.Body = "Crawling Running :" + System.DateTime.Now.ToString();
-                System.Net.Mail.SmtpClient sc = new System.Net.Mail.SmtpClient("192.168.0.1");
-                sc.Credentials = new System.Net.NetworkCredential("MMarinov", "matrix");
+                //mail.Attachments.Add(new System.Net.Mail.Attachment(""));
+                System.Net.Mail.SmtpClient sc = new System.Net.Mail.SmtpClient("localhost");
+                //sc.Credentials = new System.Net.NetworkCredential("MMarinov", "matrix");
                 sc.Send(mail);
             }
             catch (System.Exception ex)
@@ -192,10 +194,10 @@
                     }
                     break;
                 case Report.EventTypes.Crawling:
-                    indexedLinksMessage += pea.Message;
+                    indexedLinksMessage += pea.Message + "\n";
                     break;
                 default:
-                    logMessage += pea.Message;
+                    logMessage += pea.Message + "\n";
                     break;
             }
         }
@@ -204,14 +206,14 @@
         {
             ShouldStopThreads = true;
 
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(500);
 
             foreach (Spider spider in spiderArray)
             {
                 spider.KillThread();
             }
 
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(500);
 
             SendMail();
 

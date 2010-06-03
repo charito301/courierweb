@@ -15,7 +15,6 @@ namespace MMarinov.WebCrawler.Indexer
         #region Private fields: _Uri, _ContentType, _RobotIndexOK, _RobotFollowOK
 
         private string _htmlCode = "";
-        private Uri _Uri;
         private String _ContentType;
         private bool _RobotIndexOK = true;
         private bool _RobotFollowOK = true;
@@ -39,30 +38,19 @@ namespace MMarinov.WebCrawler.Indexer
         public HtmlDocument(Uri location)
             : base(location)
         {
-            _Uri = location;
+            this.Uri = location;
         }
 
         public HtmlDocument(Uri location, string mimeType)
             : base(location, mimeType)
         {
-            _Uri = location;
+            this.Uri = location;
             _MimeType = mimeType;
         }
 
         #endregion
 
         #region Public Properties: Uri, RobotIndexOK
-        /// <summary>
-        /// http://www.ietf.org/rfc/rfc2396.txt
-        /// </summary>
-        public override Uri Uri
-        {
-            get { return _Uri; }
-            set
-            {
-                _Uri = value;
-            }
-        }
         /// <summary>
         /// Whether a robot should index the text 
         /// found on this page, or just ignore it
@@ -375,8 +363,6 @@ namespace MMarinov.WebCrawler.Indexer
         /// <param name="link"></param>
         private void AddLinkToCollection(string link)
         {
-            const string HTTP = "http://";
-
             // strip off internal links, so we don't index same page over again
             if (link.Contains("#"))
             {
@@ -396,7 +382,7 @@ namespace MMarinov.WebCrawler.Indexer
                 return;
             }
 
-            if (link.Length > 1 && !link.StartsWith("/") && (link.StartsWith(HTTP) || link.StartsWith("https://")))
+            if (link.Length > 1 && !link.StartsWith("/") && (link.StartsWith(Common.HTTP) || link.StartsWith("https://")))
             {
                 try
                 {
@@ -410,9 +396,9 @@ namespace MMarinov.WebCrawler.Indexer
                             linksLocal.Add(address.PathAndQuery); //gets only the relative link
                         }
                     }
-                    else if (!linksExternal.Contains(HTTP + authority))
+                    else if (!linksExternal.Contains(Common.GetHttpAuthority(address)))
                     {
-                        linksExternal.Add(HTTP + authority);
+                        linksExternal.Add(Common.GetHttpAuthority(address));
                     }
                 }
                 catch
@@ -452,21 +438,27 @@ namespace MMarinov.WebCrawler.Indexer
 
             try
             {
-                DateTime startDLtime = DateTime.Now;
+               // DateTime startDLtime = DateTime.Now;
 
                 stream = new System.IO.StreamReader(webResponse.GetResponseStream(), this.Encoding);
 
-                this.Uri = webResponse.ResponseUri; // we *may* have been redirected... and we want the *final* URL
+                if (webResponse.ResponseUri != this.Uri)
+                {
+                    this.Uri = webResponse.ResponseUri; // we *may* have been redirected... and we want the *final* URL
+
+                    base.AddURLtoGlobalVisited(this.Uri);
+                }
+
                 this.AllCode = stream.ReadToEnd();
 
-                DateTime endDLtime = DateTime.Now;
-                double periodDL = (endDLtime - startDLtime).TotalSeconds;
+                //DateTime endDLtime = DateTime.Now;
+                //double periodDL = (endDLtime - startDLtime).TotalSeconds;
 
-                if (periodDL > 0)
-                {
-                    int bytesPerSec = (int)(this.Encoding.GetBytes(AllCode).Length / periodDL);
-                    System.Console.WriteLine(bytesPerSec / 1024 + " KB/s");
-                }
+                //if (periodDL > 0)
+                //{
+                //    int bytesPerSec = (int)(this.Encoding.GetBytes(AllCode).Length / periodDL);
+                //    System.Console.WriteLine(bytesPerSec / 1024 + " KB/s");
+                //}
             }
             catch (Exception e)
             {
@@ -485,6 +477,7 @@ namespace MMarinov.WebCrawler.Indexer
             return true; //success
         }//GetResponse
 
+       
         /// <summary>
         /// Stripping HTML
         /// http://www.4guysfromrolla.com/webtech/042501-1.shtml
@@ -498,12 +491,12 @@ namespace MMarinov.WebCrawler.Indexer
         /// </remarks>
         protected string StripHtml(string htmlCode)
         {
-            htmlCode = ISOtoASCII(htmlCode);
-
             htmlCode = Regex.Replace(htmlCode, "&amp;", "&", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
             //Strips the <script> and <noscript> tags, comments <!-- --> , <style>
             htmlCode = Regex.Replace(htmlCode, @"(<script.*?</script>)|(<noscript.*?</noscript>)|(\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>)|(<style.*?</style>)", " ", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+            htmlCode = ISOtoASCII(htmlCode);
 
             //removes tags, new lines and multiple spaces 
             htmlCode = Regex.Replace(htmlCode, "(<(.|\n)*?>)|(&(.|\n)+?;)|(\r?\n?)", "");

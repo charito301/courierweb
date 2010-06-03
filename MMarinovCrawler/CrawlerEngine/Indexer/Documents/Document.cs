@@ -243,5 +243,15 @@ namespace MMarinov.WebCrawler.Indexer
             }
         }
 
+        protected void AddURLtoGlobalVisited(Uri uri)
+        {
+            lock (Spider.GlobalVisitedURLs)
+            {
+                if (!Spider.GlobalVisitedURLs.Contains(Common.GetHttpAuthority(uri)))
+                {
+                    Spider.GlobalVisitedURLs.Add(Common.GetHttpAuthority(uri));
+                }
+            }
+        }
     }
 }
