@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="WebCrawler">
+  <DataContextMoniker Name="/WebCrawlerDataContext" />
+  <nestedChildShapes>
+    <classShape Id="fa569c94-baba-4645-add8-47a3d7b3681b" absoluteBounds="0.75, 4.125, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/WebCrawlerDataContext/File" />
+      <nestedChildShapes>
+        <elementListCompartment Id="06653ce1-81f7-4c4c-a5a9-c27dbea62875" absoluteBounds="0.765, 4.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f3807cf8-370a-4994-9dcc-93da6f6b93cc" absoluteBounds="3.5, 0.875, 2, 1.3862939453124998">
+      <DataClassMoniker Name="/WebCrawlerDataContext/WordsInFile" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5d5415f8-cdee-4127-a49d-957a304795ec" absoluteBounds="3.515, 1.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="47a043e3-a3b3-475c-a551-8b51847ef983" absoluteBounds="0.75, 1, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/WebCrawlerDataContext/Word" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ad75a076-16c0-4017-a210-a2ebc305feb4" absoluteBounds="0.765, 1.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 5.01044840494792); (4.5 : 5.01044840494792); (4.5 : 2.2612939453125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/WebCrawlerDataContext/File/File_WordsInFile" />
+      <nodes>
+        <classShapeMoniker Id="fa569c94-baba-4645-add8-47a3d7b3681b" />
+        <classShapeMoniker Id="f3807cf8-370a-4994-9dcc-93da6f6b93cc" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 1.59699625651042); (3.5 : 1.59699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/WebCrawlerDataContext/Word/Word_WordsInFile" />
+      <nodes>
+        <classShapeMoniker Id="47a043e3-a3b3-475c-a551-8b51847ef983" />
+        <classShapeMoniker Id="f3807cf8-370a-4994-9dcc-93da6f6b93cc" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

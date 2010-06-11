@@ -45,6 +45,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -60,15 +63,15 @@
     <Compile Include="Common.cs" />
     <Compile Include="Indexer\Documents\Mp3Document.cs" />
     <Compile Include="Indexer\SeedList.cs" />
-    <Compile Include="Indexer\Catalog.cs" />
-    <Compile Include="Indexer\File.cs" />
+    <Compile Include="Library\Catalog.cs" />
+    <Compile Include="Library\FileManipulator.cs" />
+    <Compile Include="Library\WordManipulator.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="Stemming\IStemming.cs" />
     <Compile Include="Stemming\NoStemming.cs" />
     <Compile Include="Stemming\PorterStemmer.cs" />
     <Compile Include="StopWords\IStopper.cs" />
     <Compile Include="StopWords\StopWords.cs" />
-    <Compile Include="Indexer\Word.cs" />
     <Compile Include="Indexer\CrawlingManager.cs" />
     <Compile Include="Indexer\Documents\Document.cs" />
     <Compile Include="Indexer\Documents\DocumentFactory.cs" />
@@ -91,6 +94,12 @@
     <Content Include="DLLs\Ionic.Zip.dll" />
     <Content Include="DLLs\PDFBox-0.7.3.dll" />
     <Content Include="DLLs\UltraID3Lib.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DALWebCrawler\DALWebCrawler.csproj">
+      <Project>{FA75D857-C3E2-46FD-8DAE-5A6EAFDC7BF1}</Project>
+      <Name>DALWebCrawler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

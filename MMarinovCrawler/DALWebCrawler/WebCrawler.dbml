@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="WebCrawler" Class="WebCrawlerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=MMARINOV-PC;Initial Catalog=WebCrawler;Persist Security Info=True;User ID=MMarinov" SettingsObjectName="DALWebCrawler.Properties.Settings" SettingsPropertyName="WebCrawlerConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Files" Member="Files">
+    <Type Name="File">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="URL" Type="System.String" DbType="NVarChar(2500) NOT NULL" CanBeNull="false" />
+      <Column Name="ImportantWords" Type="System.String" DbType="NVarChar(2500) NOT NULL" CanBeNull="false" />
+      <Column Name="WeightedWords" Type="System.String" DbType="NVarChar(2500)" CanBeNull="true" />
+      <Column Name="FileType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Association Name="File_WordsInFile" Member="WordsInFiles" ThisKey="ID" OtherKey="FileID" Type="WordsInFile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WordsInFiles" Member="WordsInFiles">
+    <Type Name="WordsInFile">
+      <Column Name="WordID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="FileID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="File_WordsInFile" Member="File" ThisKey="FileID" OtherKey="ID" Type="File" IsForeignKey="true" />
+      <Association Name="Word_WordsInFile" Member="Word" ThisKey="FileID" OtherKey="ID" Type="Word" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Words" Member="Words">
+    <Type Name="Word">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="WordName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Word_WordsInFile" Member="WordsInFiles" ThisKey="ID" OtherKey="FileID" Type="WordsInFile" />
+    </Type>
+  </Table>
+  <Function Name="dbo.sp_InsertFile" Method="sp_InsertFile">
+    <Parameter Name="URL" Parameter="uRL" Type="System.String" DbType="NVarChar(2500)" />
+    <Parameter Name="ImportantWords" Parameter="importantWords" Type="System.String" DbType="NVarChar(2500)" />
+    <Parameter Name="WeightedWords" Parameter="weightedWords" Type="System.String" DbType="NVarChar(2500)" />
+    <Parameter Name="FileType" Parameter="fileType" Type="System.Byte" DbType="TinyInt" />
+    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_UpdateWordInFile" Method="sp_UpdateWordInFile">
+    <Parameter Name="WordID" Parameter="wordID" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="FileID" Parameter="fileID" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="Count" Parameter="count" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_InsertWord" Method="sp_InsertWord">
+    <Parameter Name="WordName" Parameter="wordName" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_InsertWordInFile" Method="sp_InsertWordInFile">
+    <Parameter Name="WordID" Parameter="wordID" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="FileID" Parameter="fileID" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="Count" Parameter="count" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_SelectFile" Method="sp_SelectFile">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="sp_SelectFileResult">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="URL" Type="System.String" DbType="NVarChar(2500) NOT NULL" CanBeNull="false" />
+      <Column Name="ImportantWords" Type="System.String" DbType="NVarChar(2500) NOT NULL" CanBeNull="false" />
+      <Column Name="WeightedWords" Type="System.String" DbType="NVarChar(2500)" CanBeNull="true" />
+      <Column Name="FileType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_SelectFilesAll" Method="sp_SelectFilesAll">
+    <ElementType Name="sp_SelectFilesAllResult">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="URL" Type="System.String" DbType="NVarChar(2500) NOT NULL" CanBeNull="false" />
+      <Column Name="ImportantWords" Type="System.String" DbType="NVarChar(2500) NOT NULL" CanBeNull="false" />
+      <Column Name="WeightedWords" Type="System.String" DbType="NVarChar(2500)" CanBeNull="true" />
+      <Column Name="FileType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_SelectFilesDynamic" Method="sp_SelectFilesDynamic">
+    <Parameter Name="WhereCondition" Parameter="whereCondition" Type="System.String" DbType="NVarChar(500)" />
+    <Parameter Name="OrderByExpression" Parameter="orderByExpression" Type="System.String" DbType="NVarChar(250)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_SelectWord" Method="sp_SelectWord">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="sp_SelectWordResult">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="WordName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_SelectWordsAll" Method="sp_SelectWordsAll">
+    <ElementType Name="sp_SelectWordsAllResult">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="WordName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_SelectWordsDynamic" Method="sp_SelectWordsDynamic">
+    <Parameter Name="WhereCondition" Parameter="whereCondition" Type="System.String" DbType="NVarChar(500)" />
+    <Parameter Name="OrderByExpression" Parameter="orderByExpression" Type="System.String" DbType="NVarChar(250)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_SelectWordsInFiles" Method="sp_SelectWordsInFiles">
+    <Parameter Name="WordID" Parameter="wordID" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="FileID" Parameter="fileID" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="sp_SelectWordsInFilesResult">
+      <Column Name="WordID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="FileID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_SelectWordsInFilesByWordID" Method="sp_SelectWordsInFilesByWordID">
+    <Parameter Name="WordID" Parameter="wordID" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="sp_SelectWordsInFilesByWordIDResult">
+      <Column Name="WordID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="FileID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.sp_UpdateFile" Method="sp_UpdateFile">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="URL" Parameter="uRL" Type="System.String" DbType="NVarChar(2500)" />
+    <Parameter Name="ImportantWords" Parameter="importantWords" Type="System.String" DbType="NVarChar(2500)" />
+    <Parameter Name="WeightedWords" Parameter="weightedWords" Type="System.String" DbType="NVarChar(2500)" />
+    <Parameter Name="FileType" Parameter="fileType" Type="System.Byte" DbType="TinyInt" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.sp_UpdateWord" Method="sp_UpdateWord">
+    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="WordName" Parameter="wordName" Type="System.String" DbType="NVarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

@@ -56,7 +56,7 @@ namespace MMarinov.WebCrawler.UI
 
         void CrawlingManager_CrawlerEvent(Report.ProgressEventArgs pea)
         {
-            //tbLog.Text += message;
+            //tbLog.WordName += message;
             //UpdatePanel1.Update();
 
             if (pea.EventType == MMarinov.WebCrawler.Report.EventTypes.Error)

@@ -255,6 +255,7 @@ namespace MMarinov.WebCrawler.Indexer
                     }
                 }
 
+                Document.FoundTotalLinks++;
                 AddLinkToCollection(link);
             } // foreach
         }// Parse Links
@@ -394,11 +395,13 @@ namespace MMarinov.WebCrawler.Indexer
                         if (!linksLocal.Contains(address.PathAndQuery))
                         {
                             linksLocal.Add(address.PathAndQuery); //gets only the relative link
+                            Document.FoundValidLinks++;
                         }
                     }
                     else if (!linksExternal.Contains(Common.GetHttpAuthority(address)))
                     {
                         linksExternal.Add(Common.GetHttpAuthority(address));
+                        Document.FoundValidLinks++;
                     }
                 }
                 catch
@@ -417,6 +420,7 @@ namespace MMarinov.WebCrawler.Indexer
             else if (!linksLocal.Contains(link))
             {
                 linksLocal.Add(link);
+                Document.FoundValidLinks++;
             }
         }
 
@@ -438,7 +442,7 @@ namespace MMarinov.WebCrawler.Indexer
 
             try
             {
-               // DateTime startDLtime = DateTime.Now;
+                // DateTime startDLtime = DateTime.Now;
 
                 stream = new System.IO.StreamReader(webResponse.GetResponseStream(), this.Encoding);
 
@@ -446,7 +450,10 @@ namespace MMarinov.WebCrawler.Indexer
                 {
                     this.Uri = webResponse.ResponseUri; // we *may* have been redirected... and we want the *final* URL
 
-                    base.AddURLtoGlobalVisited(this.Uri);
+                    if (!base.AddURLtoGlobalVisited(this.Uri))
+                    {
+                        return false;
+                    }
                 }
 
                 this.AllCode = stream.ReadToEnd();
@@ -477,7 +484,7 @@ namespace MMarinov.WebCrawler.Indexer
             return true; //success
         }//GetResponse
 
-       
+
         /// <summary>
         /// Stripping HTML
         /// http://www.4guysfromrolla.com/webtech/042501-1.shtml
@@ -491,15 +498,20 @@ namespace MMarinov.WebCrawler.Indexer
         /// </remarks>
         protected string StripHtml(string htmlCode)
         {
+            const string matchCommentPattern = @"(\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>)";
+
             htmlCode = Regex.Replace(htmlCode, "&amp;", "&", RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
             //Strips the <script> and <noscript> tags, comments <!-- --> , <style>
-            htmlCode = Regex.Replace(htmlCode, @"(<script.*?</script>)|(<noscript.*?</noscript>)|(\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>)|(<style.*?</style>)", " ", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            htmlCode = Regex.Replace(htmlCode, MatchTag("script") + "|" + MatchTag("noscript") + "|" + matchCommentPattern + "|" + MatchTag("style"), " ", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+            // htmlCode = Regex.Replace(htmlCode, @"(<script.*?</script>)|(<noscript.*?</noscript>)|(\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>)|(<style.*?</style>)", " ", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
             htmlCode = ISOtoASCII(htmlCode);
 
             //removes tags, new lines and multiple spaces 
-            htmlCode = Regex.Replace(htmlCode, "(<(.|\n)*?>)|(&(.|\n)+?;)|(\r?\n?)", "");
+            htmlCode = Regex.Replace(htmlCode, "<(.|\n)*?>", " ");
+            // new lines and multiple spaces 
+            htmlCode = Regex.Replace(htmlCode, "(&(.|\n)+?;)|(\r?\n?)", "");
             htmlCode = Regex.Replace(htmlCode, Common.MatchEmptySpacesPattern, " ");
 
             return htmlCode;
@@ -653,6 +665,11 @@ namespace MMarinov.WebCrawler.Indexer
             }
 
             return (strText);
+        }
+
+        private string MatchTag(string tagName)
+        {
+            return @"(\<[ \r\n\t]*" + tagName + @"([ \r\n\t\>]|\>){1,}([ \r\n\t]|.)*</[ \r\n\t]*" + tagName + @"[ \r\n\t]*\>)";
         }
     }
 }

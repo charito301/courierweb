@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MMarinov.WebCrawler.UI
 {
@@ -22,10 +13,11 @@ namespace MMarinov.WebCrawler.UI
         private MMarinov.WebCrawler.Indexer.CrawlingManager manager = null;
         private System.Threading.Timer timer;
         private Int64 elapsedSec = 0;
-        
+
         public MainWindow()
         {
             InitializeComponent();
+
             btnStop.IsEnabled = false;
 
             manager = new MMarinov.WebCrawler.Indexer.CrawlingManager();
@@ -33,6 +25,13 @@ namespace MMarinov.WebCrawler.UI
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
+            tbCrawlerDomains.Text = "";
+            tbErrors.Text = "";
+            tbIndexedLinks.Text = "";
+            tbProtocolEx.Text = "";
+            tbTimeoutEx.Text = "";
+            tbWebEx.Text = "";
+
             Cursor = Cursors.Wait;
             lblStartTime.Content = "Starting...";
             elapsedSec = 0;
@@ -56,7 +55,7 @@ namespace MMarinov.WebCrawler.UI
                    { lblTimeElapsed.Content = "Elapsed:" + TimeSpan.FromSeconds(++elapsedSec); }));
         }
 
-        void CrawlingManager_CrawlerEvent(Report.ProgressEventArgs pea)
+        private void CrawlingManager_CrawlerEvent(Report.ProgressEventArgs pea)
         {
             switch (pea.EventType)
             {
@@ -69,8 +68,11 @@ namespace MMarinov.WebCrawler.UI
                         case System.Net.WebExceptionStatus.Timeout:
                             AddMessageToTextbox(pea, tbTimeoutEx);
                             break;
-                        default:
+                        case System.Net.WebExceptionStatus.Success:
                             AddMessageToTextbox(pea, tbErrors);
+                            break;
+                        default:
+                            AddMessageToTextbox(pea, tbWebEx);
                             break;
                     }
                     break;
@@ -83,12 +85,18 @@ namespace MMarinov.WebCrawler.UI
                     AddMessageToTextbox(pea, tbIndexedLinks);
                     break;
             }
+
+            lblTotalFoundLinks.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, TimeSpan.FromMilliseconds(100),
+            (Action)(() => { lblTotalFoundLinks.Content = "Total links found:" + MMarinov.WebCrawler.Indexer.Document.FoundTotalLinks; }));
+
+            lblTotalValidLinksFound.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, TimeSpan.FromMilliseconds(100),
+            (Action)(() => { lblTotalValidLinksFound.Content = "Total valid links found:" + MMarinov.WebCrawler.Indexer.Document.FoundValidLinks; }));
         }
 
         private void AddMessageToTextbox(Report.ProgressEventArgs pea, TextBox tbx)
         {
             tbx.Dispatcher.Invoke(
-            System.Windows.Threading.DispatcherPriority.Normal,
+            System.Windows.Threading.DispatcherPriority.Normal, TimeSpan.FromMilliseconds(100),
             (Action)(() =>
             {
                 if (tbx.LineCount > 1000)
@@ -110,6 +118,11 @@ namespace MMarinov.WebCrawler.UI
             btnStop.IsEnabled = false;
             btnStart.IsEnabled = true;
             Cursor = Cursors.Arrow;
+        }
+
+        private void btnPause_Click(object sender, RoutedEventArgs e)
+        {
+            manager.PauseSpiders();
         }
     }
 }

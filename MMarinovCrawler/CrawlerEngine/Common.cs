@@ -20,7 +20,7 @@ namespace MMarinov.WebCrawler
         public const string MatchEmptySpacesPattern = @"\s+";
 
         public const string ErrorLogsFolder = "\\ErrorLogs";
-        public const string MessageLogsFolder = "\\MessageLogs";
+        public const string MessageLogsFolder = "\\MessageLogs";       
 
         public static readonly string ErrorLog = ErrorLogsFolder + "\\ErrorLog.txt";
         public static readonly string ErrorWebLog = ErrorLogsFolder + "\\ErrorWebLog.txt";
@@ -29,6 +29,7 @@ namespace MMarinov.WebCrawler
 
         public static readonly string MessagesLog = MessageLogsFolder + "\\MessagesLog.txt";
         public static readonly string IndexedLinksLog = MessageLogsFolder + "\\IndexedLinksLog.txt";
+        public const string DBLog = MessageLogsFolder + "DBLog.txt";
 
         public const string DateFormat = "dd/MM/yyyy HH:mm";
         public const string HTTP = "http://";

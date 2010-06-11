@@ -45,7 +45,7 @@ namespace MMarinov.WebCrawler.Indexer
             System.Text.RegularExpressions.MatchCollection matchLinks2 = System.Text.RegularExpressions.Regex.Matches(_All, "(http|https)://([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
 
-        public override bool GetResponse(System.Net.HttpWebResponse webresponse)
+        public override bool GetResponse(System.Net.HttpWebResponse webResponse)
         {
             string filename = System.IO.Path.Combine(Preferences.TempPath, (System.IO.Path.GetFileName(this.Uri.LocalPath)));
             this.Title = System.IO.Path.GetFileNameWithoutExtension(filename);
@@ -54,7 +54,7 @@ namespace MMarinov.WebCrawler.Indexer
 
             try
             {
-                binaryReader = new System.IO.BinaryReader(webresponse.GetResponseStream());
+                binaryReader = new System.IO.BinaryReader(webResponse.GetResponseStream());
                 iofilestream = new System.IO.FileStream(filename, System.IO.FileMode.Create);
                 const int BUFFER_SIZE = 8192;
                 byte[] buf = new byte[BUFFER_SIZE];
@@ -66,12 +66,18 @@ namespace MMarinov.WebCrawler.Indexer
                     n = binaryReader.Read(buf, 0, BUFFER_SIZE);
                 }
 
-                this.Uri = webresponse.ResponseUri;
+                if (webResponse.ResponseUri != this.Uri)
+                {
+                    this.Uri = webResponse.ResponseUri; // we *may* have been redirected... and we want the *final* URL
+
+                    base.AddURLtoGlobalVisited(this.Uri);
+                }
+
                 _All = ParsePDF(filename);
             }
             catch (Exception e)
             {
-                base.DocumentProgressEvent(new Report.ProgressEventArgs(e));
+                base.DocumentProgressEvent(new Report.ProgressEventArgs(new Exception(Uri.AbsoluteUri, e)));
                 return false;
             }
             finally

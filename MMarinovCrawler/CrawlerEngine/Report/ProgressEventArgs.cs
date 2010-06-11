@@ -12,11 +12,13 @@ namespace MMarinov.WebCrawler.Report
     /// </summary>
     public enum EventTypes
     {
+        Other,
         Start,
         Error,
         End,
-        Crawling,
-        Other
+        EmptyVisitedURLs,
+        WakeJoinedThreads,
+        Crawling
     }
     /// <summary>
     /// Declare the Event arguments

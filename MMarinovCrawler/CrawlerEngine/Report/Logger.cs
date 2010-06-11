@@ -15,15 +15,15 @@
         // constructor for static resources
         static Logger()
         {
-            OpenFile(Preferences.WorkingPath + Common.ErrorLog, swErrors);
-            OpenFile(Preferences.WorkingPath + Common.ErrorWebLog, swWebErrors);
-            OpenFile(Preferences.WorkingPath + Common.ErrorWebProtocolLog, swProtocolEx);
-            OpenFile(Preferences.WorkingPath + Common.ErrorWebTimeoutLog, swTimeoutEx);
-            OpenFile(Preferences.WorkingPath + Common.IndexedLinksLog, swIndexedWebsites);
-            OpenFile(Preferences.WorkingPath + Common.MessagesLog, swMessage);
+            OpenFile(Preferences.WorkingPath + Common.ErrorLog, ref swErrors);
+            OpenFile(Preferences.WorkingPath + Common.ErrorWebLog, ref  swWebErrors);
+            OpenFile(Preferences.WorkingPath + Common.ErrorWebProtocolLog, ref  swProtocolEx);
+            OpenFile(Preferences.WorkingPath + Common.ErrorWebTimeoutLog, ref  swTimeoutEx);
+            OpenFile(Preferences.WorkingPath + Common.IndexedLinksLog, ref  swIndexedWebsites);
+            OpenFile(Preferences.WorkingPath + Common.MessagesLog, ref  swMessage);
         }
 
-        private static void OpenFile(string filename, System.IO.StreamWriter sw)
+        private static void OpenFile(string filename, ref  System.IO.StreamWriter sw)
         {
             // if the file doesn't exist, create it
             if (!System.IO.File.Exists(filename))
@@ -70,7 +70,7 @@
                 default:
                     WriteToFile(msg, swWebErrors);
                     break;
-            }           
+            }
         }
 
         public static void MessageLog(string msg, Report.EventTypes eventType)

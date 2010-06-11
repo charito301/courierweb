@@ -2,22 +2,25 @@ using System;
 
 namespace MMarinov.WebCrawler.Indexer
 {
-    public enum DoumentTypes
-    {
-        HTML, //1
-        Text, //2
-        Mp3,  //3
-        PDF   //4
-    }
-
     public abstract class Document
     {
+        public enum DoumentTypes
+        {
+            HTML, //1
+            Text, //2
+            Mp3,  //3
+            PDF   //4
+        }
+
         private Uri _Uri;
         private string _allCode;
         private string _ContentType;
         private string _MimeType = "";
         private string _Title;
         private string _Description = "";
+
+        public static Int64 FoundValidLinks = 0;
+        public static Int64 FoundTotalLinks = 0;
 
         private System.Collections.Generic.List<string> _localLinks;
         private System.Collections.Generic.List<string> _externalLinks;
@@ -243,15 +246,43 @@ namespace MMarinov.WebCrawler.Indexer
             }
         }
 
-        protected void AddURLtoGlobalVisited(Uri uri)
+        /// <summary>
+        /// False if the link exists, so the website must be skipped
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns>False if the link exists</returns>
+        protected bool AddURLtoGlobalVisited(Uri uri)
         {
             lock (Spider.GlobalVisitedURLs)
             {
                 if (!Spider.GlobalVisitedURLs.Contains(Common.GetHttpAuthority(uri)))
                 {
                     Spider.GlobalVisitedURLs.Add(Common.GetHttpAuthority(uri));
+
+                    DocumentProgressEvent(new Report.ProgressEventArgs(Report.EventTypes.Start, "Crawling website(redirected):" + this.Uri));
+                    return true;
                 }
+                else
+                {
+                    return false;
+                }
+            }          
+        }
+
+        protected bool DeleteFile(string filename)
+        {
+            // delete file
+            try
+            {
+                new System.IO.FileInfo(filename).Delete();
             }
+            catch (Exception e)
+            {
+                Report.Logger.ErrorLog(e);
+                return false;
+            }
+
+            return true;
         }
     }
 }

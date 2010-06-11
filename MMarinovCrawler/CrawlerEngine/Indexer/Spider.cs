@@ -20,7 +20,7 @@ namespace MMarinov.WebCrawler.Indexer
 
         private int _spiderIndex = 0;
         private System.Threading.Thread thread;
-        //private System.Threading.EventWaitHandle _threadWaitHandle = new System.Threading.AutoResetEvent(false);
+        // private System.Threading.EventWaitHandle _threadWaitHandle = new System.Threading.AutoResetEvent(false);
 
         private ThreadedGenerics.TList<string> _visitedLinks = new ThreadedGenerics.TList<string>();
         private ThreadedGenerics.TList<string> _externalLinks = new ThreadedGenerics.TList<string>();
@@ -29,13 +29,13 @@ namespace MMarinov.WebCrawler.Indexer
         private static Int64 _totalSuccessfulLinks = 0;
 
         /// <summary></summary>
-        private MMarinov.WebCrawler.Indexer.Catalog _Catalog;
+        private Library.Catalog _Catalog;
 
         /// <summary>Stemmer to use</summary>
-        private static MMarinov.WebCrawler.Stemming.IStemming _Stemmer;
+        private static Stemming.IStemming _Stemmer;
 
         /// <summary>Stemmer to use</summary>
-        private static MMarinov.WebCrawler.Stopper.IStopper _Stopper;
+        private static Stopper.IStopper _Stopper;
 
         /// <summary>Loads and acts as 'authorisation' for robot-excluded Urls</summary>
         private RobotsTxt _Robot;
@@ -89,9 +89,16 @@ namespace MMarinov.WebCrawler.Indexer
 
             if (thread.IsAlive)
             {
-                thread.Abort();
+                try
+                {
+                    thread.Abort();
 
-                ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " killed"));
+                    ProgressEvent(new ProgressEventArgs(new Exception(thread.Name + " couldn't stop!")));
+                }
+                catch (System.Threading.ThreadAbortException e)
+                {
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " killed:" + e.Message));
+                }
             }
         }
 
@@ -116,18 +123,24 @@ namespace MMarinov.WebCrawler.Indexer
                     {
                         if (GlobalURLsToVisit.Count == 0)
                         {
-                            ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " : Empty GlobalURLsToVisit at: " + DateTime.Now));
+                            CrawlingManager.HasWaitingThread = true;
+
+                            ProgressEvent(new ProgressEventArgs(EventTypes.EmptyVisitedURLs, thread.Name + " : Empty GlobalURLsToVisit at: " + DateTime.Now));
+
+                            thread.Join();
 
                             StopThreadsOnEmptyURLsList();
-
-                            continue;
                         }
+                        else
+                        {
+                            ProgressEvent(new ProgressEventArgs(EventTypes.WakeJoinedThreads, thread.Name + " : Wake waiting threads at: " + DateTime.Now));
 
-                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " : Get from GlobalURLsToVisit: " + GlobalURLsToVisit[0]));
-                        GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
+                            //ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + " : Get from GlobalURLsToVisit: " + GlobalURLsToVisit[0]));
+                            GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
 
-                        startPageUri = new Uri(GlobalURLsToVisit[0]);
-                        GlobalURLsToVisit.RemoveAt(0);
+                            startPageUri = new Uri(GlobalURLsToVisit[0]);
+                            GlobalURLsToVisit.RemoveAt(0);
+                        }
                     }
                 }
 
@@ -143,9 +156,7 @@ namespace MMarinov.WebCrawler.Indexer
 
                     MergeExternalGlobalLinks();
 
-                    _Catalog.MergeResultsRange();
-
-                    _Catalog.SaveWebSiteFilesToDB();
+                    _Catalog.MergeResultsRange(CrawlingManager.GlobalCatalog);
 
                     ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": GlobalCatalog => Words(" + CrawlingManager.GlobalCatalog.Words.Count + ") Files(" + CrawlingManager.GlobalCatalog.Files.Count + ")"));
                 }
@@ -158,9 +169,17 @@ namespace MMarinov.WebCrawler.Indexer
             ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " Crawling finished at: " + DateTime.Now));
         }
 
+        public void WakeWaitingThead()
+        {
+            if (thread.ThreadState == System.Threading.ThreadState.WaitSleepJoin)
+            {
+                thread.Interrupt();
+            }
+        }
+
         private void InitListsAndPreferences()
         {
-            _Catalog = new MMarinov.WebCrawler.Indexer.Catalog();
+            _Catalog = new Library.Catalog();
             _visitedLinks.Clear();
             _externalLinks.Clear();
 
@@ -247,7 +266,7 @@ namespace MMarinov.WebCrawler.Indexer
                     break;
             }
         }
-        string oldUrl = "";
+
         /// <summary>
         ///GETS THE FIRST DOCUMENT, AND STARTS THE SPIDER!
         // RECURSIVE CALL
@@ -261,17 +280,6 @@ namespace MMarinov.WebCrawler.Indexer
 
             int wordcount = 0;
             string url = uri.AbsoluteUri;
-
-            if (uri.IsAbsoluteUri)
-            {
-                if (uri.Authority != oldUrl)
-                {
-                }
-                if (uri.AbsoluteUri == "http://google.co.in/")
-                {
-                }
-            }
-            oldUrl = uri.Authority;
 
             if (_Robot.Allowed(uri) && !_visitedLinks.Contains(url))
             {
@@ -395,7 +403,12 @@ namespace MMarinov.WebCrawler.Indexer
         /// <return>Number of words catalogued</return>
         private int AddToCatalog(Document downloadDocument)
         {
-            File infile = new File(downloadDocument);
+            DALWebCrawler.File infile = new DALWebCrawler.File()
+            {
+                FileType = (byte)Library.FileManipulator.SetFileType(downloadDocument),
+                ImportantWords = Library.FileManipulator.SetImportantWords(downloadDocument),
+                URL = Common.GetHttpAuthority(downloadDocument.Uri) + downloadDocument.Uri.AbsolutePath//do i need that again here ??
+            };
 
             int i = 0;          // count of words
             string key = "";    // temp variable
@@ -405,21 +418,21 @@ namespace MMarinov.WebCrawler.Indexer
             {
                 key = word.ToLower();
 
-                // Apply Stemmer (set by preferences)
+                // Apply Stemming and stopping (set by preferences)
                 key = _Stemmer.StemWord(key);
-
-                // Apply Stopper (set by preferences)
                 key = _Stopper.StopWord(key);
 
                 if (key != "")
                 {
-                    formatedWords.Append(key).Append(" ");
-                    _Catalog.AddWordFilePair(key, infile, i);
+                    formatedWords.AppendLine(key);
+
+                    _Catalog.AddWordFilePair(key, infile);
+
                     i++;
                 }
             } // foreach
 
-            infile.SetWeightedWords(formatedWords.ToString());
+            infile.WeightedWords = Library.FileManipulator.SetWeightedWords(formatedWords.ToString());
 
             _Catalog.AddHtmlFile(infile);
 
