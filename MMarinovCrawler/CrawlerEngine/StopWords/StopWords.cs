@@ -27,7 +27,7 @@ namespace MMarinov.WebCrawler.Stopper
     /// </summary>
     /// <remarks>
     /// Examples of words ignored:
-    /// a of we in or i to 
+    /// a of we in or wordsCount to 
     /// </remarks>
     public class ShortStopper : IStopper
     {

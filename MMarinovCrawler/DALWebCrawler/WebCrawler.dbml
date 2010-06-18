@@ -11,47 +11,22 @@
       <Association Name="File_WordsInFile" Member="WordsInFiles" ThisKey="ID" OtherKey="FileID" Type="WordsInFile" />
     </Type>
   </Table>
-  <Table Name="dbo.WordsInFiles" Member="WordsInFiles">
-    <Type Name="WordsInFile">
-      <Column Name="WordID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="FileID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="File_WordsInFile" Member="File" ThisKey="FileID" OtherKey="ID" Type="File" IsForeignKey="true" />
-      <Association Name="Word_WordsInFile" Member="Word" ThisKey="FileID" OtherKey="ID" Type="Word" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Words" Member="Words">
     <Type Name="Word">
       <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="WordName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="Word_WordsInFile" Member="WordsInFiles" ThisKey="ID" OtherKey="FileID" Type="WordsInFile" />
+      <Association Name="Word_WordsInFile" Member="WordsInFiles" ThisKey="ID" OtherKey="WordID" Type="WordsInFile" />
     </Type>
   </Table>
-  <Function Name="dbo.sp_InsertFile" Method="sp_InsertFile">
-    <Parameter Name="URL" Parameter="uRL" Type="System.String" DbType="NVarChar(2500)" />
-    <Parameter Name="ImportantWords" Parameter="importantWords" Type="System.String" DbType="NVarChar(2500)" />
-    <Parameter Name="WeightedWords" Parameter="weightedWords" Type="System.String" DbType="NVarChar(2500)" />
-    <Parameter Name="FileType" Parameter="fileType" Type="System.Byte" DbType="TinyInt" />
-    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.sp_UpdateWordInFile" Method="sp_UpdateWordInFile">
-    <Parameter Name="WordID" Parameter="wordID" Type="System.Int64" DbType="BigInt" />
-    <Parameter Name="FileID" Parameter="fileID" Type="System.Int64" DbType="BigInt" />
-    <Parameter Name="Count" Parameter="count" Type="System.Int32" DbType="Int" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.sp_InsertWord" Method="sp_InsertWord">
-    <Parameter Name="WordName" Parameter="wordName" Type="System.String" DbType="NVarChar(50)" />
-    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" Direction="InOut" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.sp_InsertWordInFile" Method="sp_InsertWordInFile">
-    <Parameter Name="WordID" Parameter="wordID" Type="System.Int64" DbType="BigInt" />
-    <Parameter Name="FileID" Parameter="fileID" Type="System.Int64" DbType="BigInt" />
-    <Parameter Name="Count" Parameter="count" Type="System.Int32" DbType="Int" />
-    <Return Type="System.Int32" />
-  </Function>
+  <Table Name="dbo.WordsInFiles" Member="WordsInFiles">
+    <Type Name="WordsInFile">
+      <Column Name="WordID" Type="System.Int64" DbType="BigInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FileID" Type="System.Int64" DbType="BigInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="File_WordsInFile" Member="File" ThisKey="FileID" OtherKey="ID" Type="File" IsForeignKey="true" />
+      <Association Name="Word_WordsInFile" Member="Word" ThisKey="WordID" OtherKey="ID" Type="Word" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.sp_SelectFile" Method="sp_SelectFile">
     <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
     <ElementType Name="sp_SelectFileResult">
@@ -111,17 +86,7 @@
       <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
-  <Function Name="dbo.sp_UpdateFile" Method="sp_UpdateFile">
-    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
-    <Parameter Name="URL" Parameter="uRL" Type="System.String" DbType="NVarChar(2500)" />
-    <Parameter Name="ImportantWords" Parameter="importantWords" Type="System.String" DbType="NVarChar(2500)" />
-    <Parameter Name="WeightedWords" Parameter="weightedWords" Type="System.String" DbType="NVarChar(2500)" />
-    <Parameter Name="FileType" Parameter="fileType" Type="System.Byte" DbType="TinyInt" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.sp_UpdateWord" Method="sp_UpdateWord">
-    <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
-    <Parameter Name="WordName" Parameter="wordName" Type="System.String" DbType="NVarChar(50)" />
+  <Function Name="dbo.sp_TruncateAllTables" Method="sp_TruncateAllTables">
     <Return Type="System.Int32" />
   </Function>
 </Database>

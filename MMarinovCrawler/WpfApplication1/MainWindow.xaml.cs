@@ -32,6 +32,11 @@ namespace MMarinov.WebCrawler.UI
             tbTimeoutEx.Text = "";
             tbWebEx.Text = "";
 
+            if (MessageBox.Show("This procees will override the database, if such exists!", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning) == MessageBoxResult.OK)
+            {
+                manager.DropTheDatabase();
+            }
+            
             Cursor = Cursors.Wait;
             lblStartTime.Content = "Starting...";
             elapsedSec = 0;

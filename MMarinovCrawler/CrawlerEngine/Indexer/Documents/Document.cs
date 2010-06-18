@@ -6,10 +6,10 @@ namespace MMarinov.WebCrawler.Indexer
     {
         public enum DoumentTypes
         {
-            HTML, //1
-            Text, //2
-            Mp3,  //3
-            PDF   //4
+            HTML = 1,
+            Text = 2,
+            Mp3 = 3,
+            PDF = 4
         }
 
         private Uri _Uri;
@@ -196,7 +196,7 @@ namespace MMarinov.WebCrawler.Indexer
             try
             {
                 Uri uri = new Uri(foundHref);
-                if(uri.Segments.Length==0)
+                if (uri.Segments.Length == 0)
                 {
                 }
                 string lastSegment = uri.Segments[uri.Segments.Length - 1];
@@ -221,7 +221,7 @@ namespace MMarinov.WebCrawler.Indexer
                     return true;
                 }
             }
-           
+
             switch (extension)
             {
                 case "htm":
@@ -266,7 +266,7 @@ namespace MMarinov.WebCrawler.Indexer
                 {
                     return false;
                 }
-            }          
+            }
         }
 
         protected bool DeleteFile(string filename)

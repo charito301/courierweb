@@ -81,8 +81,8 @@ namespace MMarinov.WebCrawler.Stemming
         void setTerm(string s)
         {
             i = s.Length;
-            //char[] new_b = new char[i];
-            //for (int c = 0; c < i; c++)
+            //char[] new_b = new char[wordsCount];
+            //for (int c = 0; c < wordsCount; c++)
             //    new_b[c] = s[c];
 
             //b = new_b;
@@ -151,7 +151,7 @@ namespace MMarinov.WebCrawler.Stemming
             return b;
         }
 
-        /* cons(i) is true <=> b[i] is a consonant. */
+        /* cons(wordsCount) is true <=> b[wordsCount] is a consonant. */
         private bool isConsonantEN(int i)
         {
             switch (b[i])
@@ -226,7 +226,7 @@ namespace MMarinov.WebCrawler.Stemming
             return isConsonantEN(j);
         }
 
-        /* cvc(i) is true <=> i-2,i-1,i has the form consonant - vowel - consonant
+        /* cvc(wordsCount) is true <=> wordsCount-2,wordsCount-1,wordsCount has the form consonant - vowel - consonant
             and also if the second c is not w,x or y. this is used when trying to
             restore an e at the end of a short word. e.g.
 
@@ -334,7 +334,7 @@ namespace MMarinov.WebCrawler.Stemming
             }
         }
 
-        /* step2() turns terminal y to i when there is another vowel in the stem. */
+        /* step2() turns terminal y to wordsCount when there is another vowel in the stem. */
         private void step2()
         {
             if (ends("y") && vowelinstem())

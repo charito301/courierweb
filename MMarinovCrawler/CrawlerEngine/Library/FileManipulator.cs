@@ -16,7 +16,7 @@ namespace MMarinov.WebCrawler.Library
             try
             {
                 Uri uri = new Uri(downloadDocument.Uri.AbsoluteUri);
-                importantWords.Append(uri.Authority + uri.AbsolutePath).Append(" ");
+                importantWords.AppendLine(Common.GetAuthority(uri)).AppendLine(uri.AbsolutePath);
             }
             catch { }
 

@@ -551,13 +551,13 @@ namespace MMarinov.WebCrawler.Indexer
             strFrom[23] = "&Euml;"; strTo[23] = "Ë"; //capital E, diæresis/umlaut   
             strFrom[24] = "&euml;"; strTo[24] = "ë"; //small e, diæresis/umlaut     
             strFrom[25] = "&Igrave;"; strTo[25] = "Ì"; //capital I, grave accent      
-            strFrom[26] = "&igrave;"; strTo[26] = "ì"; //small i, grave accent        
+            strFrom[26] = "&igrave;"; strTo[26] = "ì"; //small wordsCount, grave accent        
             strFrom[27] = "&Iacute;"; strTo[27] = "Í"; //capital I, acute accent      
-            strFrom[28] = "&iacute;"; strTo[28] = "í"; //small i, acute accent        
+            strFrom[28] = "&iacute;"; strTo[28] = "í"; //small wordsCount, acute accent        
             strFrom[29] = "&Icirc;"; strTo[29] = "Î"; //capital I, circumflex        
-            strFrom[30] = "&icirc;"; strTo[30] = "î"; //small i, circumflex          
+            strFrom[30] = "&icirc;"; strTo[30] = "î"; //small wordsCount, circumflex          
             strFrom[31] = "&Iuml;"; strTo[31] = "Ï"; //capital I, diæresis/umlaut   
-            strFrom[32] = "&iuml;"; strTo[32] = "ï"; //small i, diæresis/umlaut  
+            strFrom[32] = "&iuml;"; strTo[32] = "ï"; //small wordsCount, diæresis/umlaut  
             strFrom[33] = "&ETH;"; strTo[33] = "Ð"; //capital Eth, Icelandic
             strFrom[34] = "&eth;"; strTo[34] = "ð"; //small eth, Icelandic
             strFrom[35] = "&Ntilde;"; strTo[35] = "Ñ"; //capital N, tilde        
@@ -660,7 +660,7 @@ namespace MMarinov.WebCrawler.Indexer
             int i;
             for (i = 1; i < strFrom.Length; i = i + 2)
             {
-                //strText = Regex.Replace(strText, strFrom[i], strTo[i], RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                //strText = Regex.Replace(strText, strFrom[wordsCount], strTo[wordsCount], RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 strText = strText.Replace(strFrom[i], strTo[i]).Replace(strFrom[i + 1], strTo[i + 1]);
             }
 

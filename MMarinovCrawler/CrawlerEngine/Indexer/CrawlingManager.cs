@@ -1,4 +1,6 @@
-﻿namespace MMarinov.WebCrawler.Indexer
+﻿using System;
+
+namespace MMarinov.WebCrawler.Indexer
 {
     /// <summary>
     /// Summary description for CrawlingManager
@@ -247,6 +249,14 @@
             //SendMail();
 
             timer.Dispose();
+        }
+
+        public void DropTheDatabase()
+        {
+            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            {
+                dataContext.sp_TruncateAllTables();
+            }
         }
     }
 }

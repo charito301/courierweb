@@ -158,6 +158,8 @@ namespace MMarinov.WebCrawler.Indexer
 
                     _Catalog.MergeResultsRange(CrawlingManager.GlobalCatalog);
 
+                    _Catalog.SaveResultsToDB();
+
                     ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": GlobalCatalog => Words(" + CrawlingManager.GlobalCatalog.Words.Count + ") Files(" + CrawlingManager.GlobalCatalog.Files.Count + ")"));
                 }
                 else
@@ -407,10 +409,10 @@ namespace MMarinov.WebCrawler.Indexer
             {
                 FileType = (byte)Library.FileManipulator.SetFileType(downloadDocument),
                 ImportantWords = Library.FileManipulator.SetImportantWords(downloadDocument),
-                URL = Common.GetHttpAuthority(downloadDocument.Uri) + downloadDocument.Uri.AbsolutePath//do i need that again here ??
+                URL = Common.GetHttpAuthority(downloadDocument.Uri) + downloadDocument.Uri.AbsolutePath//do wordsCount need that again here ??
             };
 
-            int i = 0;          // count of words
+            int wordsCount = 0;          
             string key = "";    // temp variable
             System.Text.StringBuilder formatedWords = new System.Text.StringBuilder();
 
@@ -428,7 +430,7 @@ namespace MMarinov.WebCrawler.Indexer
 
                     _Catalog.AddWordFilePair(key, infile);
 
-                    i++;
+                    wordsCount++;
                 }
             } // foreach
 
@@ -436,7 +438,7 @@ namespace MMarinov.WebCrawler.Indexer
 
             _Catalog.AddHtmlFile(infile);
 
-            return i;
+            return wordsCount;
         }
     }
 }

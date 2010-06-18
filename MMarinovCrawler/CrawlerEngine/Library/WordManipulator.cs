@@ -9,31 +9,16 @@ namespace MMarinov.WebCrawler.Library
     {
         public struct FileCountPair
         {
-            public string URL;
+            public DALWebCrawler.File File;
 
             public int Count;
 
-            public FileCountPair(string url, int count)
+            public FileCountPair(DALWebCrawler.File file, int count)
             {
-                URL = url;
+                File = file;
                 Count = count;
             }
         }
-
-        ///// <summary>Add a file referencing this word</summary>
-        //public void AddWordInFile(DALWebCrawler.File inFile, ThreadedGenerics.TList<DALWebCrawler.WordsInFile> wordsInFileColl)
-        //{
-        //    DALWebCrawler.WordsInFile wif = wordsInFileColl.GetWordInFile(_id, inFile.ID);
-
-        //    if (wif != null)
-        //    {
-        //        wif.Count++; 
-        //    }
-        //    else
-        //    {
-        //        wordsInFileColl.Add(DALWebCrawler.WordsInFile.NewWordInFile(_id, inFile.ID, 1));
-        //    }
-        //}
 
         public static void InsertWordsIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.Word> wordsColl)
         {
@@ -44,16 +29,12 @@ namespace MMarinov.WebCrawler.Library
             }
         }
 
-        ///TODO
-        public static void InsertWordsInFilesIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.WordsInFile> wordInFileColl)
+        public static void InsertWordsInFilesIntoDB(System.Collections.Generic.List<DALWebCrawler.WordsInFile> wordInFileColl)
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
-                //dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
-                //dataContext.SubmitChanges();
-                ///
-                /// TODO
-                /// get all records from table with words and file ..
+                dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
+                dataContext.SubmitChanges();
             }
         }
     }

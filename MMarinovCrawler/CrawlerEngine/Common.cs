@@ -20,7 +20,7 @@ namespace MMarinov.WebCrawler
         public const string MatchEmptySpacesPattern = @"\s+";
 
         public const string ErrorLogsFolder = "\\ErrorLogs";
-        public const string MessageLogsFolder = "\\MessageLogs";       
+        public const string MessageLogsFolder = "\\MessageLogs";
 
         public static readonly string ErrorLog = ErrorLogsFolder + "\\ErrorLog.txt";
         public static readonly string ErrorWebLog = ErrorLogsFolder + "\\ErrorWebLog.txt";
@@ -36,7 +36,12 @@ namespace MMarinov.WebCrawler
 
         public static string GetHttpAuthority(Uri uri)
         {
-            return HTTP + System.Text.RegularExpressions.Regex.Replace(uri.Authority, Common.MatchWwwDigitDotPattern, "");
+            return HTTP + GetAuthority(uri);
+        }
+
+        public static string GetAuthority(Uri uri)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(uri.Authority, Common.MatchWwwDigitDotPattern, "");
         }
     }
 }
