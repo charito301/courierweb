@@ -9,7 +9,7 @@ namespace MMarinov.WebCrawler.Indexer
     {
         public static Library.Catalog GlobalCatalog = new Library.Catalog();
         public static volatile bool ShouldStopThreads = false;
-        public static volatile bool HasWaitingThread = false;
+        public static volatile int WaitingThreadsCount = 0;
 
         private Spider[] spiderArray;
         private System.Threading.Timer timer;
@@ -189,7 +189,7 @@ namespace MMarinov.WebCrawler.Indexer
             switch (pea.EventType)
             {
                 case Report.EventTypes.WakeJoinedThreads:
-                    WakeJoinedThreads();
+                    WakeThreads();
                     break;
                 case Report.EventTypes.Error:
                     switch (pea.WebExStatus)
@@ -214,16 +214,16 @@ namespace MMarinov.WebCrawler.Indexer
             }
         }
 
-        private void WakeJoinedThreads()
+        private void WakeThreads()
         {
-            if (HasWaitingThread)
+            if (WaitingThreadsCount > 0)
             {
                 foreach (Spider spider in spiderArray)
                 {
                     spider.WakeWaitingThead();
                 }
 
-                HasWaitingThread = false;
+                WaitingThreadsCount = 0;
             }
         }
 

@@ -34,11 +34,12 @@ namespace MMarinov.WebCrawler.UI
 
             if (MessageBox.Show("This procees will override the database, if such exists!", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning) == MessageBoxResult.OK)
             {
+                Cursor = Cursors.Wait;
+                lblStartTime.Content = "Starting...";
+
                 manager.DropTheDatabase();
-            }
-            
-            Cursor = Cursors.Wait;
-            lblStartTime.Content = "Starting...";
+            }           
+           
             elapsedSec = 0;
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(ShowElapsedTime), null, 0, 1000);
 
@@ -104,7 +105,7 @@ namespace MMarinov.WebCrawler.UI
             System.Windows.Threading.DispatcherPriority.Normal, TimeSpan.FromMilliseconds(100),
             (Action)(() =>
             {
-                if (tbx.LineCount > 1000)
+                if (tbx.LineCount > 500)
                 {
                     tbx.Text = "";
                 }
@@ -128,6 +129,12 @@ namespace MMarinov.WebCrawler.UI
         private void btnPause_Click(object sender, RoutedEventArgs e)
         {
             manager.PauseSpiders();
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            //TODO shutdown at all
         }
     }
 }

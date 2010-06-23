@@ -113,12 +113,14 @@ namespace MMarinov.WebCrawler.Library
             return Indexer.Document.DoumentTypes.HTML;
         }
 
-        public static void InsertFilesIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.File> files)
+        public static bool InsertFilesIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.File> files)
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
                 dataContext.Files.InsertAllOnSubmit(files);
                 dataContext.SubmitChanges();
+
+                return true;
             }
         }
     }

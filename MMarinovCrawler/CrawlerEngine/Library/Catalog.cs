@@ -203,7 +203,7 @@ namespace MMarinov.WebCrawler.Library
                     theGlobalCatalog.FileCountPairs[wordName].Add(urlLocal, fileCountPairColl[urlLocal]);
                     if (wordsInFilesToSaveIntoDB.ContainsKey(_wordColl[wordName]))
                     {
-                        wordsInFilesToSaveIntoDB[_wordColl[wordName]].Add(fileCountPairColl[urlLocal]);
+                        wordsInFilesToSaveIntoDB[_wordColl[wordName]].Add(fileCountPairColl[urlLocal]);//to save into db coll
                     }
                     else
                     {
@@ -256,6 +256,13 @@ namespace MMarinov.WebCrawler.Library
 
                     if (wordsInFileList.Count > 0)
                     {
+                        foreach (DALWebCrawler.WordsInFile wif in wordsInFileList)
+                        {
+                            if (wif.WordID == 0 || wif.FileID == 0)
+                            {
+                            }
+                        }
+
                         WordManipulator.InsertWordsInFilesIntoDB(wordsInFileList);
                     }
                 }

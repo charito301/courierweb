@@ -255,11 +255,12 @@ namespace MMarinov.WebCrawler.Indexer
         {
             lock (Spider.GlobalVisitedURLs)
             {
-                if (!Spider.GlobalVisitedURLs.Contains(Common.GetHttpAuthority(uri)))
+                string link = Common.GetHttpAuthority(uri);
+                if (!Spider.GlobalVisitedURLs.Contains(link))
                 {
-                    Spider.GlobalVisitedURLs.Add(Common.GetHttpAuthority(uri));
+                    Spider.GlobalVisitedURLs.Add(link);
 
-                    DocumentProgressEvent(new Report.ProgressEventArgs(Report.EventTypes.Start, "Crawling website(redirected):" + this.Uri));
+                    DocumentProgressEvent(new Report.ProgressEventArgs(Report.EventTypes.Start, "Crawling website(redirected):" + link));
                     return true;
                 }
                 else

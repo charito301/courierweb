@@ -65,6 +65,8 @@ namespace MMarinov.WebCrawler.Indexer
             _spiderIndex = spiderIndex;
         }
 
+        #region Thread methods
+
         public void StartThread()
         {
             try
@@ -93,14 +95,24 @@ namespace MMarinov.WebCrawler.Indexer
                 {
                     thread.Abort();
 
-                    ProgressEvent(new ProgressEventArgs(new Exception(thread.Name + " couldn't stop!")));
+                    ProgressEvent(new ProgressEventArgs(new Exception(thread.Name + " killed.")));
                 }
                 catch (System.Threading.ThreadAbortException e)
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " killed:" + e.Message));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " couldn't stop! :" + e.Message));
                 }
             }
         }
+
+        public void WakeWaitingThead()
+        {
+            if (thread.ThreadState == System.Threading.ThreadState.WaitSleepJoin)
+            {
+                thread.Interrupt();
+            }
+        } 
+
+        #endregion
 
         /// <summary>
         /// Takes a single Uri (Url) and returns the catalog that is generated
@@ -123,17 +135,14 @@ namespace MMarinov.WebCrawler.Indexer
                     {
                         if (GlobalURLsToVisit.Count == 0)
                         {
-                            CrawlingManager.HasWaitingThread = true;
-
-                            ProgressEvent(new ProgressEventArgs(EventTypes.EmptyVisitedURLs, thread.Name + " : Empty GlobalURLsToVisit at: " + DateTime.Now));
-
-                            thread.Join();
-
-                            StopThreadsOnEmptyURLsList();
+                            if (!StopThreadsOnEmptyURLsList())
+                            {
+                                thread.Join();
+                            }
                         }
                         else
                         {
-                            ProgressEvent(new ProgressEventArgs(EventTypes.WakeJoinedThreads, thread.Name + " : Wake waiting threads at: " + DateTime.Now));
+                            ProgressEvent(new ProgressEventArgs(EventTypes.WakeJoinedThreads, thread.Name + ": !!! Wake waiting threads at: " + DateTime.Now));
 
                             //ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + " : Get from GlobalURLsToVisit: " + GlobalURLsToVisit[0]));
                             GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
@@ -146,7 +155,7 @@ namespace MMarinov.WebCrawler.Indexer
 
                 if (startPageUri != null)
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + " : Crawling website: " + startPageUri.AbsoluteUri));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + ": Crawling website: " + startPageUri.AbsoluteUri));
 
                     InitListsAndPreferences();
 
@@ -164,19 +173,11 @@ namespace MMarinov.WebCrawler.Indexer
                 }
                 else
                 {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " : No more tasks - wait for a signal "));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": !!! No more tasks - wait for a signal "));
                 }
             }
 
-            ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + " Crawling finished at: " + DateTime.Now));
-        }
-
-        public void WakeWaitingThead()
-        {
-            if (thread.ThreadState == System.Threading.ThreadState.WaitSleepJoin)
-            {
-                thread.Interrupt();
-            }
+            ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": !!! Crawling finished at: " + DateTime.Now));
         }
 
         private void InitListsAndPreferences()
@@ -192,20 +193,15 @@ namespace MMarinov.WebCrawler.Indexer
         /// <summary>
         /// Checks if all threads are not working and kills them.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if Should Stop Threads</returns>
         private bool StopThreadsOnEmptyURLsList()
         {
-            int nonWorkingThreads = 0;
+            CrawlingManager.WaitingThreadsCount++;
 
-            if (!thread.IsAlive)
+            ProgressEvent(new ProgressEventArgs(EventTypes.EmptyVisitedURLs, thread.Name + " : !!! Empty GlobalURLsToVisit at: " + DateTime.Now));
+
+            if (CrawlingManager.WaitingThreadsCount == Preferences.ThreadsCount)
             {
-                nonWorkingThreads++;
-            }
-
-            if (nonWorkingThreads == Preferences.ThreadsCount)
-            {
-                CrawlingManager.ShouldStopThreads = true;
-
                 KillThread();
             }
 
@@ -305,7 +301,7 @@ namespace MMarinov.WebCrawler.Indexer
 
                         wordcount = AddToCatalog(downloadDocument);
 
-                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " " + ++_totalSuccessfulLinks + ": " + url + "(" + wordcount + " words cat. in local)"));
+                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " " + ++_totalSuccessfulLinks + ": " + url + " [" + wordcount + " words]"));
                     }
                 }
 

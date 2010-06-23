@@ -20,21 +20,26 @@ namespace MMarinov.WebCrawler.Library
             }
         }
 
-        public static void InsertWordsIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.Word> wordsColl)
+        public static bool InsertWordsIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.Word> wordsColl)
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
                 dataContext.Words.InsertAllOnSubmit(wordsColl);
                 dataContext.SubmitChanges();
+
+                return true;
             }
         }
 
-        public static void InsertWordsInFilesIntoDB(System.Collections.Generic.List<DALWebCrawler.WordsInFile> wordInFileColl)
+        public static bool InsertWordsInFilesIntoDB(System.Collections.Generic.List<DALWebCrawler.WordsInFile> wordInFileColl)
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
                 dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
+                //dataContext.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, wordInFileColl);
                 dataContext.SubmitChanges();
+
+                return true;
             }
         }
     }
