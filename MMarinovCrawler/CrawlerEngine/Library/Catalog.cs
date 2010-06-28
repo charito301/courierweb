@@ -16,9 +16,9 @@ namespace MMarinov.WebCrawler.Library
         private ThreadedGenerics.TDictionary<string, DALWebCrawler.Word> _wordColl;
         private ThreadedGenerics.TDictionary<string, DALWebCrawler.File> _fileColl;
 
-        private System.Collections.Generic.List<DALWebCrawler.File> filesToSaveIntoDB;
-        private System.Collections.Generic.List<DALWebCrawler.Word> wordsToSaveIntoDB;
-        private System.Collections.Generic.Dictionary<DALWebCrawler.Word, System.Collections.Generic.List<WordManipulator.FileCountPair>> wordsInFilesToSaveIntoDB;
+        private ThreadedGenerics.TList<DALWebCrawler.File> filesToSaveIntoDB;
+        private ThreadedGenerics.TList<DALWebCrawler.Word> wordsToSaveIntoDB;
+        private ThreadedGenerics.TDictionary<DALWebCrawler.Word, System.Collections.Generic.List<WordManipulator.FileCountPair>> wordsInFilesToSaveIntoDB;
 
         /// <summary>
         /// Key(wordName), 
@@ -72,9 +72,9 @@ namespace MMarinov.WebCrawler.Library
             _fileColl = new ThreadedGenerics.TDictionary<string, DALWebCrawler.File>();
             _fileCountPairColl = new MMarinov.ThreadedGenerics.TDictionary<string, ThreadedGenerics.TDictionary<string, WordManipulator.FileCountPair>>();
 
-            filesToSaveIntoDB = new System.Collections.Generic.List<DALWebCrawler.File>();
-            wordsToSaveIntoDB = new System.Collections.Generic.List<DALWebCrawler.Word>();
-            wordsInFilesToSaveIntoDB = new System.Collections.Generic.Dictionary<DALWebCrawler.Word, System.Collections.Generic.List<WordManipulator.FileCountPair>>();
+            filesToSaveIntoDB = new ThreadedGenerics.TList<DALWebCrawler.File>();
+            wordsToSaveIntoDB = new ThreadedGenerics.TList<DALWebCrawler.Word>();
+            wordsInFilesToSaveIntoDB = new ThreadedGenerics.TDictionary<DALWebCrawler.Word, System.Collections.Generic.List<WordManipulator.FileCountPair>>();
         }
 
         /// <summary>
@@ -146,80 +146,83 @@ namespace MMarinov.WebCrawler.Library
         /// Adds results from one web site to the GlobalCatalog.
         /// Merging of the lists is sychronized, so GlobalCatalog is thread-safe.
         /// </summary>
-        internal void MergeResultsRange(Catalog theGlobalCatalog)
+        internal void MergeResultsRange()
         {
-            //lock (((System.Collections.IDictionary)CrawlingManager.GlobalCatalog.Files).SyncRoot)
-            //{
-            //    lock (((System.Collections.IDictionary)_filesWithKeywords).SyncRoot)
-            //    {
-            MergeFilesWithGlobalCatalog(theGlobalCatalog);
-            //    }
-            //}
-
-            //lock (((System.Collections.IDictionary)CrawlingManager.GlobalCatalog.Words).SyncRoot)
-            //{
-            //    lock (((System.Collections.IDictionary)_IndexOfWords).SyncRoot)
-            //    {
-            MergeWordsAndPairsWithGlobalCatalog(theGlobalCatalog);
-            //    }
-            //}           
+            MergeFilesWithGlobalCatalog();
+            MergeWordsAndPairsWithGlobalCatalog();
         }
 
-        private void MergeWordsAndPairsWithGlobalCatalog(Catalog theGlobalCatalog)
+        private void MergeWordsAndPairsWithGlobalCatalog()
         {
             foreach (string wordName in _wordColl.Keys)//local collection
             {
-                if (theGlobalCatalog.Words.ContainsKey(wordName))
+                if (Indexer.CrawlingManager.GlobalCatalog.Words.ContainsKey(wordName))
                 {
-                    UpdateWordsAndFileToGlobalCatalog(theGlobalCatalog, wordName);
+                    UpdateWordsAndPairsToGlobalCatalog(wordName);
                 }
                 else
                 {
-                    InsertNewWordsAndFileToGlobalCatalog(theGlobalCatalog, wordName);
+                    InsertWordsAndPairsToGlobalCatalog(wordName);
                 }
             }
         }
 
-        private void MergeFilesWithGlobalCatalog(Catalog theGlobalCatalog)
+        private void MergeFilesWithGlobalCatalog()
         {
             foreach (string url in _fileColl.Keys)
             {
-                if (!theGlobalCatalog.Files.ContainsKey(url))
+                if (!Indexer.CrawlingManager.GlobalCatalog.Files.ContainsKey(url))
                 {
-                    theGlobalCatalog.Files.Add(url, _fileColl[url]);
+                    Indexer.CrawlingManager.GlobalCatalog.Files.Add(url, _fileColl[url]);
                     filesToSaveIntoDB.Add(_fileColl[url]);
                 }
             }
         }
 
-        private void UpdateWordsAndFileToGlobalCatalog(Catalog theGlobalCatalog, string wordName)
+        private void UpdateWordsAndPairsToGlobalCatalog(string wordName)
         {
             ThreadedGenerics.TDictionary<string, WordManipulator.FileCountPair> fileCountPairColl = _fileCountPairColl[wordName];//get all pairs for that word
 
             foreach (string urlLocal in fileCountPairColl.Keys)
             {
-                if (!theGlobalCatalog.FileCountPairs[wordName].ContainsKey(urlLocal))
+                if (!Indexer.CrawlingManager.GlobalCatalog.FileCountPairs[wordName].ContainsKey(urlLocal))
                 {
-                    theGlobalCatalog.FileCountPairs[wordName].Add(urlLocal, fileCountPairColl[urlLocal]);
-                    if (wordsInFilesToSaveIntoDB.ContainsKey(_wordColl[wordName]))
+                    Indexer.CrawlingManager.GlobalCatalog.FileCountPairs[wordName].Add(urlLocal, fileCountPairColl[urlLocal]);
+
+                    DALWebCrawler.Word word = _wordColl[wordName];
+                    if (!wordsToSaveIntoDB.Contains(word))
                     {
-                        wordsInFilesToSaveIntoDB[_wordColl[wordName]].Add(fileCountPairColl[urlLocal]);//to save into db coll
+                        wordsToSaveIntoDB.Add(word);
+                    }
+
+                    if (wordsInFilesToSaveIntoDB.ContainsKey(word))
+                    {
+                        wordsInFilesToSaveIntoDB[word].Add(fileCountPairColl[urlLocal]);//to save into db coll
                     }
                     else
                     {
-                        wordsInFilesToSaveIntoDB.Add(_wordColl[wordName], new System.Collections.Generic.List<WordManipulator.FileCountPair>() { fileCountPairColl[urlLocal] });
+                        wordsInFilesToSaveIntoDB.Add(word, new System.Collections.Generic.List<WordManipulator.FileCountPair>() { fileCountPairColl[urlLocal] });
                     }
+                }
+                else
+                {
                 }
             }
         }
 
-        private void InsertNewWordsAndFileToGlobalCatalog(Catalog theGlobalCatalog, string wordName)
+        private void InsertWordsAndPairsToGlobalCatalog(string wordName)
         {
-            theGlobalCatalog.Words.Add(wordName, _wordColl[wordName]);
+            Indexer.CrawlingManager.GlobalCatalog.Words.Add(wordName, _wordColl[wordName]);
             wordsToSaveIntoDB.Add(_wordColl[wordName]);
 
-            theGlobalCatalog.FileCountPairs.Add(wordName, _fileCountPairColl[wordName]);//add all pairs for that word because it's a new one
-            wordsInFilesToSaveIntoDB.Add(_wordColl[wordName], _fileCountPairColl[wordName].Values.ToList<WordManipulator.FileCountPair>());
+            Indexer.CrawlingManager.GlobalCatalog.FileCountPairs.Add(wordName, _fileCountPairColl[wordName]);//add all pairs for that word because it's a new one
+            if (wordsInFilesToSaveIntoDB.ContainsKey(_wordColl[wordName]))
+            {
+            }
+            else
+            {
+                wordsInFilesToSaveIntoDB.Add(_wordColl[wordName], _fileCountPairColl[wordName].Values.ToList<WordManipulator.FileCountPair>());
+            }
         }
 
         #endregion
@@ -241,6 +244,19 @@ namespace MMarinov.WebCrawler.Library
                 if (wordsInFilesToSaveIntoDB.Count > 0)
                 {
                     System.Collections.Generic.List<DALWebCrawler.WordsInFile> wordsInFileList = new System.Collections.Generic.List<DALWebCrawler.WordsInFile>();
+                    foreach (DALWebCrawler.Word word in wordsInFilesToSaveIntoDB.Keys)
+                    {
+                        if (word.ID == 0)
+                        {
+                        }
+
+                        foreach (MMarinov.WebCrawler.Library.WordManipulator.FileCountPair fcp in wordsInFilesToSaveIntoDB[word])
+                        {
+                            if (fcp.File.ID == 0)
+                            {
+                            }
+                        }
+                    }
 
                     foreach (DALWebCrawler.Word word in wordsInFilesToSaveIntoDB.Keys)
                     {

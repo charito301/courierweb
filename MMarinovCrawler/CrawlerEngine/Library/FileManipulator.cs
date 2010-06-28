@@ -123,5 +123,14 @@ namespace MMarinov.WebCrawler.Library
                 return true;
             }
         }
+
+        public static IQueryable<DALWebCrawler.File> SelectAllFiles()
+        {
+            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            {
+                return from file in dataContext.Files
+                       select file;
+            }
+        }
     }
 }

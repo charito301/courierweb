@@ -457,15 +457,6 @@ namespace MMarinov.WebCrawler.Indexer
                 }
 
                 this.AllCode = stream.ReadToEnd();
-
-                //DateTime endDLtime = DateTime.Now;
-                //double periodDL = (endDLtime - startDLtime).TotalSeconds;
-
-                //if (periodDL > 0)
-                //{
-                //    int bytesPerSec = (int)(this.Encoding.GetBytes(AllCode).Length / periodDL);
-                //    System.Console.WriteLine(bytesPerSec / 1024 + " KB/s");
-                //}
             }
             catch (Exception e)
             {

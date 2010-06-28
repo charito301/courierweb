@@ -39,6 +39,9 @@ namespace DALWebCrawler
     partial void InsertWordsInFile(WordsInFile instance);
     partial void UpdateWordsInFile(WordsInFile instance);
     partial void DeleteWordsInFile(WordsInFile instance);
+    partial void InsertStatistic(Statistic instance);
+    partial void UpdateStatistic(Statistic instance);
+    partial void DeleteStatistic(Statistic instance);
     #endregion
 		
 		public WebCrawlerDataContext() : 
@@ -92,6 +95,14 @@ namespace DALWebCrawler
 			get
 			{
 				return this.GetTable<WordsInFile>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Statistic> Statistics
+		{
+			get
+			{
+				return this.GetTable<Statistic>();
 			}
 		}
 		
@@ -626,6 +637,260 @@ namespace DALWebCrawler
 						this._WordID = default(long);
 					}
 					this.SendPropertyChanged("Word");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[Table(Name="dbo.[Statistics]")]
+	public partial class Statistic : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private System.DateTime _StartDate;
+		
+		private string _Duration;
+		
+		private long _Words;
+		
+		private long _FoundTotalLinks;
+		
+		private long _FoundValidLinks;
+		
+		private long _CrawledTotalLinks;
+		
+		private long _CrawledSuccessfulLinks;
+		
+		private string _ProcessDescription;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnStartDateChanging(System.DateTime value);
+    partial void OnStartDateChanged();
+    partial void OnDurationChanging(string value);
+    partial void OnDurationChanged();
+    partial void OnWordsChanging(long value);
+    partial void OnWordsChanged();
+    partial void OnFoundTotalLinksChanging(long value);
+    partial void OnFoundTotalLinksChanged();
+    partial void OnFoundValidLinksChanging(long value);
+    partial void OnFoundValidLinksChanged();
+    partial void OnCrawledTotalLinksChanging(long value);
+    partial void OnCrawledTotalLinksChanged();
+    partial void OnCrawledSuccessfulLinksChanging(long value);
+    partial void OnCrawledSuccessfulLinksChanged();
+    partial void OnProcessDescriptionChanging(string value);
+    partial void OnProcessDescriptionChanged();
+    #endregion
+		
+		public Statistic()
+		{
+			OnCreated();
+		}
+		
+		[Column(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_StartDate", DbType="DateTime NOT NULL")]
+		public System.DateTime StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Duration", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Duration
+		{
+			get
+			{
+				return this._Duration;
+			}
+			set
+			{
+				if ((this._Duration != value))
+				{
+					this.OnDurationChanging(value);
+					this.SendPropertyChanging();
+					this._Duration = value;
+					this.SendPropertyChanged("Duration");
+					this.OnDurationChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Words", DbType="BigInt NOT NULL")]
+		public long Words
+		{
+			get
+			{
+				return this._Words;
+			}
+			set
+			{
+				if ((this._Words != value))
+				{
+					this.OnWordsChanging(value);
+					this.SendPropertyChanging();
+					this._Words = value;
+					this.SendPropertyChanged("Words");
+					this.OnWordsChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_FoundTotalLinks", DbType="BigInt NOT NULL")]
+		public long FoundTotalLinks
+		{
+			get
+			{
+				return this._FoundTotalLinks;
+			}
+			set
+			{
+				if ((this._FoundTotalLinks != value))
+				{
+					this.OnFoundTotalLinksChanging(value);
+					this.SendPropertyChanging();
+					this._FoundTotalLinks = value;
+					this.SendPropertyChanged("FoundTotalLinks");
+					this.OnFoundTotalLinksChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_FoundValidLinks", DbType="BigInt NOT NULL")]
+		public long FoundValidLinks
+		{
+			get
+			{
+				return this._FoundValidLinks;
+			}
+			set
+			{
+				if ((this._FoundValidLinks != value))
+				{
+					this.OnFoundValidLinksChanging(value);
+					this.SendPropertyChanging();
+					this._FoundValidLinks = value;
+					this.SendPropertyChanged("FoundValidLinks");
+					this.OnFoundValidLinksChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_CrawledTotalLinks", DbType="BigInt NOT NULL")]
+		public long CrawledTotalLinks
+		{
+			get
+			{
+				return this._CrawledTotalLinks;
+			}
+			set
+			{
+				if ((this._CrawledTotalLinks != value))
+				{
+					this.OnCrawledTotalLinksChanging(value);
+					this.SendPropertyChanging();
+					this._CrawledTotalLinks = value;
+					this.SendPropertyChanged("CrawledTotalLinks");
+					this.OnCrawledTotalLinksChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_CrawledSuccessfulLinks", DbType="BigInt NOT NULL")]
+		public long CrawledSuccessfulLinks
+		{
+			get
+			{
+				return this._CrawledSuccessfulLinks;
+			}
+			set
+			{
+				if ((this._CrawledSuccessfulLinks != value))
+				{
+					this.OnCrawledSuccessfulLinksChanging(value);
+					this.SendPropertyChanging();
+					this._CrawledSuccessfulLinks = value;
+					this.SendPropertyChanged("CrawledSuccessfulLinks");
+					this.OnCrawledSuccessfulLinksChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ProcessDescription", DbType="VarChar(250)")]
+		public string ProcessDescription
+		{
+			get
+			{
+				return this._ProcessDescription;
+			}
+			set
+			{
+				if ((this._ProcessDescription != value))
+				{
+					this.OnProcessDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._ProcessDescription = value;
+					this.SendPropertyChanged("ProcessDescription");
+					this.OnProcessDescriptionChanged();
 				}
 			}
 		}

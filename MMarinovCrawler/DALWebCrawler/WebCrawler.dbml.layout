@@ -2,37 +2,43 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="WebCrawler">
   <DataContextMoniker Name="/WebCrawlerDataContext" />
   <nestedChildShapes>
-    <classShape Id="fa569c94-baba-4645-add8-47a3d7b3681b" absoluteBounds="0.75, 4.125, 2, 1.7708968098958327">
+    <classShape Id="fa569c94-baba-4645-add8-47a3d7b3681b" absoluteBounds="0.75, 4.125, 2, 1.7708968091756105">
       <DataClassMoniker Name="/WebCrawlerDataContext/File" />
       <nestedChildShapes>
-        <elementListCompartment Id="06653ce1-81f7-4c4c-a5a9-c27dbea62875" absoluteBounds="0.765, 4.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="06653ce1-81f7-4c4c-a5a9-c27dbea62875" absoluteBounds="0.76500000059604645, 4.58500000089407, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="47a043e3-a3b3-475c-a551-8b51847ef983" absoluteBounds="0.75, 1, 2, 1.1939925130208335">
+    <classShape Id="47a043e3-a3b3-475c-a551-8b51847ef983" absoluteBounds="0.75, 1, 2, 1.1939925123006108">
       <DataClassMoniker Name="/WebCrawlerDataContext/Word" />
       <nestedChildShapes>
-        <elementListCompartment Id="ad75a076-16c0-4017-a210-a2ebc305feb4" absoluteBounds="0.765, 1.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="ad75a076-16c0-4017-a210-a2ebc305feb4" absoluteBounds="0.76500000059604645, 1.4600000008940697, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="e30041ee-4ca2-4bb6-8879-bd1b86ea991a" absoluteBounds="4.25, 2.5, 2, 1.3862939453125">
+    <classShape Id="e30041ee-4ca2-4bb6-8879-bd1b86ea991a" absoluteBounds="3.5, 0.875, 2, 1.3862939453125005">
       <DataClassMoniker Name="/WebCrawlerDataContext/WordsInFile" />
       <nestedChildShapes>
-        <elementListCompartment Id="f19a6c89-361e-48d9-a549-fd6df254c64a" absoluteBounds="4.265, 2.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f19a6c89-361e-48d9-a549-fd6df254c64a" absoluteBounds="3.5150000005960464, 1.3350000008940697, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.75 : 5.01044840494792); (5.25 : 5.01044840494792); (5.25 : 3.8862939453125)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(2.75 : 4.125); (3.125 : 3.75); (3.125 : 1.56814697265625); (3.5 : 1.56814697265625)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/WebCrawlerDataContext/File/File_WordsInFile" />
       <nodes>
         <classShapeMoniker Id="fa569c94-baba-4645-add8-47a3d7b3681b" />
         <classShapeMoniker Id="e30041ee-4ca2-4bb6-8879-bd1b86ea991a" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 1.59699625651042); (5.25 : 1.59699625651042); (5.25 : 2.5)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(2.75 : 1.94356974247843); (3.04166666666667 : 1.94356974247843 : JumpStart); (3.20833333333333 : 1.94356974247843 : JumpEnd); (3.5 : 1.94356974247843)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/WebCrawlerDataContext/Word/Word_WordsInFile" />
       <nodes>
         <classShapeMoniker Id="47a043e3-a3b3-475c-a551-8b51847ef983" />
         <classShapeMoniker Id="e30041ee-4ca2-4bb6-8879-bd1b86ea991a" />
       </nodes>
     </associationConnector>
+    <classShape Id="a608c025-ac17-4a9f-a751-8d4a1d93bc19" absoluteBounds="5, 3.75, 2, 2.5401025390625">
+      <DataClassMoniker Name="/WebCrawlerDataContext/Statistic" />
+      <nestedChildShapes>
+        <elementListCompartment Id="80987de9-1bc6-4c4b-976e-d2178e9b4dba" absoluteBounds="5.015, 4.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

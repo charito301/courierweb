@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace MMarinov.WebCrawler.Indexer
 {
@@ -19,6 +20,7 @@ namespace MMarinov.WebCrawler.Indexer
         private static string errorWebMessage = "";
         private static string errorWebProtocolMessage = "";
         private static string errorWebTimeoutMessage = "";
+        private DateTime startDate;
 
         /// <summary>
         /// Declaring the Event Handler delegate
@@ -78,7 +80,7 @@ namespace MMarinov.WebCrawler.Indexer
         {
             // SeedList.GetTheList();
             Spider.GlobalURLsToVisit.Add("http://live.com");
-            Spider.GlobalURLsToVisit.Add("http://google.com");
+            //Spider.GlobalURLsToVisit.Add("http://google.com");
             Spider.GlobalURLsToVisit.Add("http://facebook.com");
             Spider.GlobalURLsToVisit.Add("http://tweeter.com");
             Spider.GlobalURLsToVisit.Add("http://msn.com");
@@ -87,6 +89,7 @@ namespace MMarinov.WebCrawler.Indexer
             ResetFolders();
 
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 200, 3000);
+            startDate = DateTime.Now;
 
             spiderArray = new Spider[Preferences.ThreadsCount];
 
@@ -156,18 +159,17 @@ namespace MMarinov.WebCrawler.Indexer
             catch { }
         }
 
-        private void SendMail()
+        private void SendMail(string bodyMsg)
         {
             try
             {
                 System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
-                mail.To.Add("mariyan87@gmail.com");
-                mail.From = new System.Net.Mail.MailAddress("WebCrawler@Service.com", "WebCrawler Service");
+                mail.To.Add("m.marinov.de@gmail.com");
+                mail.From = new System.Net.Mail.MailAddress("WebCrawler@MMarinovService.com", "WebCrawler Service");
                 mail.Subject = "Crawling Report";
-                mail.Body = "Crawling Running :" + System.DateTime.Now.ToString();
+                mail.Body = bodyMsg;
                 //mail.Attachments.Add(new System.Net.Mail.Attachment(""));
                 System.Net.Mail.SmtpClient sc = new System.Net.Mail.SmtpClient("localhost");
-                //sc.Credentials = new System.Net.NetworkCredential("MMarinov", "matrix");
                 sc.Send(mail);
             }
             catch (System.Exception ex)
@@ -227,31 +229,77 @@ namespace MMarinov.WebCrawler.Indexer
             }
         }
 
-        public void PauseSpiders()
+        public void SaveToActiveDB()
         {
-            //join - to finish
-            //sleep
+
         }
 
         public void StopSpider()
         {
             ShouldStopThreads = true;
+            System.Threading.Thread.Sleep(300);
 
-            System.Threading.Thread.Sleep(500);
-
-            foreach (Spider spider in spiderArray)
+            for (int i = 0; i < Preferences.ThreadsCount; i++)
             {
-                spider.KillThread();
+                spiderArray[i].KillThread();
             }
 
-            System.Threading.Thread.Sleep(500);
+            ///TODO: save current sites
+            ///TODO: save current sites
+            ///a.k.a FLUSH
 
-            //SendMail();
+            System.Threading.Thread.Sleep(300);
 
             timer.Dispose();
+
+            SendMail(SaveStatistics());
         }
 
-        public void DropTheDatabase()
+        private string SaveStatistics()
+        {
+            System.Text.StringBuilder statisticMsg = new System.Text.StringBuilder();
+            statisticMsg.AppendLine("Report e-mail for status of the crawling process").AppendLine();
+            statisticMsg.AppendLine("CrawledSuccessfulLinks = " + Spider.CrawledSuccessfulLinks);
+            statisticMsg.AppendLine("CrawledTotalLinks = " + Spider.CrawledTotalLinks);
+            statisticMsg.AppendLine("FoundTotalLinks = " + Document.FoundTotalLinks);
+            statisticMsg.AppendLine("FoundValidLinks = " + Document.FoundValidLinks);
+            statisticMsg.AppendLine("StartDate = " + startDate.ToString(Common.DateFormat));
+
+            System.Text.StringBuilder description = new System.Text.StringBuilder();
+            description.AppendLine("IndexOnlyHTMLDocuments = " + Preferences.IndexOnlyHTMLDocuments);
+            description.AppendLine("RecursionLimit = " + Preferences.RecursionLimit);
+            description.AppendLine("StemmingModeEnabled = " + Preferences.StemmingModeEnabled);
+            description.AppendLine("StoppingMode = " + Preferences.StoppingMode);
+            description.AppendLine("ThreadsCount = " + Preferences.ThreadsCount);
+
+            TimeSpan duration = (DateTime.Now - startDate);
+
+            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            {
+                DALWebCrawler.Statistic stat = new DALWebCrawler.Statistic()
+                {
+                    CrawledSuccessfulLinks = Spider.CrawledSuccessfulLinks,
+                    CrawledTotalLinks = Spider.CrawledTotalLinks,
+                    FoundTotalLinks = Document.FoundTotalLinks,
+                    FoundValidLinks = Document.FoundValidLinks,
+                    StartDate = startDate,
+                    Duration = string.Format("{0}d:{1}h:{2}m ({3}min)", duration.Days, duration.Hours.ToString("00"), duration.Minutes.ToString("00"), (int)duration.TotalMinutes),
+                    Words = dataContext.Words.Count(),
+                    ProcessDescription = description.ToString()
+                };
+
+                statisticMsg.AppendLine("Duration = " + stat.Duration);
+                statisticMsg.AppendLine("Words = " + stat.Words);
+
+                dataContext.Statistics.InsertOnSubmit(stat);
+                dataContext.SubmitChanges();
+            }
+
+            statisticMsg.AppendLine().AppendLine("Properties of the crawler:").AppendLine(description.ToString());
+            return statisticMsg.ToString();
+        }
+
+        public void TruncateDBTables()
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {

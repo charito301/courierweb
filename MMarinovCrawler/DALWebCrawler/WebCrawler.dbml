@@ -27,6 +27,19 @@
       <Association Name="Word_WordsInFile" Member="Word" ThisKey="WordID" OtherKey="ID" Type="Word" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.[Statistics]" Member="Statistics">
+    <Type Name="Statistic">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Duration" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Words" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="FoundTotalLinks" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="FoundValidLinks" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="CrawledTotalLinks" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="CrawledSuccessfulLinks" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProcessDescription" Type="System.String" DbType="VarChar(250)" CanBeNull="true" />
+    </Type>
+  </Table>
   <Function Name="dbo.sp_SelectFile" Method="sp_SelectFile">
     <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" />
     <ElementType Name="sp_SelectFileResult">

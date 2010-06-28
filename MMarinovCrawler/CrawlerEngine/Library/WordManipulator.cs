@@ -1,6 +1,5 @@
 using System;
-using System.Xml.Serialization;
-using System.Collections.Specialized;
+using System.Linq;
 
 namespace MMarinov.WebCrawler.Library
 {
@@ -31,15 +30,32 @@ namespace MMarinov.WebCrawler.Library
             }
         }
 
-        public static bool InsertWordsInFilesIntoDB(System.Collections.Generic.List<DALWebCrawler.WordsInFile> wordInFileColl)
+        public static bool InsertWordsInFilesIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.WordsInFile> wordInFileColl)
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
                 dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
-                //dataContext.Refresh(System.Data.Linq.RefreshMode.KeepCurrentValues, wordInFileColl);
                 dataContext.SubmitChanges();
 
                 return true;
+            }
+        }
+
+        public static IQueryable<DALWebCrawler.Word> SelectAllWords()
+        {
+            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            {
+                return from w in dataContext.Words
+                       select w;
+            }
+        }
+
+        public static IQueryable<DALWebCrawler.WordsInFile> SelectAllWordsInFiles()
+        {
+            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            {
+                return from wif in dataContext.WordsInFiles
+                       select wif;
             }
         }
     }
