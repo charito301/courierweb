@@ -216,10 +216,7 @@ namespace MMarinov.WebCrawler.Library
             wordsToSaveIntoDB.Add(_wordColl[wordName]);
 
             Indexer.CrawlingManager.GlobalCatalog.FileCountPairs.Add(wordName, _fileCountPairColl[wordName]);//add all pairs for that word because it's a new one
-            if (wordsInFilesToSaveIntoDB.ContainsKey(_wordColl[wordName]))
-            {
-            }
-            else
+            if (!wordsInFilesToSaveIntoDB.ContainsKey(_wordColl[wordName]))
             {
                 wordsInFilesToSaveIntoDB.Add(_wordColl[wordName], _fileCountPairColl[wordName].Values.ToList<WordManipulator.FileCountPair>());
             }
@@ -244,41 +241,40 @@ namespace MMarinov.WebCrawler.Library
                 if (wordsInFilesToSaveIntoDB.Count > 0)
                 {
                     System.Collections.Generic.List<DALWebCrawler.WordsInFile> wordsInFileList = new System.Collections.Generic.List<DALWebCrawler.WordsInFile>();
+
                     foreach (DALWebCrawler.Word word in wordsInFilesToSaveIntoDB.Keys)
                     {
                         if (word.ID == 0)
                         {
                         }
 
-                        foreach (MMarinov.WebCrawler.Library.WordManipulator.FileCountPair fcp in wordsInFilesToSaveIntoDB[word])
+                        foreach (WordManipulator.FileCountPair fcp in wordsInFilesToSaveIntoDB[word])
                         {
                             if (fcp.File.ID == 0)
                             {
+                                continue;
                             }
-                        }
-                    }
 
-                    foreach (DALWebCrawler.Word word in wordsInFilesToSaveIntoDB.Keys)
-                    {
-                        wordsInFilesToSaveIntoDB[word].ForEach(fileCountPair =>
-                             wordsInFileList.Add(new DALWebCrawler.WordsInFile()
-                             {
-                                 WordID = word.ID,
-                                 FileID = fileCountPair.File.ID,
-                                 Count = fileCountPair.Count
-                             })
-                        );
+                            wordsInFileList.Add(new DALWebCrawler.WordsInFile()
+                           {
+                               WordID = word.ID,
+                               FileID = fcp.File.ID,
+                               Count = fcp.Count
+                           });
+                        }
+
+                        //wordsInFilesToSaveIntoDB[word].ForEach(fileCountPair =>
+                        //     wordsInFileList.Add(new DALWebCrawler.WordsInFile()
+                        //     {
+                        //         WordID = word.ID,
+                        //         FileID = fileCountPair.File.ID,
+                        //         Count = fileCountPair.Count
+                        //     })
+                        //);
                     }
 
                     if (wordsInFileList.Count > 0)
                     {
-                        foreach (DALWebCrawler.WordsInFile wif in wordsInFileList)
-                        {
-                            if (wif.WordID == 0 || wif.FileID == 0)
-                            {
-                            }
-                        }
-
                         WordManipulator.InsertWordsInFilesIntoDB(wordsInFileList);
                     }
                 }

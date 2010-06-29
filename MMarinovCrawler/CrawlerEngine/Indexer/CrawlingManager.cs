@@ -237,18 +237,14 @@ namespace MMarinov.WebCrawler.Indexer
         public void StopSpider()
         {
             ShouldStopThreads = true;
-            System.Threading.Thread.Sleep(300);
+            System.Threading.Thread.Sleep(50);
 
             for (int i = 0; i < Preferences.ThreadsCount; i++)
             {
                 spiderArray[i].KillThread();
             }
 
-            ///TODO: save current sites
-            ///TODO: save current sites
-            ///a.k.a FLUSH
-
-            System.Threading.Thread.Sleep(300);
+            System.Threading.Thread.Sleep(200);
 
             timer.Dispose();
 

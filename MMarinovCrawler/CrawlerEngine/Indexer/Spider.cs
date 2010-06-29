@@ -413,20 +413,26 @@ namespace MMarinov.WebCrawler.Indexer
             return wordsCount;
         }
 
+        /// <summary>
+        /// Aborts thread and flushs/saves catalogued results.
+        /// </summary>
         internal void KillThread()
         {
             if (thread.IsAlive)
             {
                 try
                 {
-                    thread.Abort();
-                    System.Threading.Thread.Sleep(100);
-
-                    _Catalog.MergeResultsRange();
-                    _Catalog.SaveResultsToDB();
+                    thread.Abort();                    
                 }
-                catch
-                { }
+                catch (System.Threading.ThreadStateException e)
+                {
+                    ProgressEvent(new ProgressEventArgs(e));
+                }
+
+                System.Threading.Thread.Sleep(100);
+
+                _Catalog.MergeResultsRange();
+                _Catalog.SaveResultsToDB();
             }
         }
     }
