@@ -29,7 +29,7 @@ namespace MMarinov.WebCrawler.Indexer
         public static Int64 CrawledSuccessfulLinks = 0;
 
         /// <summary></summary>
-        private Library.Catalog _Catalog;
+        private Library.WebsiteCatalog _Catalog;
 
         /// <summary>Stemmer to use</summary>
         private static Stemming.IStemming _Stemmer;
@@ -145,7 +145,7 @@ namespace MMarinov.WebCrawler.Indexer
                     _Catalog.MergeResultsRange();
                     _Catalog.SaveResultsToDB();
 
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": GlobalCatalog => Words(" + CrawlingManager.GlobalCatalog.Words.Count + ") Files(" + CrawlingManager.GlobalCatalog.Files.Count + ")"));
+                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": GlobalCatalog => Words(" + _Catalog.GlobalWordsListCount + ") Files(" + _Catalog.GlobalFilesListCount + ")"));
                 }
                 else
                 {
@@ -158,7 +158,7 @@ namespace MMarinov.WebCrawler.Indexer
 
         private void InitListsAndPreferences()
         {
-            _Catalog = new Library.Catalog();
+            _Catalog = new Library.WebsiteCatalog();
             _visitedLinks.Clear();
             _externalLinks.Clear();
 
@@ -418,22 +418,19 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         internal void KillThread()
         {
-            if (thread.IsAlive)
+            try
             {
-                try
-                {
-                    thread.Abort();                    
-                }
-                catch (System.Threading.ThreadStateException e)
-                {
-                    ProgressEvent(new ProgressEventArgs(e));
-                }
-
-                System.Threading.Thread.Sleep(100);
-
-                _Catalog.MergeResultsRange();
-                _Catalog.SaveResultsToDB();
+                thread.Abort();
             }
+            catch (System.Threading.ThreadStateException e)
+            {
+                ProgressEvent(new ProgressEventArgs(e));
+            }
+
+            System.Threading.Thread.Sleep(100);
+
+            _Catalog.MergeResultsRange();
+            _Catalog.SaveResultsToDB();
         }
     }
 }

@@ -31,17 +31,20 @@
           BorderThickness="0,0,0,0"
           Height="Auto">
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="346*" />
+                <ColumnDefinition Width="30*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <ProgressBar Margin="3" x:Name="progressBar" VerticalAlignment="Bottom" Grid.Row="1"
-                   Height="25" />
+            <ProgressBar Margin="3,0,3,3" x:Name="progressBar" VerticalAlignment="Bottom" Grid.Row="1"
+                   Height="25" Grid.ColumnSpan="2" />
 
-            <TextBlock Text="A background operation is in progress. Please wait..." Grid.Row="0"
-                 x:Name="txtDialogMessage"
+            <TextBlock Text="A background operation is in progress. Please wait..." x:Name="txtDialogMessage"
                  VerticalAlignment="Top"
-                 TextWrapping="Wrap" Margin="3" />
+                 TextWrapping="Wrap" Margin="3,3,3,0" Grid.ColumnSpan="2" Height="15.96" />
         </Grid>
     </Border>
 </Window>

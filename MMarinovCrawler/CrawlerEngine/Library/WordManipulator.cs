@@ -19,6 +19,19 @@ namespace MMarinov.WebCrawler.Library
             }
         }
 
+        public struct WordFilesPair
+        {
+            public DALWebCrawler.Word Word;
+
+            public ThreadedGenerics.TDictionary<string, WordManipulator.FileCountPair> WordFileCountHT;
+
+            public WordFilesPair(DALWebCrawler.Word word, ThreadedGenerics.TDictionary<string, WordManipulator.FileCountPair> wordFileCountDic)
+            {
+                Word = word;
+                WordFileCountHT = wordFileCountDic;
+            }
+        }
+
         public static bool InsertWordsIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.Word> wordsColl)
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))

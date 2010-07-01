@@ -83,7 +83,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="Indexer\Documents\Mp3Document.cs" />
     <Compile Include="Indexer\SeedList.cs" />
-    <Compile Include="Library\Catalog.cs" />
+    <Compile Include="Library\WebsiteCatalog.cs" />
     <Compile Include="Library\FileManipulator.cs" />
     <Compile Include="Library\WordManipulator.cs" />
     <Compile Include="Preferences.cs" />

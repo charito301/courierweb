@@ -8,7 +8,7 @@ namespace MMarinov.WebCrawler.Indexer
     /// </summary>
     public class CrawlingManager
     {
-        public static Library.Catalog GlobalCatalog = new Library.Catalog();
+        //public static Library.WebsiteCatalog GlobalCatalog = new Library.WebsiteCatalog();
         public static volatile bool ShouldStopThreads = false;
         public static volatile int WaitingThreadsCount = 0;
 
@@ -78,13 +78,14 @@ namespace MMarinov.WebCrawler.Indexer
         /// <param name="p"></param>
         public void StartSpider()
         {
-            // SeedList.GetTheList();
-            Spider.GlobalURLsToVisit.Add("http://live.com");
-            //Spider.GlobalURLsToVisit.Add("http://google.com");
-            Spider.GlobalURLsToVisit.Add("http://facebook.com");
-            Spider.GlobalURLsToVisit.Add("http://tweeter.com");
-            Spider.GlobalURLsToVisit.Add("http://msn.com");
-            Spider.GlobalURLsToVisit.Add("http://nike.com");
+             //SeedList.GetTheList();
+             Spider.GlobalURLsToVisit.Add("http://live.com");
+             Spider.GlobalURLsToVisit.Add("http://abv.com");
+             Spider.GlobalURLsToVisit.Add("http://firefox.com");
+             Spider.GlobalURLsToVisit.Add("http://facebook.com");
+             Spider.GlobalURLsToVisit.Add("http://tweeter.com");
+             Spider.GlobalURLsToVisit.Add("http://msn.com");
+             Spider.GlobalURLsToVisit.Add("http://nike.com");
 
             ResetFolders();
 

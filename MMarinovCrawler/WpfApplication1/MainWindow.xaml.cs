@@ -64,21 +64,21 @@ namespace MMarinov.WebCrawler.UI
             System.Threading.Thread.Sleep(350);
             worker.ReportProgress(20);
             System.Threading.Thread.Sleep(250);
-            worker.ReportProgress(30);
+            worker.ReportProgress(30, "Loading the seed list...");
             System.Threading.Thread.Sleep(250);
             worker.ReportProgress(40);
             System.Threading.Thread.Sleep(250);
             worker.ReportProgress(50);
 
-            manager.TruncateDBTables();
+            //manager.TruncateDBTables();
 
-            worker.ReportProgress(70, "Initializing crawling process..");
+            worker.ReportProgress(70, "Initializing crawling process...");
             System.Threading.Thread.Sleep(350);
 
             elapsedSec = 0;
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(ShowElapsedTime), null, 0, 1000);
 
-            manager.StartSpider();
+            //manager.StartSpider();
             Indexer.CrawlingManager.CrawlerEvent += new Indexer.CrawlingManager.CrawlerEventHandler(CrawlingManager_CrawlerEvent);
 
             worker.ReportProgress(80);
