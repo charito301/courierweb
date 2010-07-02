@@ -32,7 +32,7 @@
         </Grid.RowDefinitions>
         <Button HorizontalAlignment="Left" Margin="12,12,0,9" Name="btnStart" Width="55" IsCancel="False" IsDefault="False" Click="btnStart_Click" Visibility="Visible" Background="LightGreen" VerticalAlignment="Top">Start</Button>
         <Button HorizontalAlignment="Left" Margin="78,12,0,9" Name="btnStop" IsCancel="False" OverridesDefaultStyle="False" Click="btnStop_Click" Background="OrangeRed"  Width="55" VerticalAlignment="Top">Stop</Button>
-        <Button HorizontalAlignment="Left" Margin="159,12,191,9" Name="btnSaveToDB" Click="btnSaveToDB_Click"  Background="Yellow" VerticalAlignment="Top">Copy to Active DB</Button>
+        <Button HorizontalAlignment="Left" Margin="159,12,191,9" Name="btnSaveToDB" Click="btnCopyToActiveDB_Click"  Background="Yellow" VerticalAlignment="Top">Copy to Active DB</Button>
         <TextBox IsReadOnly="True" Margin="12,27,8.423,12" Name="tbIndexedLinks" Grid.Row="1" TextDecorations="None" Visibility="Visible" IsEnabled="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility ="Visible" />
         <TextBox IsReadOnly="True" Name="tbCrawlerDomains" Grid.Row="2"  VerticalScrollBarVisibility="Auto" Margin="12,25,8.423,8" HorizontalScrollBarVisibility="Disabled"></TextBox>
         <Label Margin="0,9,8.423,8" Name="lblStartTime" VerticalContentAlignment="Center" HorizontalAlignment="Right" Width="164" VerticalAlignment="Top">Start time:</Label>

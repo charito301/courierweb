@@ -19,6 +19,7 @@ namespace MMarinov.WebCrawler.UI
             InitializeComponent();
 
             btnStop.IsEnabled = false;
+            //btnSaveToDB.IsEnabled = false;
 
             manager = new MMarinov.WebCrawler.Indexer.CrawlingManager();
         }
@@ -70,7 +71,7 @@ namespace MMarinov.WebCrawler.UI
             System.Threading.Thread.Sleep(250);
             worker.ReportProgress(50);
 
-            //manager.TruncateDBTables();
+            manager.TruncateDBTables();
 
             worker.ReportProgress(70, "Initializing crawling process...");
             System.Threading.Thread.Sleep(350);
@@ -78,7 +79,7 @@ namespace MMarinov.WebCrawler.UI
             elapsedSec = 0;
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(ShowElapsedTime), null, 0, 1000);
 
-            //manager.StartSpider();
+            manager.StartSpider();
             Indexer.CrawlingManager.CrawlerEvent += new Indexer.CrawlingManager.CrawlerEventHandler(CrawlingManager_CrawlerEvent);
 
             worker.ReportProgress(80);
@@ -155,12 +156,14 @@ namespace MMarinov.WebCrawler.UI
             Cursor = Cursors.Wait;
 
             ProgressDialog dlg = new ProgressDialog();
+            dlg.IsIndeterminate = true;
             dlg.Owner = this;
             dlg.DialogText = "Finalizing crawling process.. ";
             dlg.RunWorkerThread(StopCrawling);
 
             btnStop.IsEnabled = false;
             btnStart.IsEnabled = true;
+            btnSaveToDB.IsEnabled = true;
             progressBarInf.Visibility = Visibility.Collapsed;
             lblStatus.Text = "Stopped.";
 
@@ -190,10 +193,35 @@ namespace MMarinov.WebCrawler.UI
             System.Threading.Thread.Sleep(350);
         }
 
-        private void btnSaveToDB_Click(object sender, RoutedEventArgs e)
+        private void btnCopyToActiveDB_Click(object sender, RoutedEventArgs e)
         {
-            manager.SaveToActiveDB();
+            Cursor = Cursors.Wait;
+
+            ProgressDialog dlg = new ProgressDialog();
+            //dlg.IsIndeterminate = true;
+            dlg.Owner = this;
+            dlg.DialogText = "Coping DB to active DB, used of the web client...";
+            dlg.RunWorkerThread(CopyDatabase);
+
+            btnSaveToDB.IsEnabled = false;
             lblStatus.Text = "Saved to Active Database";
+            Cursor = Cursors.Arrow;
+
+            manager.SaveToActiveDB();
+        }
+
+        private void CopyDatabase(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {//the sender property is a reference to the dialog's BackgroundWorker component
+            System.ComponentModel.BackgroundWorker worker = (System.ComponentModel.BackgroundWorker)sender;
+
+            worker.ReportProgress(10);
+            System.Threading.Thread.Sleep(350);
+
+            System.Threading.Thread.Sleep(350);
+            System.Threading.Thread.Sleep(350);
+            System.Threading.Thread.Sleep(350);
+            System.Threading.Thread.Sleep(350);
+            worker.ReportProgress(100);
         }
 
         #region Closing

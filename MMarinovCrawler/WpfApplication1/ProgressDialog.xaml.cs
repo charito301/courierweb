@@ -163,6 +163,18 @@ namespace MMarinov.WebCrawler.UI
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
         }
 
+        public bool IsIndeterminate
+        {
+            get
+            {
+                return progressBar.IsIndeterminate;
+            }
+            set
+            {
+                progressBar.IsIndeterminate = value;
+            }
+        }
+
         private bool closeCompleted = false;
 
         void ProgressDialog_Closing(object sender, CancelEventArgs e)
