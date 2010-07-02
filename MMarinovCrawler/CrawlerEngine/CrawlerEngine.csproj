@@ -83,6 +83,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="Indexer\Documents\Mp3Document.cs" />
     <Compile Include="Indexer\SeedList.cs" />
+    <Compile Include="Library\DBCopier.cs" />
     <Compile Include="Library\WebsiteCatalog.cs" />
     <Compile Include="Library\FileManipulator.cs" />
     <Compile Include="Library\WordManipulator.cs" />
@@ -116,6 +117,10 @@
     <Content Include="DLLs\UltraID3Lib.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DALWebCrawlerActive\DALWebCrawlerActive.csproj">
+      <Project>{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}</Project>
+      <Name>DALWebCrawlerActive</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DALWebCrawler\DALWebCrawler.csproj">
       <Project>{FA75D857-C3E2-46FD-8DAE-5A6EAFDC7BF1}</Project>
       <Name>DALWebCrawler</Name>

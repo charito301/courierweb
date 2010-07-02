@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MMarinov.WebCrawler.Library
 {
-    public class FileManipulator
+    public static class FileManipulator
     {
         /// <summary>
         /// Set words without change, but ordered - every word occurs once
@@ -117,8 +117,14 @@ namespace MMarinov.WebCrawler.Library
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
-                dataContext.Files.InsertAllOnSubmit(files);
-                dataContext.SubmitChanges();
+                foreach (DALWebCrawler.File file in files)
+                {
+                    long? id = 0;
+                    dataContext.sp_InsertFile(file.URL, file.Title, file.ImportantWords, file.WeightedWords, file.FileType, ref id);
+                    file.ID = id ?? 0;
+                }
+                //dataContext.Files.InsertAllOnSubmit(files);
+                //dataContext.SubmitChanges();
 
                 return true;
             }

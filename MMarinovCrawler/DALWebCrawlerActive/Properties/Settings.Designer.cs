@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DALWebCrawler.Properties {
+namespace DALWebCrawlerActive.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -26,11 +26,11 @@ namespace DALWebCrawler.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=MMARINOV-PC;Initial Catalog=WebCrawler;Persist Security Info=True;Use" +
-            "r ID=MMarinov;Password=matrix")]
-        public string WebCrawlerConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=MMARINOV-PC;Initial Catalog=WebCrawlerActive;Persist Security Info=Tr" +
+            "ue;User ID=MMarinov")]
+        public string WebCrawlerActiveConnectionString {
             get {
-                return ((string)(this["WebCrawlerConnectionString"]));
+                return ((string)(this["WebCrawlerActiveConnectionString"]));
             }
         }
     }

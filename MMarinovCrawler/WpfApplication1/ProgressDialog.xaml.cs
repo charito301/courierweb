@@ -133,10 +133,12 @@ namespace MMarinov.WebCrawler.UI
         /// <summary>
         /// Inits the dialog with a given dialog text.
         /// </summary>
-        public ProgressDialog(string dialogText)
+        public ProgressDialog(string dialogText, Window owner, bool isIndeterminate)
             : this()
         {
             DialogText = dialogText;
+            Owner = owner;
+            progressBar.IsIndeterminate = isIndeterminate;
         }
 
 

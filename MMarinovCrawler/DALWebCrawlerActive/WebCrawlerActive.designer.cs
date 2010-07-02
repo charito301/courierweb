@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DALWebCrawler
+namespace DALWebCrawlerActive
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -22,63 +22,63 @@ namespace DALWebCrawler
 	using System;
 	
 	
-	[System.Data.Linq.Mapping.DatabaseAttribute(Name="WebCrawler")]
-	public partial class WebCrawlerDataContext : System.Data.Linq.DataContext
+	[System.Data.Linq.Mapping.DatabaseAttribute(Name="WebCrawlerActive")]
+	public partial class WebCrawlerActiveDataContext : System.Data.Linq.DataContext
 	{
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertWord(Word instance);
-    partial void UpdateWord(Word instance);
-    partial void DeleteWord(Word instance);
+    partial void InsertFile(File instance);
+    partial void UpdateFile(File instance);
+    partial void DeleteFile(File instance);
     partial void InsertWordsInFile(WordsInFile instance);
     partial void UpdateWordsInFile(WordsInFile instance);
     partial void DeleteWordsInFile(WordsInFile instance);
     partial void InsertStatistic(Statistic instance);
     partial void UpdateStatistic(Statistic instance);
     partial void DeleteStatistic(Statistic instance);
-    partial void InsertFile(File instance);
-    partial void UpdateFile(File instance);
-    partial void DeleteFile(File instance);
+    partial void InsertWord(Word instance);
+    partial void UpdateWord(Word instance);
+    partial void DeleteWord(Word instance);
     #endregion
 		
-		public WebCrawlerDataContext() : 
-				base(global::DALWebCrawler.Properties.Settings.Default.WebCrawlerConnectionString, mappingSource)
+		public WebCrawlerActiveDataContext() : 
+				base(global::DALWebCrawlerActive.Properties.Settings.Default.WebCrawlerActiveConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public WebCrawlerDataContext(string connection) : 
+		public WebCrawlerActiveDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public WebCrawlerDataContext(System.Data.IDbConnection connection) : 
+		public WebCrawlerActiveDataContext(System.Data.IDbConnection connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public WebCrawlerDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public WebCrawlerActiveDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public WebCrawlerDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public WebCrawlerActiveDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Word> Words
+		public System.Data.Linq.Table<File> Files
 		{
 			get
 			{
-				return this.GetTable<Word>();
+				return this.GetTable<File>();
 			}
 		}
 		
@@ -98,11 +98,11 @@ namespace DALWebCrawler
 			}
 		}
 		
-		public System.Data.Linq.Table<File> Files
+		public System.Data.Linq.Table<Word> Words
 		{
 			get
 			{
-				return this.GetTable<File>();
+				return this.GetTable<Word>();
 			}
 		}
 		
@@ -112,47 +112,25 @@ namespace DALWebCrawler
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
 			return ((int)(result.ReturnValue));
 		}
-		
-		[Function(Name="dbo.sp_InsertFile")]
-		public int sp_InsertFile([Parameter(Name="URL", DbType="NVarChar(2500)")] string uRL, [Parameter(Name="Title", DbType="NVarChar(200)")] string title, [Parameter(Name="ImportantWords", DbType="NVarChar(2500)")] string importantWords, [Parameter(Name="WeightedWords", DbType="NVarChar(2500)")] string weightedWords, [Parameter(Name="FileType", DbType="TinyInt")] System.Nullable<byte> fileType, [Parameter(Name="ID", DbType="BigInt")] ref System.Nullable<long> iD)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), uRL, title, importantWords, weightedWords, fileType, iD);
-			iD = ((System.Nullable<long>)(result.GetParameterValue(5)));
-			return ((int)(result.ReturnValue));
-		}
-		
-		[Function(Name="dbo.sp_InsertWordInFile")]
-		public int sp_InsertWordInFile([Parameter(Name="WordID", DbType="BigInt")] System.Nullable<long> wordID, [Parameter(Name="FileID", DbType="BigInt")] System.Nullable<long> fileID, [Parameter(Name="Count", DbType="Int")] System.Nullable<int> count)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), wordID, fileID, count);
-			return ((int)(result.ReturnValue));
-		}
-		
-		[Function(Name="dbo.sp_InsertWord")]
-		public int sp_InsertWord([Parameter(Name="WordName", DbType="NVarChar(50)")] string wordName, [Parameter(Name="ID", DbType="BigInt")] ref System.Nullable<long> iD)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), wordName, iD);
-			iD = ((System.Nullable<long>)(result.GetParameterValue(1)));
-			return ((int)(result.ReturnValue));
-		}
-		
-		[Function(Name="dbo.sp_CopyDBByRestore")]
-		public int sp_CopyDBByRestore([Parameter(Name="BackupFile", DbType="VarChar(2000)")] string backupFile, [Parameter(Name="DestinationDB", DbType="VarChar(200)")] string destinationDB, [Parameter(Name="RestoreFileNoExtension", DbType="VarChar(2000)")] string restoreFileNoExtension)
-		{
-			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), backupFile, destinationDB, restoreFileNoExtension);
-			return ((int)(result.ReturnValue));
-		}
 	}
 	
-	[Table(Name="dbo.Words")]
-	public partial class Word : INotifyPropertyChanging, INotifyPropertyChanged
+	[Table(Name="dbo.Files")]
+	public partial class File : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private long _ID;
 		
-		private string _WordName;
+		private string _URL;
+		
+		private string _Title;
+		
+		private string _ImportantWords;
+		
+		private string _WeightedWords;
+		
+		private byte _FileType;
 		
 		private EntitySet<WordsInFile> _WordsInFiles;
 		
@@ -162,11 +140,19 @@ namespace DALWebCrawler
     partial void OnCreated();
     partial void OnIDChanging(long value);
     partial void OnIDChanged();
-    partial void OnWordNameChanging(string value);
-    partial void OnWordNameChanged();
+    partial void OnURLChanging(string value);
+    partial void OnURLChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnImportantWordsChanging(string value);
+    partial void OnImportantWordsChanged();
+    partial void OnWeightedWordsChanging(string value);
+    partial void OnWeightedWordsChanged();
+    partial void OnFileTypeChanging(byte value);
+    partial void OnFileTypeChanged();
     #endregion
 		
-		public Word()
+		public File()
 		{
 			this._WordsInFiles = new EntitySet<WordsInFile>(new Action<WordsInFile>(this.attach_WordsInFiles), new Action<WordsInFile>(this.detach_WordsInFiles));
 			OnCreated();
@@ -192,27 +178,107 @@ namespace DALWebCrawler
 			}
 		}
 		
-		[Column(Storage="_WordName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string WordName
+		[Column(Storage="_URL", DbType="NVarChar(2500) NOT NULL", CanBeNull=false)]
+		public string URL
 		{
 			get
 			{
-				return this._WordName;
+				return this._URL;
 			}
 			set
 			{
-				if ((this._WordName != value))
+				if ((this._URL != value))
 				{
-					this.OnWordNameChanging(value);
+					this.OnURLChanging(value);
 					this.SendPropertyChanging();
-					this._WordName = value;
-					this.SendPropertyChanged("WordName");
-					this.OnWordNameChanged();
+					this._URL = value;
+					this.SendPropertyChanged("URL");
+					this.OnURLChanged();
 				}
 			}
 		}
 		
-		[Association(Name="Word_WordsInFile", Storage="_WordsInFiles", ThisKey="ID", OtherKey="WordID")]
+		[Column(Storage="_Title", DbType="NVarChar(200)")]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_ImportantWords", DbType="NVarChar(2500) NOT NULL", CanBeNull=false)]
+		public string ImportantWords
+		{
+			get
+			{
+				return this._ImportantWords;
+			}
+			set
+			{
+				if ((this._ImportantWords != value))
+				{
+					this.OnImportantWordsChanging(value);
+					this.SendPropertyChanging();
+					this._ImportantWords = value;
+					this.SendPropertyChanged("ImportantWords");
+					this.OnImportantWordsChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_WeightedWords", DbType="NVarChar(2500)")]
+		public string WeightedWords
+		{
+			get
+			{
+				return this._WeightedWords;
+			}
+			set
+			{
+				if ((this._WeightedWords != value))
+				{
+					this.OnWeightedWordsChanging(value);
+					this.SendPropertyChanging();
+					this._WeightedWords = value;
+					this.SendPropertyChanged("WeightedWords");
+					this.OnWeightedWordsChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_FileType", DbType="TinyInt NOT NULL")]
+		public byte FileType
+		{
+			get
+			{
+				return this._FileType;
+			}
+			set
+			{
+				if ((this._FileType != value))
+				{
+					this.OnFileTypeChanging(value);
+					this.SendPropertyChanging();
+					this._FileType = value;
+					this.SendPropertyChanged("FileType");
+					this.OnFileTypeChanged();
+				}
+			}
+		}
+		
+		[Association(Name="File_WordsInFile", Storage="_WordsInFiles", ThisKey="ID", OtherKey="FileID")]
 		public EntitySet<WordsInFile> WordsInFiles
 		{
 			get
@@ -248,13 +314,13 @@ namespace DALWebCrawler
 		private void attach_WordsInFiles(WordsInFile entity)
 		{
 			this.SendPropertyChanging();
-			entity.Word = this;
+			entity.File = this;
 		}
 		
 		private void detach_WordsInFiles(WordsInFile entity)
 		{
 			this.SendPropertyChanging();
-			entity.Word = null;
+			entity.File = null;
 		}
 	}
 	
@@ -270,9 +336,9 @@ namespace DALWebCrawler
 		
 		private int _Count;
 		
-		private EntityRef<Word> _Word;
-		
 		private EntityRef<File> _File;
+		
+		private EntityRef<Word> _Word;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -288,8 +354,8 @@ namespace DALWebCrawler
 		
 		public WordsInFile()
 		{
-			this._Word = default(EntityRef<Word>);
 			this._File = default(EntityRef<File>);
+			this._Word = default(EntityRef<Word>);
 			OnCreated();
 		}
 		
@@ -361,40 +427,6 @@ namespace DALWebCrawler
 			}
 		}
 		
-		[Association(Name="Word_WordsInFile", Storage="_Word", ThisKey="WordID", OtherKey="ID", IsForeignKey=true)]
-		public Word Word
-		{
-			get
-			{
-				return this._Word.Entity;
-			}
-			set
-			{
-				Word previousValue = this._Word.Entity;
-				if (((previousValue != value) 
-							|| (this._Word.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Word.Entity = null;
-						previousValue.WordsInFiles.Remove(this);
-					}
-					this._Word.Entity = value;
-					if ((value != null))
-					{
-						value.WordsInFiles.Add(this);
-						this._WordID = value.ID;
-					}
-					else
-					{
-						this._WordID = default(long);
-					}
-					this.SendPropertyChanged("Word");
-				}
-			}
-		}
-		
 		[Association(Name="File_WordsInFile", Storage="_File", ThisKey="FileID", OtherKey="ID", IsForeignKey=true)]
 		public File File
 		{
@@ -425,6 +457,40 @@ namespace DALWebCrawler
 						this._FileID = default(long);
 					}
 					this.SendPropertyChanged("File");
+				}
+			}
+		}
+		
+		[Association(Name="Word_WordsInFile", Storage="_Word", ThisKey="WordID", OtherKey="ID", IsForeignKey=true)]
+		public Word Word
+		{
+			get
+			{
+				return this._Word.Entity;
+			}
+			set
+			{
+				Word previousValue = this._Word.Entity;
+				if (((previousValue != value) 
+							|| (this._Word.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Word.Entity = null;
+						previousValue.WordsInFiles.Remove(this);
+					}
+					this._Word.Entity = value;
+					if ((value != null))
+					{
+						value.WordsInFiles.Add(this);
+						this._WordID = value.ID;
+					}
+					else
+					{
+						this._WordID = default(long);
+					}
+					this.SendPropertyChanged("Word");
 				}
 			}
 		}
@@ -704,23 +770,15 @@ namespace DALWebCrawler
 		}
 	}
 	
-	[Table(Name="dbo.Files")]
-	public partial class File : INotifyPropertyChanging, INotifyPropertyChanged
+	[Table(Name="dbo.Words")]
+	public partial class Word : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private long _ID;
 		
-		private string _URL;
-		
-		private string _Title;
-		
-		private string _ImportantWords;
-		
-		private string _WeightedWords;
-		
-		private byte _FileType;
+		private string _WordName;
 		
 		private EntitySet<WordsInFile> _WordsInFiles;
 		
@@ -730,19 +788,11 @@ namespace DALWebCrawler
     partial void OnCreated();
     partial void OnIDChanging(long value);
     partial void OnIDChanged();
-    partial void OnURLChanging(string value);
-    partial void OnURLChanged();
-    partial void OnTitleChanging(string value);
-    partial void OnTitleChanged();
-    partial void OnImportantWordsChanging(string value);
-    partial void OnImportantWordsChanged();
-    partial void OnWeightedWordsChanging(string value);
-    partial void OnWeightedWordsChanged();
-    partial void OnFileTypeChanging(byte value);
-    partial void OnFileTypeChanged();
+    partial void OnWordNameChanging(string value);
+    partial void OnWordNameChanged();
     #endregion
 		
-		public File()
+		public Word()
 		{
 			this._WordsInFiles = new EntitySet<WordsInFile>(new Action<WordsInFile>(this.attach_WordsInFiles), new Action<WordsInFile>(this.detach_WordsInFiles));
 			OnCreated();
@@ -768,107 +818,27 @@ namespace DALWebCrawler
 			}
 		}
 		
-		[Column(Storage="_URL", DbType="NVarChar(2500) NOT NULL", CanBeNull=false)]
-		public string URL
+		[Column(Storage="_WordName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string WordName
 		{
 			get
 			{
-				return this._URL;
+				return this._WordName;
 			}
 			set
 			{
-				if ((this._URL != value))
+				if ((this._WordName != value))
 				{
-					this.OnURLChanging(value);
+					this.OnWordNameChanging(value);
 					this.SendPropertyChanging();
-					this._URL = value;
-					this.SendPropertyChanged("URL");
-					this.OnURLChanged();
+					this._WordName = value;
+					this.SendPropertyChanged("WordName");
+					this.OnWordNameChanged();
 				}
 			}
 		}
 		
-		[Column(Storage="_Title", DbType="NVarChar(200)")]
-		public string Title
-		{
-			get
-			{
-				return this._Title;
-			}
-			set
-			{
-				if ((this._Title != value))
-				{
-					this.OnTitleChanging(value);
-					this.SendPropertyChanging();
-					this._Title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_ImportantWords", DbType="NVarChar(2500) NOT NULL", CanBeNull=false)]
-		public string ImportantWords
-		{
-			get
-			{
-				return this._ImportantWords;
-			}
-			set
-			{
-				if ((this._ImportantWords != value))
-				{
-					this.OnImportantWordsChanging(value);
-					this.SendPropertyChanging();
-					this._ImportantWords = value;
-					this.SendPropertyChanged("ImportantWords");
-					this.OnImportantWordsChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_WeightedWords", DbType="NVarChar(2500)")]
-		public string WeightedWords
-		{
-			get
-			{
-				return this._WeightedWords;
-			}
-			set
-			{
-				if ((this._WeightedWords != value))
-				{
-					this.OnWeightedWordsChanging(value);
-					this.SendPropertyChanging();
-					this._WeightedWords = value;
-					this.SendPropertyChanged("WeightedWords");
-					this.OnWeightedWordsChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_FileType", DbType="TinyInt NOT NULL")]
-		public byte FileType
-		{
-			get
-			{
-				return this._FileType;
-			}
-			set
-			{
-				if ((this._FileType != value))
-				{
-					this.OnFileTypeChanging(value);
-					this.SendPropertyChanging();
-					this._FileType = value;
-					this.SendPropertyChanged("FileType");
-					this.OnFileTypeChanged();
-				}
-			}
-		}
-		
-		[Association(Name="File_WordsInFile", Storage="_WordsInFiles", ThisKey="ID", OtherKey="FileID")]
+		[Association(Name="Word_WordsInFile", Storage="_WordsInFiles", ThisKey="ID", OtherKey="WordID")]
 		public EntitySet<WordsInFile> WordsInFiles
 		{
 			get
@@ -904,13 +874,13 @@ namespace DALWebCrawler
 		private void attach_WordsInFiles(WordsInFile entity)
 		{
 			this.SendPropertyChanging();
-			entity.File = this;
+			entity.Word = this;
 		}
 		
 		private void detach_WordsInFiles(WordsInFile entity)
 		{
 			this.SendPropertyChanging();
-			entity.File = null;
+			entity.Word = null;
 		}
 	}
 }

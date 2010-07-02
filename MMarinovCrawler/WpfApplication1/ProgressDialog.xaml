@@ -7,7 +7,7 @@
         WindowStartupLocation="CenterOwner"
         Opacity="1"
         WindowStyle="None" Name="winProgress"
-        ShowInTaskbar="False" ResizeMode="CanMinimize">
+        ShowInTaskbar="False" MaxWidth="400" MaxHeight="90">
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">

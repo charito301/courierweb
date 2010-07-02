@@ -8,7 +8,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MMWebCrawler", "MMWebCrawler\", "{245792F9-8785-46D8-A68E-DB97CB511C22}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.5"
-		ProjectReferences = "{18B63C5A-851E-430B-80FA-6D48F23753F0}|CrawlerEngine.dll;{FA75D857-C3E2-46FD-8DAE-5A6EAFDC7BF1}|DALWebCrawler.dll;"
+		ProjectReferences = "{18B63C5A-851E-430B-80FA-6D48F23753F0}|CrawlerEngine.dll;{FA75D857-C3E2-46FD-8DAE-5A6EAFDC7BF1}|DALWebCrawler.dll;{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}|DALWebCrawlerActive.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/MMWebCrawler"
 		Debug.AspNetCompiler.PhysicalPath = "MMWebCrawler\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\MMWebCrawler\"
@@ -27,6 +27,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MMWebCrawler", "MMWebCrawle
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMarinovCrawler", "WpfApplication1\MMarinovCrawler.csproj", "{19037456-B6C6-4E37-B64B-792AA2750E7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DALWebCrawlerActive", "DALWebCrawlerActive\DALWebCrawlerActive.csproj", "{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -80,6 +82,15 @@ Global
 		{19037456-B6C6-4E37-B64B-792AA2750E7A}.Release|x64.ActiveCfg = Release|x64
 		{19037456-B6C6-4E37-B64B-792AA2750E7A}.Release|x64.Build.0 = Release|x64
 		{19037456-B6C6-4E37-B64B-792AA2750E7A}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Debug|x64.ActiveCfg = Debug|x64
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Debug|x64.Build.0 = Debug|x64
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Release|x64.ActiveCfg = Release|Any CPU
+		{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

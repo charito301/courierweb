@@ -3,8 +3,7 @@ using System.Linq;
 
 namespace MMarinov.WebCrawler.Library
 {
-    [Serializable]
-    public class WordManipulator
+    public static class WordManipulator
     {
         public struct FileCountPair
         {
@@ -36,8 +35,15 @@ namespace MMarinov.WebCrawler.Library
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
-                dataContext.Words.InsertAllOnSubmit(wordsColl);
-                dataContext.SubmitChanges();
+                foreach (DALWebCrawler.Word word in wordsColl)
+                {
+                    long? id = 0;
+                    dataContext.sp_InsertWord(word.WordName, ref id);
+                    word.ID = id ?? 0;
+                }
+
+                //dataContext.Words.InsertAllOnSubmit(wordsColl);
+                //dataContext.SubmitChanges();
 
                 return true;
             }
@@ -47,8 +53,12 @@ namespace MMarinov.WebCrawler.Library
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
-                dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
-                dataContext.SubmitChanges();
+                foreach (DALWebCrawler.WordsInFile wif in wordInFileColl)
+                {
+                    dataContext.sp_InsertWordInFile(wif.WordID, wif.FileID, wif.Count);
+                }
+                //dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
+                //dataContext.SubmitChanges();
 
                 return true;
             }
