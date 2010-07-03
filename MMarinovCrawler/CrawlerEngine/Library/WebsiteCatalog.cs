@@ -255,15 +255,6 @@ namespace MMarinov.WebCrawler.Library
                                    Count = fcp.Count
                                });
                             }
-
-                            //_wordsInFilesToSaveIntoDB[word].ForEach(fileCountPair =>
-                            //     wordsInFileList.Add(new DALWebCrawler.WordsInFile()
-                            //     {
-                            //         WordID = word.ID,
-                            //         FileID = fileCountPair.File.ID,
-                            //         Count = fileCountPair.Count
-                            //     })
-                            //);
                         }
 
                         if (wordsInFileList.Count > 0)

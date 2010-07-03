@@ -78,14 +78,14 @@ namespace MMarinov.WebCrawler.Indexer
         /// <param name="p"></param>
         public void StartSpider()
         {
-            //SeedList.GetTheList();
-            Spider.GlobalURLsToVisit.Add("http://live.com");
-            Spider.GlobalURLsToVisit.Add("http://abv.com");
-            Spider.GlobalURLsToVisit.Add("http://firefox.com");
-            Spider.GlobalURLsToVisit.Add("http://facebook.com");
-            Spider.GlobalURLsToVisit.Add("http://tweeter.com");
-            Spider.GlobalURLsToVisit.Add("http://msn.com");
-            Spider.GlobalURLsToVisit.Add("http://nike.com");
+            SeedList.GetTheList();
+            //Spider.GlobalURLsToVisit.Add("http://live.com");
+            //Spider.GlobalURLsToVisit.Add("http://abv.com");
+            //Spider.GlobalURLsToVisit.Add("http://firefox.com");
+            //Spider.GlobalURLsToVisit.Add("http://facebook.com");
+            //Spider.GlobalURLsToVisit.Add("http://tweeter.com");
+            //Spider.GlobalURLsToVisit.Add("http://msn.com");
+            //Spider.GlobalURLsToVisit.Add("http://nike.com");
 
             ResetFolders();
 

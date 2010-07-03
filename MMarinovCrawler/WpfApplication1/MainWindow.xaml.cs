@@ -19,7 +19,7 @@ namespace MMarinov.WebCrawler.UI
             InitializeComponent();
 
             btnStop.IsEnabled = false;
-            //btnSaveToDB.IsEnabled = false;
+            btnSaveToDB.IsEnabled = false;
 
             manager = new MMarinov.WebCrawler.Indexer.CrawlingManager();
         }
@@ -38,7 +38,7 @@ namespace MMarinov.WebCrawler.UI
             btnStart.IsEnabled = false;
             btnStop.IsEnabled = true;
 
-            ProgressDialog dlg = new ProgressDialog("This procees will override the database, if such exists! Truncating tables .. ", this, true);
+            ProgressDialog dlg = new ProgressDialog("This procees will override the database! Truncating tables .. ", this, true);
             dlg.RunWorkerThread(StartCrawling);
 
             lblStatus.Text = "Crawling...";
