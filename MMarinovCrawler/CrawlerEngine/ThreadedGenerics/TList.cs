@@ -195,7 +195,7 @@ namespace MMarinov.ThreadedGenerics
         /// <summary>
         /// Adds an item to the threaded list
         /// </summary>
-        /// <param name="item">the item to add to the end of the collection</param>
+        /// <param name="item">the item to AddChar to the end of the collection</param>
         public void Add(T item)
         {
             LockList.EnterWriteLock();
@@ -218,7 +218,7 @@ namespace MMarinov.ThreadedGenerics
         /// <summary>
         /// Adds the elements of collection to the end of the threaded list
         /// </summary>
-        /// <param name="collection">the collection to add to the end of the list</param>
+        /// <param name="collection">the collection to AddChar to the end of the list</param>
         public void AddRange(IEnumerable<T> collection)
         {
             LockList.EnterWriteLock();
@@ -243,7 +243,7 @@ namespace MMarinov.ThreadedGenerics
         /// Returns true if added to the list, false if the item already existed
         /// in the list
         /// </summary>
-        /// <param name="item">the item to add to the end of the collection</param>
+        /// <param name="item">the item to AddChar to the end of the collection</param>
         public bool AddIfNotExist(T item)
         {
             LockList.EnterWriteLock();
@@ -253,7 +253,7 @@ namespace MMarinov.ThreadedGenerics
                 if (m_TList.Contains(item))
                     return false;
 
-                // add the item and return true
+                // AddChar the item and return true
                 m_TList.Add(item);
                 return true;
             }

@@ -1,6 +1,4 @@
 using System;
-using System.Xml.Serialization;
-using System.Collections.Specialized;
 using MMarinov.WebCrawler.Report;
 
 namespace MMarinov.WebCrawler.Indexer
@@ -379,6 +377,7 @@ namespace MMarinov.WebCrawler.Indexer
         {
             DALWebCrawler.File infile = new DALWebCrawler.File()
             {
+                Title = downloadDocument.Title,
                 FileType = (byte)Library.FileManipulator.SetFileType(downloadDocument),
                 ImportantWords = Library.FileManipulator.SetImportantWords(downloadDocument),
                 URL = Common.GetHttpAuthority(downloadDocument.Uri) + downloadDocument.Uri.AbsolutePath//do wordsCount need that again here ??

@@ -97,7 +97,7 @@ namespace MMarinov.ThreadedGenerics
         {
             // enter a write lock, to make absolutely sure that the key
             // is added/deleted from the time we check if it exists
-            // to the time we add it if it doesn't exist
+            // to the time we AddChar it if it doesn't exist
             Lock_Dictionary.EnterWriteLock();
             try
             {
@@ -110,7 +110,7 @@ namespace MMarinov.ThreadedGenerics
                 // not found, so do the function to get the value
                 rVal = func.Invoke();
 
-                // add to the dictionary
+                // AddChar to the dictionary
                 m_Dictionary.Add(key, rVal);
 
                 // return the value
@@ -131,8 +131,8 @@ namespace MMarinov.ThreadedGenerics
         /// <summary>
         /// Adds an item to the dictionary
         /// </summary>
-        /// <param name="key">the key to add</param>
-        /// <param name="value">the value to add</param>
+        /// <param name="key">the key to AddChar</param>
+        /// <param name="value">the value to AddChar</param>
         public void Add(TKey key, TValue value)
         {
             Lock_Dictionary.EnterWriteLock();
@@ -169,8 +169,8 @@ namespace MMarinov.ThreadedGenerics
         /// Adds the value if it's key does not already exist. Returns
         /// true if the value was added
         /// </summary>
-        /// <param name="key">the key to check, add</param>
-        /// <param name="value">the value to add if the key does not already exist</param>
+        /// <param name="key">the key to check, AddChar</param>
+        /// <param name="value">the value to AddChar if the key does not already exist</param>
         public bool AddIfNotExists(TKey key, TValue value)
         {
             bool rVal = false;
@@ -178,10 +178,10 @@ namespace MMarinov.ThreadedGenerics
             Lock_Dictionary.EnterWriteLock();
             try
             {
-                // if not exist, then add it
+                // if not exist, then AddChar it
                 if (!m_Dictionary.ContainsKey(key))
                 {
-                    // add the value and set the flag
+                    // AddChar the value and set the flag
                     m_Dictionary.Add(key, value);
                     rVal = true;
                 }
@@ -197,8 +197,8 @@ namespace MMarinov.ThreadedGenerics
         /// <summary>
         /// Adds the list of value if the keys do not already exist.
         /// </summary>
-        /// <param name="keys">the keys to check, add</param>
-        /// <param name="defaultValue">the value to add if the key does not already exist</param>
+        /// <param name="keys">the keys to check, AddChar</param>
+        /// <param name="defaultValue">the value to AddChar if the key does not already exist</param>
         public void AddIfNotExists(IEnumerable<TKey> keys, TValue defaultValue)
         {
             Lock_Dictionary.EnterWriteLock();
@@ -206,7 +206,7 @@ namespace MMarinov.ThreadedGenerics
             {
                 foreach (TKey key in keys)
                 {
-                    // if not exist, then add it
+                    // if not exist, then AddChar it
                     if (!m_Dictionary.ContainsKey(key))
                         m_Dictionary.Add(key, defaultValue);
                 }
@@ -416,15 +416,15 @@ namespace MMarinov.ThreadedGenerics
                 {
                     bool IsMatch = false;
 
-                    // add the item to the list if it matches the predicate
+                    // AddChar the item to the list if it matches the predicate
                     if (predKey != null)
                         IsMatch = (predKey(key));
 
-                    // if this item's value matches, add it
+                    // if this item's value matches, AddChar it
                     if ((!IsMatch) && (predValue != null) && (predValue(m_Dictionary[key])))
                         IsMatch = true;
 
-                    // add to the list if we have a match
+                    // AddChar to the list if we have a match
                     if (IsMatch)
                         DeleteList.Add(key);
                 }

@@ -1,6 +1,4 @@
 using System;
-using System.Xml.Serialization;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace MMarinov.WebCrawler.Library
@@ -205,7 +203,7 @@ namespace MMarinov.WebCrawler.Library
             _globalWordsList.Add(wordName);
             _wordsToSaveIntoDB.Add(newWord);
 
-            _globalWordFilePairsList.Add(wordName, new ThreadedGenerics.TList<string>(_wordFilesPairHT[wordName].WordFileCountHT.Keys));//add all pairs for that word because it's a new one
+            _globalWordFilePairsList.Add(wordName, new ThreadedGenerics.TList<string>(_wordFilesPairHT[wordName].WordFileCountHT.Keys));//AddChar all pairs for that word because it's a new one
             _wordsInFilesToSaveIntoDB.Add(newWord, new ThreadedGenerics.TList<WordManipulator.FileCountPair>(_wordFilesPairHT[wordName].WordFileCountHT.Values));
         }
 

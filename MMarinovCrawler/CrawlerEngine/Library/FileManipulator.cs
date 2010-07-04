@@ -91,26 +91,26 @@ namespace MMarinov.WebCrawler.Library
             return weightedWords.ToString();
         }
 
-        public static Indexer.Document.DoumentTypes SetFileType(Indexer.Document downloadDocument)
+        public static Indexer.Document.DocumentTypes SetFileType(Indexer.Document downloadDocument)
         {
             if (downloadDocument is MMarinov.WebCrawler.Indexer.HtmlDocument)
             {
-                return Indexer.Document.DoumentTypes.HTML;
+                return Indexer.Document.DocumentTypes.HTML;
             }
             else if (downloadDocument is Indexer.TextDocument)
             {
-                return Indexer.Document.DoumentTypes.Text;
+                return Indexer.Document.DocumentTypes.Text;
             }
             else if (downloadDocument is Indexer.PdfDocument)
             {
-                return Indexer.Document.DoumentTypes.PDF;
+                return Indexer.Document.DocumentTypes.PDF;
             }
             else if (downloadDocument is Indexer.Mp3Document)
             {
-                return Indexer.Document.DoumentTypes.Mp3;
+                return Indexer.Document.DocumentTypes.Mp3;
             }
 
-            return Indexer.Document.DoumentTypes.HTML;
+            return Indexer.Document.DocumentTypes.HTML;
         }
 
         public static bool InsertFilesIntoDB(System.Collections.Generic.ICollection<DALWebCrawler.File> files)

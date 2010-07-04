@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MMarinov.ThreadedGenerics.TDictionary&lt;TKey, TValue&gt;">
+    <Position X="1.25" Y="1.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>CKIAAGAAAAAEABAQCAAAJAQAQAAAAAAAAAAgAABQIBA=</HashCode>
+      <FileName>ThreadedGenerics\TDictionary.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MMarinov.ThreadedGenerics.TList&lt;T&gt;">
+    <Position X="4.75" Y="1.5" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AGIBCEiAJCBAABAQCAAUFAQCAIAKABAAKAkCAIFWIQA=</HashCode>
+      <FileName>ThreadedGenerics\TList.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

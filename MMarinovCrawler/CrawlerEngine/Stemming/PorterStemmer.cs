@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MMarinov.WebCrawler.Stemming
 {
@@ -16,7 +14,7 @@ namespace MMarinov.WebCrawler.Stemming
     /// Stemmer, implementing the Porter Stemming Algorithm
     /// 
     /// The Stemmer class transforms a word into its root form.  The input
-    /// word can be provided a character at time (by calling add()), or at once
+    /// word can be provided a character at time (by calling AddChar()), or at once
     /// by calling one of the various stem(something) methods.
     /// </summary>
     /// <remarks>
@@ -72,7 +70,7 @@ namespace MMarinov.WebCrawler.Stemming
 
         /// <summary>
         /// SetTerm and GetTerm have been simply added to ease the interface with other languages. 
-        /// They replace the add functions and toString function. This was done because the original functions stored
+        /// They replace the AddChar functions and toString function. This was done because the original functions stored
         /// all stemmed words (and each time a new woprd was added, the buffer would be re-copied each time, 
         /// making it quite slow). Now, The class interface that is provided simply accepts a term and returns its stem, 
         /// instead of storing all stemmed words.
@@ -96,11 +94,12 @@ namespace MMarinov.WebCrawler.Stemming
         }
 
 
-        /*
-            * Add a character to the word being stemmed.  When you are finished
-            * adding characters, you can call stem(void) to stem the word.
-            */
-        public void add(char ch)
+        /// <summary>
+        /// Add a character to the word being stemmed.  When you are finished
+        /// adding characters, you can call stem(void) to stem the word.
+        /// </summary>
+        /// <param name="ch"></param>
+        public void AddChar(char ch)
         {
             if (i == b.Length)
             {
@@ -113,10 +112,12 @@ namespace MMarinov.WebCrawler.Stemming
         }
 
 
-        /* Adds wLen characters to the word being stemmed contained in a portion
-            * of a char[] array. This is like repeated calls of add(char ch), but
-            * faster.
-            */
+        /// <summary>
+        /// Adds wLen characters to the word being stemmed contained in a portion of a char[] array. 
+        /// This is like repeated calls of AddChar(char ch), but faster.
+        /// </summary>
+        /// <param name="w"></param>
+        /// <param name="wLen"></param>
         public void add(char[] w, int wLen)
         {
             if (i + wLen >= b.Length)
@@ -166,17 +167,18 @@ namespace MMarinov.WebCrawler.Stemming
             }
         }
 
-        /* m() measures the number of consonant sequences between 0 and j. if c is
-            a consonant sequence and v a vowel sequence, and <..> indicates arbitrary
-            presence,
-
-                <c><v>       gives 0
-                <c>vc<v>     gives 1
-                <c>vcvc<v>   gives 2
-                <c>vcvcvc<v> gives 3
-                ....
-        */
-        private int m()
+        /// <summary>
+        /// Measures the number of consonant sequences between 0 and j. if c is
+        /// a consonant sequence and v a vowel sequence, and <![CDATA[<..>]]> indicates arbitrary presence,
+        ///
+        /// <![CDATA[<c><v>]]>      gives 0
+        /// <![CDATA[<c>vc<v>]]>    gives 1
+        /// <![CDATA[<c>vcvc<v>]]>  gives 2
+        /// <![CDATA[<c>vcvcvc<v>]]>gives 3
+        /// ....
+        /// </summary>
+        /// <returns></returns>
+        private int ConsonantSequencesCount()
         {
             int n = 0;
             int i = 0;
@@ -216,45 +218,64 @@ namespace MMarinov.WebCrawler.Stemming
             return false;
         }
 
-        /* doublec(j) is true <=> j,(j-1) contain a double consonant. */
-        private bool doublec(int j)
+        /// <summary>
+        /// DoubleConsonant(j) is true <![CDATA[<==>]]> j,(j-1) contain a double consonant.
+        /// </summary>
+        /// <param name="j"></param>
+        /// <returns></returns>
+        private bool DoubleConsonant(int j)
         {
             if (j < 1)
+            {
                 return false;
+            }
+
             if (b[j] != b[j - 1])
+            {
                 return false;
+            }
+
             return isConsonantEN(j);
         }
 
-        /* cvc(wordsCount) is true <=> wordsCount-2,wordsCount-1,wordsCount has the form consonant - vowel - consonant
-            and also if the second c is not w,x or y. this is used when trying to
-            restore an e at the end of a short word. e.g.
-
-                cav(e), lov(e), hop(e), crim(e), but
-                snow, box, tray.
-
-        */
-        private bool cvc(int i)
+        /// <summary>
+        /// It's true <![CDATA[<==>]]> wordsCount-2,wordsCount-1,wordsCount has the form consonant - vowel - consonant
+        /// and also if the second c is not w,x or y. this is used when trying to  restore an e at the end of a short word. 
+        /// e.g. cav(e), lov(e), hop(e), crim(e), but snow, box, tray.
+        /// </summary>
+        /// <param name="wordsCount"></param>
+        /// <returns></returns>
+        private bool ConsonantVowelConsonant(int wordsCount)
         {
-            if (i < 2 || !isConsonantEN(i) || isConsonantEN(i - 1) || !isConsonantEN(i - 2))
+            if (wordsCount < 2 || !isConsonantEN(wordsCount) || isConsonantEN(wordsCount - 1) || !isConsonantEN(wordsCount - 2))
                 return false;
-            int ch = b[i];
+            int ch = b[wordsCount];
             if (ch == 'w' || ch == 'x' || ch == 'y')
                 return false;
             return true;
         }
 
-        private bool ends(String s)
+        private bool ends(string s)
         {
-            int l = s.Length;
-            int o = k - l + 1;
+            int length = s.Length;
+            int o = k - length + 1;
+
             if (o < 0)
+            {
                 return false;
+            }
+
             char[] sc = s.ToCharArray();
-            for (int i = 0; i < l; i++)
+
+            for (int i = 0; i < length; i++)
+            {
                 if (b[o + i] != sc[i])
+                {
                     return false;
-            j = k - l;
+                }
+            }
+
+            j = k - length;
             return true;
         }
 
@@ -273,32 +294,27 @@ namespace MMarinov.WebCrawler.Stemming
         /* r(s) is used further down. */
         private void r(String s)
         {
-            if (m() > 0)
+            if (ConsonantSequencesCount() > 0)
                 setto(s);
         }
 
-        /* step1() gets rid of plurals and -ed or -ing. e.g.
-                caresses  ->  caress
-                ponies    ->  poni
-                ties      ->  ti
-                caress    ->  caress
-                cats      ->  cat
 
-                feed      ->  feed
-                agreed    ->  agree
-                disabled  ->  disable
+        /// <summary>
+        /// gets rid of plurals and -ed or -ing. e.g.
+        ///caresses  ->  caress
+        ///ponies    ->  poni
+        ///cats      ->  cat
 
-                matting   ->  mat
-                mating    ->  mate
-                meeting   ->  meet
-                milling   ->  mill
-                messing   ->  mess
+        ///feed      ->  feed
+        ///agreed    ->  agree
+        ///disabled  ->  disable
 
-                meetings  ->  meet
+        ///matting   ->  mat
+        ///mating    ->  mate
 
-        */
-
-        private void step1()
+        ///meetings  ->  meet
+        /// </summary>
+        private void step1RemovesPluralEdIng()
         {
             if (b[k] == 's')
             {
@@ -311,7 +327,7 @@ namespace MMarinov.WebCrawler.Stemming
             }
             if (ends("eed"))
             {
-                if (m() > 0)
+                if (ConsonantSequencesCount() > 0)
                     k--;
             }
             else if ((ends("ed") || ends("ing")) && vowelinstem())
@@ -323,14 +339,14 @@ namespace MMarinov.WebCrawler.Stemming
                     setto("ble");
                 else if (ends("iz"))
                     setto("ize");
-                else if (doublec(k))
+                else if (DoubleConsonant(k))
                 {
                     k--;
                     int ch = b[k];
                     if (ch == 'l' || ch == 's' || ch == 'z')
                         k++;
                 }
-                else if (m() == 1 && cvc(k)) setto("e");
+                else if (ConsonantSequencesCount() == 1 && ConsonantVowelConsonant(k)) setto("e");
             }
         }
 
@@ -343,7 +359,7 @@ namespace MMarinov.WebCrawler.Stemming
 
         /* step3() maps double suffices to single ones. so -ization ( = -ize plus
             -ation) maps to -ize etc. note that the string before the suffix must give
-            m() > 0. */
+            ConsonantSequencesCount() > 0. */
         private void step3()
         {
             if (k == 0)
@@ -442,7 +458,7 @@ namespace MMarinov.WebCrawler.Stemming
                     if (ends("ant")) break;
                     if (ends("ement")) break;
                     if (ends("ment")) break;
-                    /* element etc. not stripped before the m */
+                    /* element etc. not stripped before the ConsonantSequencesCount */
                     if (ends("ent")) break; return;
                 case 'o':
                     if (ends("ion") && j >= 0 && (b[j] == 's' || b[j] == 't')) break;
@@ -463,27 +479,27 @@ namespace MMarinov.WebCrawler.Stemming
                 default:
                     return;
             }
-            if (m() > 1)
+            if (ConsonantSequencesCount() > 1)
                 k = j;
         }
 
-        /* step6() removes a final -e if m() > 1. */
+        /* step6() removes a final -e if ConsonantSequencesCount() > 1. */
         private void step6()
         {
             j = k;
 
             if (b[k] == 'e')
             {
-                int a = m();
-                if (a > 1 || a == 1 && !cvc(k - 1))
+                int a = ConsonantSequencesCount();
+                if (a > 1 || a == 1 && !ConsonantVowelConsonant(k - 1))
                     k--;
             }
-            if (b[k] == 'l' && doublec(k) && m() > 1)
+            if (b[k] == 'l' && DoubleConsonant(k) && ConsonantSequencesCount() > 1)
                 k--;
         }
 
         /// <summary>
-        /// Stem the word placed into the Stemmer buffer through calls to add(). Returns true 
+        /// Stem the word placed into the Stemmer buffer through calls to AddChar(). Returns true 
         /// if the stemming process resulted in a word different from the input.  
         /// </summary>
         public void stemEnglishWord()
@@ -491,7 +507,7 @@ namespace MMarinov.WebCrawler.Stemming
             k = i - 1;
             if (k > 1)
             {
-                step1();
+                step1RemovesPluralEdIng();
                 step2();
                 step3();
                 step4();

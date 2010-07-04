@@ -4,7 +4,7 @@ namespace MMarinov.WebCrawler.Indexer
 {
     public abstract class Document
     {
-        public enum DoumentTypes
+        public enum DocumentTypes
         {
             HTML = 1,
             Text = 2,

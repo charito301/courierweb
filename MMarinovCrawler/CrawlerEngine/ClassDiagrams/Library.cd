@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MMarinov.WebCrawler.Library.DBCopier">
+    <Position X="4" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAACAAAAA=</HashCode>
+      <FileName>Library\DBCopier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.FileManipulator">
+    <Position X="6.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>CAAAIAAAgAAAAAAAAAAAAAAAAAAAAAAAAABABAAAAAQ=</HashCode>
+      <FileName>Library\FileManipulator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.WebsiteCatalog">
+    <Position X="0.75" Y="0.75" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BEAEAAIAAAAAAoCAAlgAIMAAAgAEACAAgAAAAABEgAA=</HashCode>
+      <FileName>Library\WebsiteCatalog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.WordManipulator">
+    <Position X="4" Y="0.75" Width="2" />
+    <NestedTypes>
+      <Struct Name="MMarinov.WebCrawler.Library.WordManipulator.FileCountPair" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Library\WordManipulator.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="MMarinov.WebCrawler.Library.WordManipulator.WordFilesPair" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Library\WordManipulator.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAABAAAAQAAIAAAAAAA=</HashCode>
+      <FileName>Library\WordManipulator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

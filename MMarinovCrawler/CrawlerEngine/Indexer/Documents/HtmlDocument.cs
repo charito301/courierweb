@@ -201,7 +201,7 @@ namespace MMarinov.WebCrawler.Indexer
         {
             if (string.IsNullOrEmpty(this._Title))
             {
-                this.Title = Regex.Match(_htmlCode, @"(?<=<title[^\>]*>).*?(?=</title>)", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture).Value;
+                this._Title = Regex.Match(_htmlCode, @"(?<=<title[^\>]*>).*?(?=</title>)", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture).Value;
             }
 
             ParseLanguage();

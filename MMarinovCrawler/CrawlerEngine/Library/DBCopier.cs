@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace MMarinov.WebCrawler.Library
 {
@@ -54,7 +51,7 @@ namespace MMarinov.WebCrawler.Library
             }
 
             // Initializing an SqlBulkCopy object
-            using (System.Data.SqlClient.SqlBulkCopy sqlBulkCopy = new System.Data.SqlClient.SqlBulkCopy(Preferences.ConnectionStringActive))
+            using (System.Data.SqlClient.SqlBulkCopy sqlBulkCopy = new System.Data.SqlClient.SqlBulkCopy(Preferences.ConnectionStringActive, System.Data.SqlClient.SqlBulkCopyOptions.KeepIdentity))
             {
                 // Copying data to destination
                 sqlBulkCopy.DestinationTableName = dtFiles.TableName;

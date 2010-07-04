@@ -39,7 +39,7 @@
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -91,8 +91,8 @@
     <Compile Include="Stemming\IStemming.cs" />
     <Compile Include="Stemming\NoStemming.cs" />
     <Compile Include="Stemming\PorterStemmer.cs" />
-    <Compile Include="StopWords\IStopper.cs" />
-    <Compile Include="StopWords\StopWords.cs" />
+    <Compile Include="Stopper\IStopper.cs" />
+    <Compile Include="Stopper\StopWords.cs" />
     <Compile Include="Indexer\CrawlingManager.cs" />
     <Compile Include="Indexer\Documents\Document.cs" />
     <Compile Include="Indexer\Documents\DocumentFactory.cs" />
@@ -104,7 +104,6 @@
     <Compile Include="Indexer\Documents\TextDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\Logger.cs" />
-    <Compile Include="Report\Reporting.cs" />
     <Compile Include="ThreadedGenerics\TDictionary.cs" />
     <Compile Include="ThreadedGenerics\TList.cs" />
   </ItemGroup>
@@ -125,6 +124,17 @@
       <Project>{FA75D857-C3E2-46FD-8DAE-5A6EAFDC7BF1}</Project>
       <Name>DALWebCrawler</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagrams\Commons.cd" />
+    <None Include="ClassDiagrams\DALWebCrawler.cd" />
+    <None Include="ClassDiagrams\Documents.cd" />
+    <None Include="ClassDiagrams\Indexer.cd" />
+    <None Include="ClassDiagrams\Library.cd" />
+    <None Include="ClassDiagrams\Report.cd" />
+    <None Include="ClassDiagrams\Stemming.cd" />
+    <None Include="ClassDiagrams\Stopper.cd" />
+    <None Include="ClassDiagrams\ThreadedGenerics.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
