@@ -19,9 +19,6 @@ namespace MMarinov.WebCrawler.UI
             InitializeComponent();
 
             btnStop.IsEnabled = false;
-            btnSaveToDB.IsEnabled = false;
-
-            manager = new MMarinov.WebCrawler.Indexer.CrawlingManager();
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
@@ -35,15 +32,19 @@ namespace MMarinov.WebCrawler.UI
             tbTimeoutEx.Text = "";
             tbWebEx.Text = "";
 
-            btnStart.IsEnabled = false;
             btnStop.IsEnabled = true;
+            btnStart.IsEnabled = !btnStop.IsEnabled;
+            btnSaveToDB.IsEnabled = !btnStop.IsEnabled;           
+        
 
             ProgressDialog dlg = new ProgressDialog("This procees will override the database! Truncating tables .. ", this, true);
             dlg.RunWorkerThread(StartCrawling);
 
+            elapsedSec = 0;
+            timer = new System.Threading.Timer(new System.Threading.TimerCallback(ShowElapsedTimeAndDLSpeed), null, 0, 1000);
+  
             lblStatus.Text = "Crawling...";
             lblStartTime.Content = "Started on " + DateTime.Now.ToString(Common.DateFormat);
-            progressBarInf.Visibility = Visibility.Visible;
 
             Cursor = Cursors.Arrow;
         }
@@ -63,23 +64,26 @@ namespace MMarinov.WebCrawler.UI
 
             worker.ReportProgress(30, "Initializing crawling process...");
 
-            elapsedSec = 0;
-            timer = new System.Threading.Timer(new System.Threading.TimerCallback(ShowElapsedTime), null, 0, 1000);
-
-            manager.StartSpider();
+            manager = new MMarinov.WebCrawler.Indexer.CrawlingManager();           
             Indexer.CrawlingManager.CrawlerEvent += new Indexer.CrawlingManager.CrawlerEventHandler(CrawlingManager_CrawlerEvent);
+            manager.StartSpider();
 
             worker.ReportProgress(70, "Loading the seed list...");
             System.Threading.Thread.Sleep(800);
             worker.ReportProgress(100);
         }
 
-        private void ShowElapsedTime(object o)
+        private void ShowElapsedTimeAndDLSpeed(object o)
         {
-            lblTimeElapsed.Dispatcher.Invoke(
+            lblTimeElapsed.Dispatcher.BeginInvoke(
                    System.Windows.Threading.DispatcherPriority.Normal,
                    (Action)(() =>
-                   { lblTimeElapsed.Content = "Elapsed:" + TimeSpan.FromSeconds(++elapsedSec); }));
+                   { lblTimeElapsed.Content = "Elapsed: " + TimeSpan.FromSeconds(++elapsedSec); }));
+
+            lblDlSpeed.Dispatcher.BeginInvoke(
+                  System.Windows.Threading.DispatcherPriority.Normal,
+                  (Action)(() =>
+                  { lblDlSpeed.Content = "Download speed: " + manager.DownloadSpeed.ToString("######0.00") + " KB/s"; }));
         }
 
         private void CrawlingManager_CrawlerEvent(Report.ProgressEventArgs pea)
@@ -113,17 +117,17 @@ namespace MMarinov.WebCrawler.UI
                     break;
             }
 
-            lblTotalFoundLinks.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, TimeSpan.FromMilliseconds(100),
+            lblTotalFoundLinks.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, 
             (Action)(() => { lblTotalFoundLinks.Content = "Total links found:" + MMarinov.WebCrawler.Indexer.Document.FoundTotalLinks; }));
 
-            lblTotalValidLinksFound.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, TimeSpan.FromMilliseconds(100),
+            lblTotalValidLinksFound.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, 
             (Action)(() => { lblTotalValidLinksFound.Content = "Total valid links found:" + MMarinov.WebCrawler.Indexer.Document.FoundValidLinks; }));
         }
 
         private void AddMessageToTextbox(Report.ProgressEventArgs pea, TextBox tbx)
         {
-            tbx.Dispatcher.Invoke(
-            System.Windows.Threading.DispatcherPriority.Normal, TimeSpan.FromMilliseconds(100),
+            tbx.Dispatcher.BeginInvoke(
+            System.Windows.Threading.DispatcherPriority.Normal, 
             (Action)(() =>
             {
                 if (tbx.LineCount > 500)
@@ -143,9 +147,8 @@ namespace MMarinov.WebCrawler.UI
             dlg.RunWorkerThread(StopCrawling);
 
             btnStop.IsEnabled = false;
-            btnStart.IsEnabled = true;
-            btnSaveToDB.IsEnabled = true;
-            progressBarInf.Visibility = Visibility.Collapsed;
+            btnStart.IsEnabled = !btnStop.IsEnabled;
+            btnSaveToDB.IsEnabled = !btnStop.IsEnabled;
             lblStatus.Text = "Stopped.";
 
             Cursor = Cursors.Arrow;
@@ -156,7 +159,7 @@ namespace MMarinov.WebCrawler.UI
             //the sender property is a reference to the dialog's BackgroundWorker component
             System.ComponentModel.BackgroundWorker worker = (System.ComponentModel.BackgroundWorker)sender;
 
-            manager.StopSpider();
+            manager.StopSpiders();
             timer.Dispose();
 
             worker.ReportProgress(70, "Saving statistics ...");
@@ -193,10 +196,12 @@ namespace MMarinov.WebCrawler.UI
         {
             if (!btnStart.IsEnabled)
             {
-                if (MessageBox.Show("Crawling process in progress. Are you sure you want to terminate it?", "Exit application?", MessageBoxButton.YesNo, MessageBoxImage.Asterisk) == MessageBoxResult.Yes)
+                if (!closeCompleted && MessageBox.Show("Crawling process in progress. Are you sure you want to terminate it?", "Exit application?", MessageBoxButton.YesNo, MessageBoxImage.Asterisk) == MessageBoxResult.Yes)
                 {
                     if (!closeCompleted)
                     {
+                        manager.KillSpiders();
+
                         e.Cancel = true;
                         FormFadeOut.Begin();
                     }

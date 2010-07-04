@@ -27,9 +27,9 @@ namespace MMarinov.WebCrawler.Library
         {
             TruncateActiveDBTables();
 
-            System.Data.DataTable dtFiles = CreateDatatable(new string[] { "ID", "URL", "Title", "ImportantWords", "WeightedWords", "FileType" });
-            System.Data.DataTable dtWords = CreateDatatable(new string[] { "ID", "WordName" });
-            System.Data.DataTable dtWordsInFiles = CreateDatatable(new string[] { "FileID", "WordID", "Count" });
+            System.Data.DataTable dtFiles = CreateDatatable("Files", new string[] { "ID", "URL", "Title", "ImportantWords", "WeightedWords", "FileType" });
+            System.Data.DataTable dtWords = CreateDatatable("Words", new string[] { "ID", "WordName" });
+            System.Data.DataTable dtWordsInFiles = CreateDatatable("WordsInFiles", new string[] { "FileID", "WordID", "Count" });
 
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
@@ -54,22 +54,23 @@ namespace MMarinov.WebCrawler.Library
             }
 
             // Initializing an SqlBulkCopy object
-            using (System.Data.SqlClient.SqlBulkCopy sbc = new System.Data.SqlClient.SqlBulkCopy(Preferences.ConnectionStringActive))
+            using (System.Data.SqlClient.SqlBulkCopy sqlBulkCopy = new System.Data.SqlClient.SqlBulkCopy(Preferences.ConnectionStringActive))
             {
                 // Copying data to destination
-                sbc.DestinationTableName = "Files";
-                sbc.WriteToServer(dtFiles);
-                sbc.DestinationTableName = "Words";
-                sbc.WriteToServer(dtWords);
-                sbc.DestinationTableName = "WordsInFiles";
-                sbc.WriteToServer(dtWordsInFiles);
-                sbc.Close();
+                sqlBulkCopy.DestinationTableName = dtFiles.TableName;
+                sqlBulkCopy.WriteToServer(dtFiles);
+                sqlBulkCopy.DestinationTableName = dtWords.TableName;
+                sqlBulkCopy.WriteToServer(dtWords);
+                sqlBulkCopy.DestinationTableName = dtWordsInFiles.TableName;
+                sqlBulkCopy.WriteToServer(dtWordsInFiles);
+
+                sqlBulkCopy.Close();
             }
         }
 
-        private static System.Data.DataTable CreateDatatable(string[] columnNames)
+        private static System.Data.DataTable CreateDatatable(string tableName, string[] columnNames)
         {
-            System.Data.DataTable dt = new System.Data.DataTable();
+            System.Data.DataTable dt = new System.Data.DataTable(tableName);
 
             foreach (string colName in columnNames)
             {

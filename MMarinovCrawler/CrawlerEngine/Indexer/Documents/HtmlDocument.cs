@@ -442,7 +442,7 @@ namespace MMarinov.WebCrawler.Indexer
 
             try
             {
-                // DateTime startDLtime = DateTime.Now;
+                DateTime startDLtime = DateTime.Now;
 
                 stream = new System.IO.StreamReader(webResponse.GetResponseStream(), this.Encoding);
 
@@ -457,10 +457,14 @@ namespace MMarinov.WebCrawler.Indexer
                 }
 
                 this.AllCode = stream.ReadToEnd();
+                if (this.AllCode != "")
+                {
+                    base.SetDownloadSpeed ( this.AllCode.Length / (DateTime.Now - startDLtime).TotalSeconds / 1000);
+                }
             }
             catch (Exception e)
             {
-                base.DocumentProgressEvent(new Report.ProgressEventArgs(new Exception(Uri.AbsoluteUri, e)));
+                this.DocumentProgressEvent(new Report.ProgressEventArgs(new Exception(Uri.AbsoluteUri, e)));
                 return false;
             }
             finally

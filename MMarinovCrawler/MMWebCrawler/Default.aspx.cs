@@ -71,7 +71,7 @@ namespace MMarinov.WebCrawler.UI
 
         protected void btnStopCrawl_Click(object sender, EventArgs e)
         {
-            manager.StopSpider();
+            manager.StopSpiders();
 
             btnStopCrawl.Enabled = false;
             btnCrawl.Enabled = true;

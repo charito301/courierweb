@@ -328,7 +328,7 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         private Document Download(Uri uri)
         {
-            System.Net.ServicePointManager.DefaultConnectionLimit = 100;
+            System.Net.ServicePointManager.DefaultConnectionLimit = 200;
             System.Net.ServicePointManager.MaxServicePointIdleTime = 2000;
 
             // Open the requested URL
@@ -428,7 +428,10 @@ namespace MMarinov.WebCrawler.Indexer
             }
 
             System.Threading.Thread.Sleep(100);
+        }
 
+        internal void FlushData()
+        {
             _Catalog.MergeResultsRange();
             _Catalog.SaveResultsToDB();
         }

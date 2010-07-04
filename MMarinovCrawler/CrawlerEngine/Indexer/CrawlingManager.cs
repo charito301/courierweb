@@ -78,10 +78,9 @@ namespace MMarinov.WebCrawler.Indexer
         /// <param name="p"></param>
         public void StartSpider()
         {
-            SeedList.GetTheList();
+             SeedList.GetTheList();
             //Spider.GlobalURLsToVisit.Add("http://live.com");
-            //Spider.GlobalURLsToVisit.Add("http://abv.com");
-            //Spider.GlobalURLsToVisit.Add("http://firefox.com");
+            //Spider.GlobalURLsToVisit.Add("http://google.com");
             //Spider.GlobalURLsToVisit.Add("http://facebook.com");
             //Spider.GlobalURLsToVisit.Add("http://tweeter.com");
             //Spider.GlobalURLsToVisit.Add("http://msn.com");
@@ -230,21 +229,32 @@ namespace MMarinov.WebCrawler.Indexer
             }
         }
 
-        public void StopSpider()
+        public void StopSpiders()
+        {
+            KillSpiders();
+
+            for (int i = 0; i < Preferences.ThreadsCount; i++)
+            {
+                spiderArray[i].FlushData();
+                System.Threading.Thread.Sleep(50);
+            }
+
+            SendMail(SaveStatistics());
+        }
+
+        /// <summary>
+        /// Only terminates threads, used also for closing the programm without any saving
+        /// </summary>
+        public void KillSpiders()
         {
             ShouldStopThreads = true;
-            System.Threading.Thread.Sleep(50);
+            timer.Dispose();
 
             for (int i = 0; i < Preferences.ThreadsCount; i++)
             {
                 spiderArray[i].KillThread();
+                System.Threading.Thread.Sleep(200);
             }
-
-            System.Threading.Thread.Sleep(200);
-
-            timer.Dispose();
-
-            SendMail(SaveStatistics());
         }
 
         private string SaveStatistics()
@@ -289,6 +299,14 @@ namespace MMarinov.WebCrawler.Indexer
 
             statisticMsg.AppendLine().AppendLine("Properties of the crawler:").AppendLine(description.ToString());
             return statisticMsg.ToString();
+        }
+
+        public double DownloadSpeed
+        {
+            get
+            {
+                return Document.DownloadSpeed;
+            }
         }
     }
 }

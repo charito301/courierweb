@@ -22,6 +22,13 @@ namespace MMarinov.WebCrawler.Indexer
         public static Int64 FoundValidLinks = 0;
         public static Int64 FoundTotalLinks = 0;
 
+        public static double DownloadSpeed = 0;
+
+        protected void SetDownloadSpeed(double speed)
+        {
+            DownloadSpeed = speed;
+        }
+
         private System.Collections.Generic.List<string> _localLinks;
         private System.Collections.Generic.List<string> _externalLinks;
 
