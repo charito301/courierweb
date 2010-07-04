@@ -5,30 +5,47 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+    <link rel="Stylesheet" href="Styles/Page.css" type="text/css" />
     <title>MMarinov's Web Crawler</title>
 </head>
 <body>
     <form id="form1" runat="server">
-    <div style="height: 500px;">
-        <asp:Label ID="Label1" runat="server" Text="Web Crawler:" Font-Size="Large"></asp:Label>
-        <br />
-        <br />
-        <asp:Button ID="btnCrawl" runat="server" Text="Start Crawl!" OnClick="btnCrawl_Click" />
-        &nbsp;<asp:Button ID="btnStopCrawl" runat="server" Text="Stop Crawl!" OnClick="btnStopCrawl_Click" />
-        <br />
-        <br />
-        <table width="100%" style="height: 80%">
-            <tr>
-                <td>
-                            <asp:TextBox ID="tbLog" runat="server" TextMode="MultiLine" Height="95%" Width="95%">
-                            </asp:TextBox>
-                   </td>
-                <td>
-                    <asp:TextBox ID="tbErrorLog" runat="server" TextMode="MultiLine" Height="95%" Width="95%">
-                    </asp:TextBox>
-                </td>
-            </tr>
-        </table>
+    <div class="Title">
+        MMarinov's Web Crawler</div>
+    <div class="SearchBar">
+        <asp:Label ID="lblSearch" runat="server" CssClass="SearchQuery" Text="Enter search criteria:"></asp:Label>
+        <asp:TextBox ID="tbSearchQuery" runat="server" CssClass="SearchQuery"></asp:TextBox>
+        <asp:ImageButton ID="btnDoSearch" runat="server" Height="25px" CssClass="SearchQuery"
+            ImageUrl="~/Images/btnSearch.jpg" OnClick="btnDoSearch_Click" />
+    </div>
+    <div>
+        <asp:GridView ID="gvKeywords" runat="server" AutoGenerateColumns="False" BorderStyle="None"
+            BorderColor="#CCCCCC" BorderWidth="1px" BackColor="White" AllowSorting="True"
+            AllowPaging="True" GridLines="None" CellPadding="2">
+            <FooterStyle ForeColor="#000066" BackColor="White"></FooterStyle>
+            <PagerStyle ForeColor="#000066" HorizontalAlign="Center" BackColor="White"></PagerStyle>
+            <HeaderStyle ForeColor="White" Font-Bold="True" BackColor="#006699"></HeaderStyle>
+            <EmptyDataTemplate>
+                No records could be retrieved from the database. We apologize for the invonvenience.
+            </EmptyDataTemplate>
+            <Columns>
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:Label runat="server" ID="lblGroupName">keyword</asp:Label>
+                        <div id="divLinks" runat="server">
+                            <asp:GridView ID="gvLinks" runat="server">
+                            </asp:GridView>
+                        </div>
+                    </ItemTemplate>
+                    <FooterStyle BackColor="#f0f0f0" />
+                    <FooterTemplate>
+                        <asp:Label runat="server" ID="lblSumRevenueGrups" >Sum revenue grups </asp:Label>
+                    </FooterTemplate>
+                </asp:TemplateField>
+            </Columns>
+            <SelectedRowStyle ForeColor="White" Font-Bold="True" BackColor="#669999"></SelectedRowStyle>
+            <RowStyle ForeColor="#000066"></RowStyle>
+        </asp:GridView>
     </div>
     </form>
 </body>

@@ -1,0 +1,32 @@
+﻿.
+{
+    font-family: Adobe Garamond Pro Bold;
+    margin: 2px 2px 2px 2px;
+    vertical-align: middle;
+}
+
+.Title
+{
+    text-align: center;
+    color: Blue;
+    font-size: 55px;
+    font-weight: bold;
+    font-family: Adobe Garamond Pro Bold;
+    margin: 10px 10px 10px 10px;
+}
+
+.SearchBar
+{
+    text-align: center;
+    margin: 5px 5px 5px 5px;
+}
+
+.SearchQuery
+{
+    height: 30px;
+    margin: 5px 5px 5px 5px;
+    vertical-align: middle;
+    font-size: x-large;
+    font-weight: bold;
+    font-family: Adobe Garamond Pro Bold;
+}
