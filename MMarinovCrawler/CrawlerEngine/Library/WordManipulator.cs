@@ -53,12 +53,14 @@ namespace MMarinov.WebCrawler.Library
         {
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
-                foreach (DALWebCrawler.WordsInFile wif in wordInFileColl)
-                {
-                    dataContext.sp_InsertWordInFile(wif.WordID, wif.FileID, wif.Count);
-                }
-                //dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
-                //dataContext.SubmitChanges();
+                //foreach (DALWebCrawler.WordsInFile wif in wordInFileColl)
+                //{
+                //    long? id = 0;
+                //    dataContext.sp_InsertWordInFile(wif.WordID, wif.FileID, wif.Count);
+                //    wif.ID = id ?? 0;
+                //}
+                dataContext.WordsInFiles.InsertAllOnSubmit(wordInFileColl);
+                dataContext.SubmitChanges();
 
                 return true;
             }

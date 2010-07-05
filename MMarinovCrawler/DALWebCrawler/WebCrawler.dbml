@@ -8,15 +8,6 @@
       <Association Name="Word_WordsInFile" Member="WordsInFiles" ThisKey="ID" OtherKey="WordID" Type="WordsInFile" />
     </Type>
   </Table>
-  <Table Name="dbo.WordsInFiles" Member="WordsInFiles">
-    <Type Name="WordsInFile">
-      <Column Name="WordID" Type="System.Int64" DbType="BigInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="FileID" Type="System.Int64" DbType="BigInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Word_WordsInFile" Member="Word" ThisKey="WordID" OtherKey="ID" Type="Word" IsForeignKey="true" />
-      <Association Name="File_WordsInFile" Member="File" ThisKey="FileID" OtherKey="ID" Type="File" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.[Statistics]" Member="Statistics">
     <Type Name="Statistic">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -39,6 +30,16 @@
       <Column Name="WeightedWords" Type="System.String" DbType="NVarChar(2500)" CanBeNull="true" />
       <Column Name="FileType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
       <Association Name="File_WordsInFile" Member="WordsInFiles" ThisKey="ID" OtherKey="FileID" Type="WordsInFile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WordsInFiles" Member="WordsInFiles">
+    <Type Name="WordsInFile">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="WordID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="FileID" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="File_WordsInFile" Member="File" ThisKey="FileID" OtherKey="ID" Type="File" IsForeignKey="true" />
+      <Association Name="Word_WordsInFile" Member="Word" ThisKey="WordID" OtherKey="ID" Type="Word" IsForeignKey="true" />
     </Type>
   </Table>
   <Function Name="dbo.sp_TruncateAllTables" Method="sp_TruncateAllTables">
@@ -64,10 +65,7 @@
     <Parameter Name="ID" Parameter="iD" Type="System.Int64" DbType="BigInt" Direction="InOut" />
     <Return Type="System.Int32" />
   </Function>
-  <Function Name="dbo.sp_CopyDBByRestore" Method="sp_CopyDBByRestore">
-    <Parameter Name="BackupFile" Parameter="backupFile" Type="System.String" DbType="VarChar(2000)" />
-    <Parameter Name="DestinationDB" Parameter="destinationDB" Type="System.String" DbType="VarChar(200)" />
-    <Parameter Name="RestoreFileNoExtension" Parameter="restoreFileNoExtension" Type="System.String" DbType="VarChar(2000)" />
+  <Function Name="dbo.sp_CopyFromDBToActiveDB" Method="sp_CopyFromDBToActiveDB">
     <Return Type="System.Int32" />
   </Function>
 </Database>

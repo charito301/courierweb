@@ -175,7 +175,6 @@ namespace MMarinov.WebCrawler.UI
             ProgressDialog dlg = new ProgressDialog("Coping DB to active DB, used of the web client...", this, true);
             dlg.RunWorkerThread(CopyDatabase);
 
-            btnSaveToDB.IsEnabled = false;
             lblStatus.Text = "Saved to Active Database";
             Cursor = Cursors.Arrow;
         }
@@ -185,7 +184,7 @@ namespace MMarinov.WebCrawler.UI
             //the sender property is a reference to the dialog's BackgroundWorker component
             System.ComponentModel.BackgroundWorker worker = (System.ComponentModel.BackgroundWorker)sender;
 
-            Library.DBCopier.BulkCopyToActiveDB();
+            Library.DBCopier.CopyDBToActiveDB();
 
             worker.ReportProgress(100);
         }

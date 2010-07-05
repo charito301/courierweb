@@ -20,13 +20,23 @@ namespace MMarinov.WebCrawler.Library
             }
         }
 
+        public static void CopyDBToActiveDB()
+        {
+            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            {
+                dataContext.sp_TruncateAllTables();
+                dataContext.sp_CopyFromDBToActiveDB();
+            }
+        }
+
+        #region Better way, but not working for now
         public static void BulkCopyToActiveDB()
         {
             TruncateActiveDBTables();
 
             System.Data.DataTable dtFiles = CreateDatatable("Files", new string[] { "ID", "URL", "Title", "ImportantWords", "WeightedWords", "FileType" });
             System.Data.DataTable dtWords = CreateDatatable("Words", new string[] { "ID", "WordName" });
-            System.Data.DataTable dtWordsInFiles = CreateDatatable("WordsInFiles", new string[] { "FileID", "WordID", "Count" });
+            System.Data.DataTable dtWordsInFiles = CreateDatatable("WordsInFiles", new string[] { "ID", "FileID", "WordID", "Count" });
 
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
@@ -46,20 +56,23 @@ namespace MMarinov.WebCrawler.Library
 
                 foreach (DALWebCrawler.WordsInFile wif in allWordsInFiles)
                 {
-                    dtWordsInFiles.Rows.Add(new object[] { wif.FileID, wif.WordID, wif.Count });
+                    dtWordsInFiles.Rows.Add(new object[] { wif.ID, wif.FileID, wif.WordID, wif.Count });
                 }
             }
 
+            CopyTable(dtFiles);
+            CopyTable(dtWords);
+            CopyTable(dtWordsInFiles);
+        }
+
+        private static void CopyTable(System.Data.DataTable dtDBtableData)
+        {
             // Initializing an SqlBulkCopy object
-            using (System.Data.SqlClient.SqlBulkCopy sqlBulkCopy = new System.Data.SqlClient.SqlBulkCopy(Preferences.ConnectionStringActive, System.Data.SqlClient.SqlBulkCopyOptions.KeepIdentity))
+            using (System.Data.SqlClient.SqlBulkCopy sqlBulkCopy = new System.Data.SqlClient.SqlBulkCopy(Preferences.ConnectionStringActive, System.Data.SqlClient.SqlBulkCopyOptions.TableLock | System.Data.SqlClient.SqlBulkCopyOptions.FireTriggers | System.Data.SqlClient.SqlBulkCopyOptions.KeepIdentity))
             {
                 // Copying data to destination
-                sqlBulkCopy.DestinationTableName = dtFiles.TableName;
-                sqlBulkCopy.WriteToServer(dtFiles);
-                sqlBulkCopy.DestinationTableName = dtWords.TableName;
-                sqlBulkCopy.WriteToServer(dtWords);
-                sqlBulkCopy.DestinationTableName = dtWordsInFiles.TableName;
-                sqlBulkCopy.WriteToServer(dtWordsInFiles);
+                sqlBulkCopy.DestinationTableName = dtDBtableData.TableName;
+                sqlBulkCopy.WriteToServer(dtDBtableData);
 
                 sqlBulkCopy.Close();
             }
@@ -75,6 +88,7 @@ namespace MMarinov.WebCrawler.Library
             }
 
             return dt;
-        }
+        } 
+        #endregion
     }
 }
