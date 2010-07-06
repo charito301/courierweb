@@ -6,25 +6,37 @@
 public class DataFetcher
 {
     private static string connectionString = System.Configuration.ConfigurationManager.AppSettings["ConnectionStringActive"].ToString();
+    private System.Collections.Generic.List<DALWebCrawlerActive.File> files;
+    private static readonly char[] space = new char[] { ' ' };
+
     public DataFetcher(string query)
     {
-        System.Collections.Generic.List<DALWebCrawlerActive.File> files;
-
-
         using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(connectionString))
         {
-            IQueryable<DALWebCrawlerActive.File> aa = from f in dataContext.Files
-                                                      join wif in dataContext.WordsInFiles on f.ID equals wif.FileID
-                                                      join w in dataContext.Words on wif.WordID equals w.ID
-                                                      where w.WordName == query
-                                                      select f;
+            DALWebCrawlerActive.Word w = dataContext.Words.SingleOrDefault(ww => ww.WordName == query);
+            if (w.WordsInFiles.Count > 0)
+            {
 
-            files = aa.ToList();
-            //var asd = from w in dataContext.Words
-            //          where w.WordName == query
-            //          select w;
+            }
+
+            IQueryable<string[]> wordsQuery = from f in dataContext.Files
+                                              where (f.ImportantWords + f.WeightedWords).Contains(query)
+                                              select (f.ImportantWords + f.WeightedWords).Split(space, System.StringSplitOptions.RemoveEmptyEntries);
+       
+            foreach (string[] wordsInFile in wordsQuery)
+            {
+
+            }
         }
+    }
 
-        int count = files.Count();
+    public int FilesCount
+    {
+        get { return files.Count(); }
+    }
+
+    public System.Collections.Generic.List<DALWebCrawlerActive.File> Files
+    {
+        get { return files; }
     }
 }
