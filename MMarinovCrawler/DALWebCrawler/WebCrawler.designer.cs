@@ -45,7 +45,7 @@ namespace DALWebCrawler
     #endregion
 		
 		public WebCrawlerDataContext() : 
-				base(global::DALWebCrawler.Properties.Settings.Default.WebCrawlerConnectionString, mappingSource)
+				base(global::DALWebCrawler.Properties.Settings.Default.WebCrawlerConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}

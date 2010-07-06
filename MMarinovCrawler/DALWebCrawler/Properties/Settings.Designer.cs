@@ -33,5 +33,16 @@ namespace DALWebCrawler.Properties {
                 return ((string)(this["WebCrawlerConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=141.45.13.223;Initial Catalog=WebCrawler;Persist Security Info=True;U" +
+            "ser ID=MMarinov")]
+        public string WebCrawlerConnectionString1 {
+            get {
+                return ((string)(this["WebCrawlerConnectionString1"]));
+            }
+        }
     }
 }

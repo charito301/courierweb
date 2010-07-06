@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Database Name="WebCrawler" Class="WebCrawlerDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=MMARINOV-PC;Initial Catalog=WebCrawler;Persist Security Info=True;User ID=MMarinov" SettingsObjectName="DALWebCrawler.Properties.Settings" SettingsPropertyName="WebCrawlerConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=141.45.13.223;Initial Catalog=WebCrawler;Persist Security Info=True;User ID=MMarinov" SettingsObjectName="DALWebCrawler.Properties.Settings" SettingsPropertyName="WebCrawlerConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Words" Member="Words">
     <Type Name="Word">
       <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
