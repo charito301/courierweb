@@ -58,12 +58,12 @@ namespace MMarinov.WebCrawler.UI
         /// </summary>
         private void LoadJavaScriptData()
         {
-            string loadValues = "";
+           // string loadValues = "";
 
             //Get payment values from form and save them in javascript class.
             foreach (GridViewRow row in gvKeywords.Rows)
             {
-                Label lblGroupName = (Label)row.FindControl("lblGroupName");
+                HyperLink lnkKeyword = (HyperLink)row.FindControl("lnkKeyword");
                 GridView gvLinks = (GridView)row.FindControl("gvLinks");
 
                 //loadValues += this.JSVarName + ".RegisteredIds.push('" + lblGroupName.ClientID + "');" + this.JSVarName + ".RegisteredValues.push(" + (lblGroupName.Text != "" ? tbRegistered.Text.Replace(',', '.') : "0.00") + ");";
@@ -92,14 +92,14 @@ namespace MMarinov.WebCrawler.UI
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                //RevenueGroup currentGroup = (RevenueGroup)e.Row.DataItem;
+                DALWebCrawlerActive.File currentFile = (DALWebCrawlerActive.File)e.Row.DataItem;
 
-                Label lblGroupName = (Label)e.Row.FindControl("lblGroupName");
+                HyperLink lnkKeyword = (HyperLink)e.Row.FindControl("lnkKeyword");
                 GridView gvLinks = (GridView)e.Row.FindControl("gvLinks");
 
-                //tbRevenue.Attributes["OnBlur"] = this.JavaScriptVariableName + ".ValidateFloat(this);";
+                lnkKeyword.Text = currentFile.URL;
+                lnkKeyword.Attributes["OnClick"] = this.JSVarName + ".ValidateFloat(this);";
                 //tbRevenue.Attributes["OnBlur"] += this.JavaScriptVariableName + ".UpdateData(" + this.JavaScriptVariableName + ".RevenueIds, " + this.JavaScriptVariableName + ".RevenueValues, this.id, event);";
-                //tbRevenue.Attributes["OnBlur"] += this.JavaScriptVariableName + ".SumGroups();";
 
                 //lblGroupName.Text = currentGroup.Name;
             }
@@ -129,7 +129,8 @@ namespace MMarinov.WebCrawler.UI
         private void LoadDataSource(string query)
         {
             DataFetcher fetcher = new DataFetcher(query);
-
+            gvKeywords.DataSource = fetcher.Files;
+            gvKeywords.DataBind();
         }
 
         public string JSVarName

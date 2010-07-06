@@ -31,7 +31,7 @@
             <Columns>
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Label runat="server" ID="lblGroupName">keyword</asp:Label>
+                        <asp:HyperLink runat="server" ID="lnkKeyword">keyword</asp:HyperLink>
                         <div id="divLinks" runat="server">
                             <asp:GridView ID="gvLinks" runat="server">
                                 <EmptyDataTemplate>
