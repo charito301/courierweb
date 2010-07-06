@@ -22,9 +22,10 @@ namespace MMarinov.WebCrawler.Library
 
         public static void CopyDBToActiveDB()
         {
+            TruncateActiveDBTables();
+
             using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
             {
-                dataContext.sp_TruncateAllTables();
                 dataContext.sp_CopyFromDBToActiveDB();
             }
         }
