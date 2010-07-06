@@ -34,12 +34,23 @@
                         <asp:Label runat="server" ID="lblGroupName">keyword</asp:Label>
                         <div id="divLinks" runat="server">
                             <asp:GridView ID="gvLinks" runat="server">
+                                <EmptyDataTemplate>
+                                    No records could be retrieved from the database. We apologize for the invonvenience.
+                                </EmptyDataTemplate>
+                                <Columns>
+                                    <asp:TemplateField>
+                                        <ItemTemplate>
+                                            <asp:HyperLink runat="server" ID="lnkWebLink">follow me</asp:HyperLink>
+                                            <asp:Label runat="server" ID="lblTitle">title</asp:Label>
+                                            </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
                             </asp:GridView>
                         </div>
                     </ItemTemplate>
                     <FooterStyle BackColor="#f0f0f0" />
                     <FooterTemplate>
-                        <asp:Label runat="server" ID="lblSumRevenueGrups" >Sum revenue grups </asp:Label>
+                        <asp:Label runat="server" ID="lblSumRevenueGrups">Sum revenue grups </asp:Label>
                     </FooterTemplate>
                 </asp:TemplateField>
             </Columns>
