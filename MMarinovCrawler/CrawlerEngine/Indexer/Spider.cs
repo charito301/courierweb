@@ -1,5 +1,6 @@
 using System;
 using MMarinov.WebCrawler.Report;
+using MMarinov.WebCrawler.Library;
 
 namespace MMarinov.WebCrawler.Indexer
 {
@@ -27,7 +28,8 @@ namespace MMarinov.WebCrawler.Indexer
         public static Int64 CrawledSuccessfulLinks = 0;
 
         /// <summary></summary>
-        private Library.WebsiteCatalog _Catalog;
+        private FileCollection _fileColl;
+        private static WordCollection _wordsCollGlobal = WordCollection.GetWordCollection();
 
         /// <summary>Stemmer to use</summary>
         private static Stemming.IStemming _Stemmer;
@@ -89,6 +91,23 @@ namespace MMarinov.WebCrawler.Indexer
             }
         }
 
+        /// <summary>
+        /// Aborts thread and flushs/saves catalogued results.
+        /// </summary>
+        internal void KillThread()
+        {
+            try
+            {
+                thread.Abort();
+            }
+            catch (System.Threading.ThreadStateException e)
+            {
+                ProgressEvent(new ProgressEventArgs(e));
+            }
+
+            System.Threading.Thread.Sleep(100);
+        }
+
         #endregion
 
         /// <summary>
@@ -101,64 +120,66 @@ namespace MMarinov.WebCrawler.Indexer
         public void BuildCatalog(object threadID)
         {
             Uri startPageUri;
-
-            while (!CrawlingManager.ShouldStopThreads)
+            try
             {
-                startPageUri = null;
-
-                lock (GlobalURLsToVisit)
+                while (!CrawlingManager.ShouldStopThreads)
                 {
-                    lock (GlobalVisitedURLs)
+                    startPageUri = null;
+
+                    lock (GlobalURLsToVisit)
                     {
-                        if (GlobalURLsToVisit.Count == 0)
+                        lock (GlobalVisitedURLs)
                         {
-                            if (!StopThreadsOnEmptyURLsList())
+                            if (GlobalURLsToVisit.Count == 0)
                             {
-                                System.Threading.Thread.Sleep(100);
-                                continue;
+                                if (!StopThreadsOnEmptyURLsList())
+                                {
+                                    System.Threading.Thread.Sleep(100);
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
+
+                                startPageUri = new Uri(GlobalURLsToVisit[0]);
+                                GlobalURLsToVisit.RemoveAt(0);
                             }
                         }
-                        else
-                        {
-                            GlobalVisitedURLs.Add(GlobalURLsToVisit[0]);
+                    }
 
-                            startPageUri = new Uri(GlobalURLsToVisit[0]);
-                            GlobalURLsToVisit.RemoveAt(0);
-                        }
+                    if (startPageUri != null)
+                    {
+                        ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + ": Crawling website: " + startPageUri.AbsoluteUri));
+
+                        InitListsAndPreferences();
+
+                        _Robot = new RobotsTxt(startPageUri, Preferences.RobotUserAgent);
+
+                        ProcessUri(startPageUri, 0);
+
+                        MergeExternalGlobalLinks();
+
+                        _fileColl.Save();
+                    }
+                    else
+                    {
+                        ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": !!! No more tasks - wait for a signal "));
                     }
                 }
 
-                if (startPageUri != null)
-                {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.Start, thread.Name + ": Crawling website: " + startPageUri.AbsoluteUri));
-
-                    InitListsAndPreferences();
-
-                    _Robot = new RobotsTxt(startPageUri, Preferences.RobotUserAgent);
-
-                    ProcessUri(startPageUri, 0);
-
-                    MergeExternalGlobalLinks();
-
-                    _Catalog.MergeResultsRange();
-                    _Catalog.SaveResultsToDB();
-
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": GlobalCatalog => Words(" + _Catalog.GlobalWordsListCount + ") Files(" + _Catalog.GlobalFilesListCount + ")"));
-                }
-                else
-                {
-                    ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": !!! No more tasks - wait for a signal "));
-                }
+                ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": !!! Crawling finished at: " + DateTime.Now));
             }
-
-            ProgressEvent(new ProgressEventArgs(EventTypes.End, thread.Name + ": !!! Crawling finished at: " + DateTime.Now));
+            catch (Exception e)
+            {
+            }
         }
 
         private void InitListsAndPreferences()
         {
-            _Catalog = new Library.WebsiteCatalog();
-            _visitedLinks.Clear();
-            _externalLinks.Clear();
+            _fileColl = FileCollection.NewFileCollection();
+            _visitedLinks = new MMarinov.ThreadedGenerics.TList<string>();
+            _externalLinks = new MMarinov.ThreadedGenerics.TList<string>();
 
             // Setup Stop, Go, Stemming
             SetPreferences();
@@ -245,7 +266,7 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         protected int ProcessUri(Uri uri, int level)
         {
-            if (level > Preferences.RecursionLimit)
+            if (level > Preferences.RecursionLimit || CrawlingManager.ShouldStopThreads)
             {
                 return Preferences.RecursionLimit;
             }
@@ -375,64 +396,93 @@ namespace MMarinov.WebCrawler.Indexer
         /// <return>Number of words catalogued</return>
         private int AddToCatalog(Document downloadDocument)
         {
-            DALWebCrawler.File infile = new DALWebCrawler.File()
-            {
-                Title = downloadDocument.Title,
-                FileType = (byte)Library.FileManipulator.SetFileType(downloadDocument),
-                ImportantWords = Library.FileManipulator.SetImportantWords(downloadDocument),
-                URL = Common.GetHttpAuthority(downloadDocument.Uri) + downloadDocument.Uri.AbsolutePath//do wordsCount need that again here ??
-            };
-
             int wordsCount = 0;
-            string key = "";    // temp variable
-            System.Text.StringBuilder formatedWords = new System.Text.StringBuilder();
+            string wordName = "";    // temp variable
+            WordCollection newWordsColl = WordCollection.NewWordCollection();
+            System.Collections.Generic.List<string> formatedNewWords = new System.Collections.Generic.List<string>();
 
-            foreach (string word in downloadDocument.WordsArray)
+            File infile = File.NewFile();
+            infile.Title = downloadDocument.Title;
+            infile.FileType = downloadDocument.FileType;
+            infile.Keywords = downloadDocument.Keywords;
+            infile.URL = Common.GetHttpAuthority(downloadDocument.Uri) + downloadDocument.Uri.AbsolutePath;
+            infile.Description = downloadDocument.Description;
+
+            foreach (string rawWord in downloadDocument.WordsArray)
             {
-                key = word.ToLower();
+                wordName = rawWord.ToLower();
 
                 // Apply Stemming and stopping (set by preferences)
-                key = _Stemmer.StemWord(key);
-                key = _Stopper.StopWord(key);
+                wordName = _Stemmer.StemWord(wordName);
+                wordName = _Stopper.StopWord(wordName);
 
-                if (key != "")
+                if (wordName != "")
                 {
-                    formatedWords.AppendLine(key);
-
-                    _Catalog.AddWordFilePair(key, infile);
-
                     wordsCount++;
+
+                    lock (_wordsCollGlobal)
+                    {
+                        Word w = _wordsCollGlobal.GetWord(wordName);
+
+                        if (w == null)
+                        {
+                            if (!newWordsColl.Contains(wordName))
+                            {
+                                newWordsColl.Add(Word.NewWord(wordName));
+                            }
+
+                            formatedNewWords.Add(wordName);
+                        }
+                        else
+                        {
+                            if (w.ID == 0)
+                            {
+                            }
+                            infile.WordsInFileColl.AddOrIncrease(w.ID);
+                        }
+                    }
                 }
             } // foreach
 
-            infile.WeightedWords = Library.FileManipulator.SetWeightedWords(formatedWords.ToString());
 
-            _Catalog.AddHtmlFile(infile);
+            newWordsColl.Save();
+
+            lock (_wordsCollGlobal)
+            {
+                _wordsCollGlobal.AddRange(newWordsColl);
+            }
+
+            foreach (string formWord in formatedNewWords)
+            {
+                Word wrd = newWordsColl.GetWord(formWord);
+                if (wrd == null)
+                {
+                }
+                infile.WordsInFileColl.AddOrIncrease(wrd.ID);
+            }
+
+            _fileColl.Add(infile);
 
             return wordsCount;
         }
 
-        /// <summary>
-        /// Aborts thread and flushs/saves catalogued results.
-        /// </summary>
-        internal void KillThread()
+        public static long WordsCount
         {
-            try
+            get
             {
-                thread.Abort();
+                return _wordsCollGlobal.Count;
             }
-            catch (System.Threading.ThreadStateException e)
-            {
-                ProgressEvent(new ProgressEventArgs(e));
-            }
-
-            System.Threading.Thread.Sleep(100);
         }
 
         internal void FlushData()
         {
-            _Catalog.MergeResultsRange();
-            _Catalog.SaveResultsToDB();
+            try
+            {
+                _fileColl.Save();
+            }
+            catch (Exception e)
+            {
+            }
         }
     }
 }

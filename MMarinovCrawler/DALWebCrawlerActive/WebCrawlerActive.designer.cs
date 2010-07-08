@@ -30,9 +30,6 @@ namespace DALWebCrawlerActive
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertFile(File instance);
-    partial void UpdateFile(File instance);
-    partial void DeleteFile(File instance);
     partial void InsertStatistic(Statistic instance);
     partial void UpdateStatistic(Statistic instance);
     partial void DeleteStatistic(Statistic instance);
@@ -42,6 +39,9 @@ namespace DALWebCrawlerActive
     partial void InsertWordsInFile(WordsInFile instance);
     partial void UpdateWordsInFile(WordsInFile instance);
     partial void DeleteWordsInFile(WordsInFile instance);
+    partial void InsertFile(File instance);
+    partial void UpdateFile(File instance);
+    partial void DeleteFile(File instance);
     #endregion
 		
 		public WebCrawlerActiveDataContext() : 
@@ -74,14 +74,6 @@ namespace DALWebCrawlerActive
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<File> Files
-		{
-			get
-			{
-				return this.GetTable<File>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Statistic> Statistics
 		{
 			get
@@ -106,221 +98,19 @@ namespace DALWebCrawlerActive
 			}
 		}
 		
+		public System.Data.Linq.Table<File> Files
+		{
+			get
+			{
+				return this.GetTable<File>();
+			}
+		}
+		
 		[Function(Name="dbo.sp_TruncateAllTables")]
 		public int sp_TruncateAllTables()
 		{
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())));
 			return ((int)(result.ReturnValue));
-		}
-	}
-	
-	[Table(Name="dbo.Files")]
-	public partial class File : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private long _ID;
-		
-		private string _URL;
-		
-		private string _Title;
-		
-		private string _ImportantWords;
-		
-		private string _WeightedWords;
-		
-		private byte _FileType;
-		
-		private EntitySet<WordsInFile> _WordsInFiles;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(long value);
-    partial void OnIDChanged();
-    partial void OnURLChanging(string value);
-    partial void OnURLChanged();
-    partial void OnTitleChanging(string value);
-    partial void OnTitleChanged();
-    partial void OnImportantWordsChanging(string value);
-    partial void OnImportantWordsChanged();
-    partial void OnWeightedWordsChanging(string value);
-    partial void OnWeightedWordsChanged();
-    partial void OnFileTypeChanging(byte value);
-    partial void OnFileTypeChanged();
-    #endregion
-		
-		public File()
-		{
-			this._WordsInFiles = new EntitySet<WordsInFile>(new Action<WordsInFile>(this.attach_WordsInFiles), new Action<WordsInFile>(this.detach_WordsInFiles));
-			OnCreated();
-		}
-		
-		[Column(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_URL", DbType="NVarChar(2500) NOT NULL", CanBeNull=false)]
-		public string URL
-		{
-			get
-			{
-				return this._URL;
-			}
-			set
-			{
-				if ((this._URL != value))
-				{
-					this.OnURLChanging(value);
-					this.SendPropertyChanging();
-					this._URL = value;
-					this.SendPropertyChanged("URL");
-					this.OnURLChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_Title", DbType="NVarChar(200)")]
-		public string Title
-		{
-			get
-			{
-				return this._Title;
-			}
-			set
-			{
-				if ((this._Title != value))
-				{
-					this.OnTitleChanging(value);
-					this.SendPropertyChanging();
-					this._Title = value;
-					this.SendPropertyChanged("Title");
-					this.OnTitleChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_ImportantWords", DbType="NVarChar(2500) NOT NULL", CanBeNull=false)]
-		public string ImportantWords
-		{
-			get
-			{
-				return this._ImportantWords;
-			}
-			set
-			{
-				if ((this._ImportantWords != value))
-				{
-					this.OnImportantWordsChanging(value);
-					this.SendPropertyChanging();
-					this._ImportantWords = value;
-					this.SendPropertyChanged("ImportantWords");
-					this.OnImportantWordsChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_WeightedWords", DbType="NVarChar(2500)")]
-		public string WeightedWords
-		{
-			get
-			{
-				return this._WeightedWords;
-			}
-			set
-			{
-				if ((this._WeightedWords != value))
-				{
-					this.OnWeightedWordsChanging(value);
-					this.SendPropertyChanging();
-					this._WeightedWords = value;
-					this.SendPropertyChanged("WeightedWords");
-					this.OnWeightedWordsChanged();
-				}
-			}
-		}
-		
-		[Column(Storage="_FileType", DbType="TinyInt NOT NULL")]
-		public byte FileType
-		{
-			get
-			{
-				return this._FileType;
-			}
-			set
-			{
-				if ((this._FileType != value))
-				{
-					this.OnFileTypeChanging(value);
-					this.SendPropertyChanging();
-					this._FileType = value;
-					this.SendPropertyChanged("FileType");
-					this.OnFileTypeChanged();
-				}
-			}
-		}
-		
-		[Association(Name="File_WordsInFile", Storage="_WordsInFiles", ThisKey="ID", OtherKey="FileID")]
-		public EntitySet<WordsInFile> WordsInFiles
-		{
-			get
-			{
-				return this._WordsInFiles;
-			}
-			set
-			{
-				this._WordsInFiles.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_WordsInFiles(WordsInFile entity)
-		{
-			this.SendPropertyChanging();
-			entity.File = this;
-		}
-		
-		private void detach_WordsInFiles(WordsInFile entity)
-		{
-			this.SendPropertyChanging();
-			entity.File = null;
 		}
 	}
 	
@@ -706,9 +496,9 @@ namespace DALWebCrawlerActive
 		
 		private int _Count;
 		
-		private EntityRef<File> _File;
-		
 		private EntityRef<Word> _Word;
+		
+		private EntityRef<File> _File;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -726,8 +516,8 @@ namespace DALWebCrawlerActive
 		
 		public WordsInFile()
 		{
-			this._File = default(EntityRef<File>);
 			this._Word = default(EntityRef<Word>);
+			this._File = default(EntityRef<File>);
 			OnCreated();
 		}
 		
@@ -819,40 +609,6 @@ namespace DALWebCrawlerActive
 			}
 		}
 		
-		[Association(Name="File_WordsInFile", Storage="_File", ThisKey="FileID", OtherKey="ID", IsForeignKey=true)]
-		public File File
-		{
-			get
-			{
-				return this._File.Entity;
-			}
-			set
-			{
-				File previousValue = this._File.Entity;
-				if (((previousValue != value) 
-							|| (this._File.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._File.Entity = null;
-						previousValue.WordsInFiles.Remove(this);
-					}
-					this._File.Entity = value;
-					if ((value != null))
-					{
-						value.WordsInFiles.Add(this);
-						this._FileID = value.ID;
-					}
-					else
-					{
-						this._FileID = default(long);
-					}
-					this.SendPropertyChanged("File");
-				}
-			}
-		}
-		
 		[Association(Name="Word_WordsInFile", Storage="_Word", ThisKey="WordID", OtherKey="ID", IsForeignKey=true)]
 		public Word Word
 		{
@@ -887,6 +643,40 @@ namespace DALWebCrawlerActive
 			}
 		}
 		
+		[Association(Name="File_WordsInFile", Storage="_File", ThisKey="FileID", OtherKey="ID", IsForeignKey=true)]
+		public File File
+		{
+			get
+			{
+				return this._File.Entity;
+			}
+			set
+			{
+				File previousValue = this._File.Entity;
+				if (((previousValue != value) 
+							|| (this._File.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._File.Entity = null;
+						previousValue.WordsInFiles.Remove(this);
+					}
+					this._File.Entity = value;
+					if ((value != null))
+					{
+						value.WordsInFiles.Add(this);
+						this._FileID = value.ID;
+					}
+					else
+					{
+						this._FileID = default(long);
+					}
+					this.SendPropertyChanged("File");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -905,6 +695,216 @@ namespace DALWebCrawlerActive
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[Table(Name="dbo.Files")]
+	public partial class File : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _ID;
+		
+		private string _URL;
+		
+		private string _Title;
+		
+		private string _Keywords;
+		
+		private string _Description;
+		
+		private byte _FileType;
+		
+		private EntitySet<WordsInFile> _WordsInFiles;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(long value);
+    partial void OnIDChanged();
+    partial void OnURLChanging(string value);
+    partial void OnURLChanged();
+    partial void OnTitleChanging(string value);
+    partial void OnTitleChanged();
+    partial void OnKeywordsChanging(string value);
+    partial void OnKeywordsChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnFileTypeChanging(byte value);
+    partial void OnFileTypeChanged();
+    #endregion
+		
+		public File()
+		{
+			this._WordsInFiles = new EntitySet<WordsInFile>(new Action<WordsInFile>(this.attach_WordsInFiles), new Action<WordsInFile>(this.detach_WordsInFiles));
+			OnCreated();
+		}
+		
+		[Column(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_URL", DbType="NVarChar(2500) NOT NULL", CanBeNull=false)]
+		public string URL
+		{
+			get
+			{
+				return this._URL;
+			}
+			set
+			{
+				if ((this._URL != value))
+				{
+					this.OnURLChanging(value);
+					this.SendPropertyChanging();
+					this._URL = value;
+					this.SendPropertyChanged("URL");
+					this.OnURLChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Title", DbType="NVarChar(200)")]
+		public string Title
+		{
+			get
+			{
+				return this._Title;
+			}
+			set
+			{
+				if ((this._Title != value))
+				{
+					this.OnTitleChanging(value);
+					this.SendPropertyChanging();
+					this._Title = value;
+					this.SendPropertyChanged("Title");
+					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Keywords", DbType="NVarChar(500)")]
+		public string Keywords
+		{
+			get
+			{
+				return this._Keywords;
+			}
+			set
+			{
+				if ((this._Keywords != value))
+				{
+					this.OnKeywordsChanging(value);
+					this.SendPropertyChanging();
+					this._Keywords = value;
+					this.SendPropertyChanged("Keywords");
+					this.OnKeywordsChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_Description", DbType="NVarChar(500)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[Column(Storage="_FileType", DbType="TinyInt NOT NULL")]
+		public byte FileType
+		{
+			get
+			{
+				return this._FileType;
+			}
+			set
+			{
+				if ((this._FileType != value))
+				{
+					this.OnFileTypeChanging(value);
+					this.SendPropertyChanging();
+					this._FileType = value;
+					this.SendPropertyChanged("FileType");
+					this.OnFileTypeChanged();
+				}
+			}
+		}
+		
+		[Association(Name="File_WordsInFile", Storage="_WordsInFiles", ThisKey="ID", OtherKey="FileID")]
+		public EntitySet<WordsInFile> WordsInFiles
+		{
+			get
+			{
+				return this._WordsInFiles;
+			}
+			set
+			{
+				this._WordsInFiles.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_WordsInFiles(WordsInFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.File = this;
+		}
+		
+		private void detach_WordsInFiles(WordsInFile entity)
+		{
+			this.SendPropertyChanging();
+			entity.File = null;
 		}
 	}
 }

@@ -116,7 +116,7 @@ namespace MMarinov.WebCrawler.Stemming
         /// Adds wLen characters to the word being stemmed contained in a portion of a char[] array. 
         /// This is like repeated calls of AddChar(char ch), but faster.
         /// </summary>
-        /// <param name="w"></param>
+        /// <param name="word"></param>
         /// <param name="wLen"></param>
         public void add(char[] w, int wLen)
         {
@@ -240,7 +240,7 @@ namespace MMarinov.WebCrawler.Stemming
 
         /// <summary>
         /// It's true <![CDATA[<==>]]> wordsCount-2,wordsCount-1,wordsCount has the form consonant - vowel - consonant
-        /// and also if the second c is not w,x or y. this is used when trying to  restore an e at the end of a short word. 
+        /// and also if the second c is not word,x or y. this is used when trying to  restore an e at the end of a short word. 
         /// e.g. cav(e), lov(e), hop(e), crim(e), but snow, box, tray.
         /// </summary>
         /// <param name="wordsCount"></param>

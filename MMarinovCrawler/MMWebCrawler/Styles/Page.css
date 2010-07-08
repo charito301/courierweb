@@ -9,10 +9,20 @@
 {
     text-align: center;
     color: Blue;
-    font-size: 55px;
+    font-size: 65px;
     font-weight: bold;
     font-family: Adobe Garamond Pro Bold;
     margin: 10px 10px 10px 10px;
+}
+
+.Subtitle
+{
+    text-align: center;
+    color: Blue;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Adobe Garamond Pro Bold;
+    margin: 5px 5px 5px 5px;
 }
 
 .SearchBar
@@ -29,4 +39,9 @@
     font-size: x-large;
     font-weight: bold;
     font-family: Adobe Garamond Pro Bold;
+}
+.NoResults
+{
+    color:Fuchsia;
+    text-align: center;
 }

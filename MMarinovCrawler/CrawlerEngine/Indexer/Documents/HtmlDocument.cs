@@ -117,15 +117,39 @@ namespace MMarinov.WebCrawler.Indexer
         /// Encoding eg. "utf-8", "Shift_JIS", "iso-8859-1", "gb2312", etc
         /// </summary>
         public System.Text.Encoding Encoding;
-
+        
         /// <summary>
         /// Html &lt;meta http-equiv='keywords'&gt; tag
         /// </summary>
-        public string Keywords
+        public override string Keywords
         {
             get
             {
                 return _keywords;
+            }
+            set
+            {
+                _keywords = value.Substring(0, 500);
+            }
+        }
+
+        public override byte FileType
+        {
+            get
+            {
+                return (byte)DocumentTypes.HTML;
+            }
+        }
+
+        public override string Title
+        {
+            get
+            {
+                return _Title;
+            }
+            set
+            {
+                _Title = value;
             }
         }
 
@@ -144,7 +168,7 @@ namespace MMarinov.WebCrawler.Indexer
         }
         public override string WordsOnly
         {
-            get { return this._keywords + " " + this._Description + " " + this._WordsOnly; }
+            get { return _Title + " " + this._keywords + " " + this._Description + " " + Common.GetAuthority(Uri)+" " + this._WordsOnly; }
         }
 
         public override string Description
@@ -155,7 +179,7 @@ namespace MMarinov.WebCrawler.Indexer
             }
             set
             {
-                _Description = Regex.Replace(value, Common.MatchEmptySpacesPattern, " ").Trim();
+                _Description = value.Substring(0, 500);
             }
         }
 
@@ -459,7 +483,7 @@ namespace MMarinov.WebCrawler.Indexer
                 this.AllCode = stream.ReadToEnd();
                 if (this.AllCode != "")
                 {
-                    base.SetDownloadSpeed ( this.AllCode.Length / (DateTime.Now - startDLtime).TotalSeconds / 1000);
+                    base.SetDownloadSpeed(this.AllCode.Length / (DateTime.Now - startDLtime).TotalSeconds / 1000);
                 }
             }
             catch (Exception e)

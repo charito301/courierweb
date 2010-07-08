@@ -6,14 +6,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link rel="Stylesheet" href="Styles/Page.css" type="text/css" />
-    <title>MMarinov's Web Crawler</title>
+    <title>Margent - MMarinov's Search Agent</title>
 </head>
 <body>
     <form id="form1" runat="server">
     <div class="Title">
-        MMarinov's Web Crawler</div>
+        Margent</div>
+        <div class="Subtitle">
+            MMarinov's Search Agent</div>
     <div class="SearchBar">
-        <asp:Label ID="lblSearch" runat="server" CssClass="SearchQuery" Text="Enter search criteria:"></asp:Label>
+        <asp:Label ID="lblSearch" runat="server" CssClass="SearchQuery" Text="Search the knowledge base:"></asp:Label>
         <asp:TextBox ID="tbSearchQuery" runat="server" CssClass="SearchQuery"></asp:TextBox>
         <asp:ImageButton ID="btnDoSearch" runat="server" Height="25px" CssClass="SearchQuery"
             ImageUrl="~/Images/btnSearch.jpg" OnClick="btnDoSearch_Click" />
@@ -25,8 +27,8 @@
             <FooterStyle ForeColor="#000066" BackColor="White"></FooterStyle>
             <PagerStyle ForeColor="#000066" HorizontalAlign="Center" BackColor="White"></PagerStyle>
             <HeaderStyle ForeColor="White" Font-Bold="True" BackColor="#006699"></HeaderStyle>
-            <EmptyDataTemplate>
-                No records could be retrieved from the database. We apologize for the invonvenience.
+            <EmptyDataTemplate><div class="NoResults">
+                No records could be retrieved from the database. We apologize for the invonvenience.</div>
             </EmptyDataTemplate>
             <Columns>
                 <asp:TemplateField>
@@ -42,7 +44,7 @@
                                         <ItemTemplate>
                                             <asp:HyperLink runat="server" ID="lnkWebLink">follow me</asp:HyperLink>
                                             <asp:Label runat="server" ID="lblTitle">title</asp:Label>
-                                            </ItemTemplate>
+                                        </ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
                             </asp:GridView>

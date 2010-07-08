@@ -1,4 +1,7 @@
 ﻿using System.Linq;
+using System.Data.SqlClient;
+using System.Data;
+using System;
 
 namespace MMarinov.WebCrawler.Library
 {
@@ -6,9 +9,22 @@ namespace MMarinov.WebCrawler.Library
     {
         public static void TruncateDBTables()
         {
-            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            SqlConnection cn = new SqlConnection(Preferences.ConnectionString);
+            SqlCommand cm = new SqlCommand();
+
+            cn.Open();
+
+            try
             {
-                dataContext.sp_TruncateAllTables();
+                cm.Connection = cn;
+                cm.CommandType = CommandType.StoredProcedure;
+
+                cm.CommandText = "sp_TruncateTables";
+                cm.ExecuteNonQuery();
+            }
+            finally
+            {
+                cn.Close();
             }
         }
 
@@ -24,13 +40,47 @@ namespace MMarinov.WebCrawler.Library
         {
             TruncateActiveDBTables();
 
-            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
+            CopyFromDBToActiveDB();
+        }
+
+        private static void CopyFromDBToActiveDB()
+        {
+            SqlConnection cn = new SqlConnection(Preferences.ConnectionString);
+            SqlCommand cm = new SqlCommand();
+            SqlTransaction tr;
+
+            cn.Open();
+
+            try
             {
-                dataContext.sp_CopyFromDBToActiveDB();
+                tr = cn.BeginTransaction(IsolationLevel.Serializable);
+
+                try
+                {
+
+                    cm.Transaction = tr;
+                    cm.Connection = cn;
+                    cm.CommandType = CommandType.StoredProcedure;
+
+                    cm.CommandText = "sp_CopyFromDBToActiveDB";
+                    cm.ExecuteNonQuery();
+
+                    tr.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tr.Rollback();//important here
+                    throw (ex);
+                }
+            }
+            finally
+            {
+                cn.Close();
             }
         }
 
         #region Better way, but not working for now
+        /*
         public static void BulkCopyToActiveDB()
         {
             TruncateActiveDBTables();
@@ -89,7 +139,7 @@ namespace MMarinov.WebCrawler.Library
             }
 
             return dt;
-        } 
+        }*/
         #endregion
     }
 }

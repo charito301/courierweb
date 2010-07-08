@@ -30,7 +30,8 @@ namespace MMarinov.WebCrawler.Indexer
 
         public CrawlingManager()
         {
-
+            DBLibrary.StoredProceduresManager.InitAllStoredProcedures();
+            ResetFolders();
         }
 
         private static void WriteLog(object o)
@@ -78,15 +79,13 @@ namespace MMarinov.WebCrawler.Indexer
         /// <param name="p"></param>
         public void StartSpider()
         {
-             SeedList.GetTheList();
-            //Spider.GlobalURLsToVisit.Add("http://live.com");
-            //Spider.GlobalURLsToVisit.Add("http://google.com");
-            //Spider.GlobalURLsToVisit.Add("http://facebook.com");
-            //Spider.GlobalURLsToVisit.Add("http://tweeter.com");
-            //Spider.GlobalURLsToVisit.Add("http://msn.com");
-            //Spider.GlobalURLsToVisit.Add("http://nike.com");
-
-            ResetFolders();
+            //SeedList.GetTheList();
+            Spider.GlobalURLsToVisit.Add("http://live.com");
+            Spider.GlobalURLsToVisit.Add("http://weblogs.asp.net");
+            Spider.GlobalURLsToVisit.Add("http://facebook.com");
+            Spider.GlobalURLsToVisit.Add("http://tweeter.com");
+            Spider.GlobalURLsToVisit.Add("http://msn.com");
+            Spider.GlobalURLsToVisit.Add("http://nike.com");
 
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 200, 3000);
             startDate = DateTime.Now;
@@ -231,6 +230,11 @@ namespace MMarinov.WebCrawler.Indexer
 
         public void StopSpiders()
         {
+            ShouldStopThreads = true;
+            timer.Dispose();
+
+            System.Threading.Thread.Sleep(100);
+
             KillSpiders();
 
             for (int i = 0; i < Preferences.ThreadsCount; i++)
@@ -247,9 +251,6 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         public void KillSpiders()
         {
-            ShouldStopThreads = true;
-            timer.Dispose();
-
             for (int i = 0; i < Preferences.ThreadsCount; i++)
             {
                 spiderArray[i].KillThread();
@@ -276,27 +277,19 @@ namespace MMarinov.WebCrawler.Indexer
 
             TimeSpan duration = (DateTime.Now - startDate);
 
-            using (DALWebCrawler.WebCrawlerDataContext dataContext = new DALWebCrawler.WebCrawlerDataContext(Preferences.ConnectionString))
-            {
-                DALWebCrawler.Statistic stat = new DALWebCrawler.Statistic()
-                {
-                    CrawledSuccessfulLinks = Spider.CrawledSuccessfulLinks,
-                    CrawledTotalLinks = Spider.CrawledTotalLinks,
-                    FoundTotalLinks = Document.FoundTotalLinks,
-                    FoundValidLinks = Document.FoundValidLinks,
-                    StartDate = startDate,
-                    Duration = string.Format("{0}d:{1}h:{2}m ({3}min)", duration.Days, duration.Hours.ToString("00"), duration.Minutes.ToString("00"), (int)duration.TotalMinutes),
-                    Words = dataContext.Words.Count(),
-                    ProcessDescription = description.ToString()
-                };
+            Library.Statistics stat = Library.Statistics.NewStatistics();
+            stat.CrawledSuccessfulLinks = Spider.CrawledSuccessfulLinks;
+            stat.CrawledTotalLinks = Spider.CrawledTotalLinks;
+            stat.Words = Spider.WordsCount;
+            stat.FoundTotalLinks = Document.FoundTotalLinks;
+            stat.FoundValidLinks = Document.FoundValidLinks;
+            stat.StartDateDT = startDate;
+            stat.Duration = string.Format("{0}d:{1}h:{2}m ({3}min)", duration.Days, duration.Hours.ToString("00"), duration.Minutes.ToString("00"), (int)duration.TotalMinutes);
+            stat.ProcessDescription = description.ToString();
+            stat.SaveOne();
 
-                statisticMsg.AppendLine("Duration = " + stat.Duration);
-                statisticMsg.AppendLine("Words = " + stat.Words);
-
-                dataContext.Statistics.InsertOnSubmit(stat);
-                dataContext.SubmitChanges();
-            }
-
+            statisticMsg.AppendLine("Duration = " + stat.Duration);
+            statisticMsg.AppendLine("Words = " + stat.Words);
             statisticMsg.AppendLine().AppendLine("Properties of the crawler:").AppendLine(description.ToString());
             return statisticMsg.ToString();
         }

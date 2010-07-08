@@ -87,15 +87,15 @@ namespace MMarinov.ThreadedGenerics
         #region GetValueAddIfNotExist
 
         /// <summary>
-        /// Returns the value of <paramref name="key"/>. If <paramref name="key"/>
+        /// Returns the value of <paramref name="wordName"/>. If <paramref name="wordName"/>
         /// does not exist, <paramref name="func"/> is performed and added to the 
         /// dictionary
         /// </summary>
-        /// <param name="key">the key to check</param>
-        /// <param name="func">the delegate to call if key does not exist</param>
+        /// <param name="wordName">the wordName to check</param>
+        /// <param name="func">the delegate to call if wordName does not exist</param>
         public TValue GetValueAddIfNotExist(TKey key, Func<TValue> func)
         {
-            // enter a write lock, to make absolutely sure that the key
+            // enter a write lock, to make absolutely sure that the wordName
             // is added/deleted from the time we check if it exists
             // to the time we AddChar it if it doesn't exist
             Lock_Dictionary.EnterWriteLock();
@@ -131,7 +131,7 @@ namespace MMarinov.ThreadedGenerics
         /// <summary>
         /// Adds an item to the dictionary
         /// </summary>
-        /// <param name="key">the key to AddChar</param>
+        /// <param name="wordName">the wordName to AddChar</param>
         /// <param name="value">the value to AddChar</param>
         public void Add(TKey key, TValue value)
         {
@@ -166,11 +166,11 @@ namespace MMarinov.ThreadedGenerics
         #region AddIfNotExists
 
         /// <summary>
-        /// Adds the value if it's key does not already exist. Returns
+        /// Adds the value if it's wordName does not already exist. Returns
         /// true if the value was added
         /// </summary>
-        /// <param name="key">the key to check, AddChar</param>
-        /// <param name="value">the value to AddChar if the key does not already exist</param>
+        /// <param name="wordName">the wordName to check, AddChar</param>
+        /// <param name="value">the value to AddChar if the wordName does not already exist</param>
         public bool AddIfNotExists(TKey key, TValue value)
         {
             bool rVal = false;
@@ -198,7 +198,7 @@ namespace MMarinov.ThreadedGenerics
         /// Adds the list of value if the keys do not already exist.
         /// </summary>
         /// <param name="keys">the keys to check, AddChar</param>
-        /// <param name="defaultValue">the value to AddChar if the key does not already exist</param>
+        /// <param name="defaultValue">the value to AddChar if the wordName does not already exist</param>
         public void AddIfNotExists(IEnumerable<TKey> keys, TValue defaultValue)
         {
             Lock_Dictionary.EnterWriteLock();
@@ -223,9 +223,9 @@ namespace MMarinov.ThreadedGenerics
         #region UpdateValueIfKeyExists
 
         /// <summary>
-        /// Updates the value of the key if the key exists. Returns true if updated
+        /// Updates the value of the wordName if the wordName exists. Returns true if updated
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="wordName"></param>
         /// <param name="NewValue"></param>
         public bool UpdateValueIfKeyExists(TKey key, TValue NewValue)
         {
@@ -234,7 +234,7 @@ namespace MMarinov.ThreadedGenerics
             Lock_Dictionary.EnterWriteLock();
             try
             {
-                // if we have the key, then update it
+                // if we have the wordName, then update it
                 if (m_Dictionary.ContainsKey(key))
                 {
                     m_Dictionary[key] = NewValue;
@@ -256,9 +256,9 @@ namespace MMarinov.ThreadedGenerics
         #region Contains
 
         /// <summary>
-        /// Returns true if the key value pair exists in the dictionary
+        /// Returns true if the wordName value pair exists in the dictionary
         /// </summary>
-        /// <param name="item">key value pair to find</param>
+        /// <param name="item">wordName value pair to find</param>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
             Lock_Dictionary.EnterReadLock();
@@ -279,9 +279,9 @@ namespace MMarinov.ThreadedGenerics
         #region ContainsKey
 
         /// <summary>
-        /// Returns true if the key exists in the dictionary
+        /// Returns true if the wordName exists in the dictionary
         /// </summary>
-        /// <param name="key">the key to find in the dictionary</param>
+        /// <param name="wordName">the wordName to find in the dictionary</param>
         public bool ContainsKey(TKey key)
         {
             Lock_Dictionary.EnterReadLock();
@@ -348,9 +348,9 @@ namespace MMarinov.ThreadedGenerics
         #region Remove
 
         /// <summary>
-        /// Removes the element with this key name
+        /// Removes the element with this wordName name
         /// </summary>
-        /// <param name="key">the key to remove</param>
+        /// <param name="wordName">the wordName to remove</param>
         public bool Remove(TKey key)
         {
             Lock_Dictionary.EnterWriteLock();
@@ -365,16 +365,16 @@ namespace MMarinov.ThreadedGenerics
         }
 
         /// <summary>
-        /// Removes the element with this key name and value. Returns
+        /// Removes the element with this wordName name and value. Returns
         /// true if the item was removed.
         /// </summary>
-        /// <param name="item">the key to remove</param>
+        /// <param name="item">the wordName to remove</param>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             Lock_Dictionary.EnterWriteLock();
             try
             {
-                // skip if the key doesn't exist
+                // skip if the wordName doesn't exist
                 TValue tempVal;
                 if (!m_Dictionary.TryGetValue(item.Key, out tempVal))
                     return false;
@@ -450,11 +450,11 @@ namespace MMarinov.ThreadedGenerics
         #region TryGetValue
 
         /// <summary>
-        /// Attemtps to return the value found at element <paramref name="key"/>
+        /// Attemtps to return the value found at element <paramref name="wordName"/>
         /// If no value is found, returns false
         /// </summary>
-        /// <param name="key">the key to find</param>
-        /// <param name="value">the value returned if the key is found</param>
+        /// <param name="wordName">the wordName to find</param>
+        /// <param name="value">the value returned if the wordName is found</param>
         public bool TryGetValue(TKey key, out TValue value)
         {
             Lock_Dictionary.EnterReadLock();
@@ -554,9 +554,9 @@ namespace MMarinov.ThreadedGenerics
         #region CopyTo
 
         /// <summary>
-        /// Copies the items of the dictionary to a key value pair array
+        /// Copies the items of the dictionary to a wordName value pair array
         /// </summary>
-        /// <param name="array">the key value pair collection to copy into</param>
+        /// <param name="array">the wordName value pair collection to copy into</param>
         /// <param name="arrayIndex">the index to begin copying to</param>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {

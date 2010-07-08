@@ -222,5 +222,12 @@ namespace MMarinov.WebCrawler.UI
         }
 
         #endregion
+
+        private void btnShowStatistics_Click(object sender, RoutedEventArgs e)
+        {
+            ViewStatistics stats = new ViewStatistics();
+            stats.WindowState = WindowState.Maximized;
+            stats.Show();
+        }
     }
 }

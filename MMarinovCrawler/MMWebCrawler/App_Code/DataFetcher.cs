@@ -1,42 +1,80 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using DALWebCrawlerActive;
 
 /// <summary>
 /// Summary description for DataFetcher
 /// </summary>
-public class DataFetcher
+public static class DataFetcher
 {
     private static string connectionString = System.Configuration.ConfigurationManager.AppSettings["ConnectionStringActive"].ToString();
-    private System.Collections.Generic.List<DALWebCrawlerActive.File> files;
-    private static readonly char[] space = new char[] { ' ' };
 
-    public DataFetcher(string query)
+    public class CountFileList
     {
-        using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(connectionString))
+        public int Count = 0;
+        public List<File> FilesList = new List<File>();
+
+        public CountFileList(int count, File fileToAdd)
         {
-            DALWebCrawlerActive.Word w = dataContext.Words.SingleOrDefault(ww => ww.WordName == query);
-            if (w.WordsInFiles.Count > 0)
-            {
-
-            }
-
-            IQueryable<string[]> wordsQuery = from f in dataContext.Files
-                                              where (f.ImportantWords + f.WeightedWords).Contains(query)
-                                              select (f.ImportantWords + f.WeightedWords).Split(space, System.StringSplitOptions.RemoveEmptyEntries);
-       
-            foreach (string[] wordsInFile in wordsQuery)
-            {
-
-            }
+            Count = count;
+            FilesList.Add(fileToAdd);
         }
     }
 
-    public int FilesCount
+    public static Dictionary<Word, CountFileList> FetchResults(string query)
     {
-        get { return files.Count(); }
-    }
+        using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(connectionString))
+        {
+            IQueryable<IEnumerable<long>> innerQuery = from w in dataContext.Words
+                                                       where w.WordName == query
+                                                       orderby w.WordsInFiles.Count descending
+                                                       select w.WordsInFiles.Select(wif => wif.FileID);//all files that contain the words ordered by count desc
 
-    public System.Collections.Generic.List<DALWebCrawlerActive.File> Files
-    {
-        get { return files; }
+            List<long> fileIDs = new List<long>();
+            foreach (IEnumerable<long> allFileIDs in innerQuery)
+            {
+                foreach (long fileId in allFileIDs)
+                {
+                    if (!fileIDs.Contains(fileId))
+                    {
+                        fileIDs.Add(fileId);
+                    }
+                    else
+                    {//debug
+                    }
+                }
+            }
+
+            IOrderedQueryable<WordsInFile> wordsinfileList = from wif in dataContext.WordsInFiles
+                                                             where fileIDs.Contains(wif.FileID)
+                                                             orderby wif.Count descending
+                                                             select wif;
+
+            Dictionary<Word, CountFileList> results = new Dictionary<Word, CountFileList>();
+            foreach (WordsInFile wif in wordsinfileList)
+            {
+                if (results.Keys.Contains(wif.Word))
+                {
+                    CountFileList cfl = results[wif.Word];
+                    cfl.Count += wif.Count;
+                    cfl.FilesList.Add(wif.File);
+                }
+                else
+                {
+                    results.Add(wif.Word, new CountFileList(wif.Count,wif.File));
+                }
+            }
+
+            return results;
+
+            //            select * from Words 
+            //inner join WordsInFiles on WordsInFiles.WordID = Words.ID
+            //where Words.ID in (
+            //select top 100 WordsInFiles.FileID from Words
+            //inner join WordsInFiles on WordsInFiles.WordID = Words.ID
+            //where WordName='live' )
+            // order by count desc
+        }
     }
 }

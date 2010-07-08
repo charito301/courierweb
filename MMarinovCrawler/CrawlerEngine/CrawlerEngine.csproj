@@ -55,6 +55,26 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSLA, Version=1.52.2049.30762, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.dll</HintPath>
+    </Reference>
+    <Reference Include="CSLA.Core.BindableBase, Version=1.52.2049.30762, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Core.BindableBase.dll</HintPath>
+    </Reference>
+    <Reference Include="CSLA.Resources, Version=1.52.2049.30760, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="CSLA.Server.DataPortal, Version=1.52.2049.30762, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Server.DataPortal.dll</HintPath>
+    </Reference>
+    <Reference Include="CSLA.Server.ServicedDataPortal, Version=1.52.2049.30762, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Server.ServicedDataPortal.dll</HintPath>
+    </Reference>
     <Reference Include="FontBox-0.1.0-dev, Version=0.0.0.0, Culture=neutral" />
     <Reference Include="IKVM.GNU.Classpath, Version=0.30.0.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58" />
     <Reference Include="IKVM.Runtime, Version=0.30.0.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58" />
@@ -81,12 +101,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="DBLibrary\StoredProceduresManager.cs" />
     <Compile Include="Indexer\Documents\Mp3Document.cs" />
     <Compile Include="Indexer\SeedList.cs" />
-    <Compile Include="Library\DBCopier.cs" />
-    <Compile Include="Library\WebsiteCatalog.cs" />
-    <Compile Include="Library\FileManipulator.cs" />
-    <Compile Include="Library\WordManipulator.cs" />
+    <Compile Include="DBLibrary\Statistics.cs" />
+    <Compile Include="DBLibrary\StatisticsCollectionReadOnly.cs" />
+    <Compile Include="DBLibrary\Word.cs" />
+    <Compile Include="DBLibrary\WordCollection.cs" />
+    <Compile Include="DBLibrary\DBCopier.cs" />
+    <Compile Include="DBLibrary\File.cs" />
+    <Compile Include="DBLibrary\FileCollection.cs" />
+    <Compile Include="DBLibrary\WordsInFile.cs" />
+    <Compile Include="DBLibrary\WordsInFileCollection.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="Stemming\IStemming.cs" />
     <Compile Include="Stemming\NoStemming.cs" />
@@ -119,10 +145,6 @@
     <ProjectReference Include="..\DALWebCrawlerActive\DALWebCrawlerActive.csproj">
       <Project>{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}</Project>
       <Name>DALWebCrawlerActive</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DALWebCrawler\DALWebCrawler.csproj">
-      <Project>{FA75D857-C3E2-46FD-8DAE-5A6EAFDC7BF1}</Project>
-      <Name>DALWebCrawler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

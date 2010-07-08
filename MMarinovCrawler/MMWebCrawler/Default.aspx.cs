@@ -58,31 +58,22 @@ namespace MMarinov.WebCrawler.UI
         /// </summary>
         private void LoadJavaScriptData()
         {
-           // string loadValues = "";
+            // string loadValues = "";
 
             //Get payment values from form and save them in javascript class.
             foreach (GridViewRow row in gvKeywords.Rows)
             {
-                HyperLink lnkKeyword = (HyperLink)row.FindControl("lnkKeyword");
                 GridView gvLinks = (GridView)row.FindControl("gvLinks");
-
-                //loadValues += this.JSVarName + ".RegisteredIds.push('" + lblGroupName.ClientID + "');" + this.JSVarName + ".RegisteredValues.push(" + (lblGroupName.Text != "" ? tbRegistered.Text.Replace(',', '.') : "0.00") + ");";
-
-                gvLinks.Style["display"] = "none";
-
-                //tbComment.Style["display"] = "block";
+                //gvLinks.Style["display"] = "none";
             }
 
             //Page.ClientScript.RegisterStartupScript(this.GetType(), "LoadValues; ", loadValues, true);
-
-            //loadValues = "";
 
             //GridViewRow currentRow = grPayments.FooterRow;
             //TextBox tbRegisteredFooter = (TextBox)currentRow.FindControl("tbRegisteredFooter");
 
             ////Register field's ids in wich result sum is calculated.
             //Page.ClientScript.RegisterStartupScript(this.GetType(), "SetProperties1", this.JavaScriptVariableName + ".TbDifferenceId ='" + tbDifferenceFooter.ClientID + "';", true);
-            //Page.ClientScript.RegisterStartupScript(this.GetType(), "SetProperties2", this.JavaScriptVariableName + ".TbRegisteredId ='" + tbRegisteredFooter.ClientID + "';", true);
 
             //GridViewRow groupsFooterRow = grRevenueGroups.FooterRow;
 
@@ -92,16 +83,19 @@ namespace MMarinov.WebCrawler.UI
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                DALWebCrawlerActive.File currentFile = (DALWebCrawlerActive.File)e.Row.DataItem;
+                System.Collections.Generic.KeyValuePair<DALWebCrawlerActive.Word, DataFetcher.CountFileList> currentWord = (System.Collections.Generic.KeyValuePair<DALWebCrawlerActive.Word, DataFetcher.CountFileList>)e.Row.DataItem;
 
                 HyperLink lnkKeyword = (HyperLink)e.Row.FindControl("lnkKeyword");
                 GridView gvLinks = (GridView)e.Row.FindControl("gvLinks");
 
-                lnkKeyword.Text = currentFile.URL;
-                lnkKeyword.Attributes["OnClick"] = this.JSVarName + ".ValidateFloat(this);";
+                lnkKeyword.Text = currentWord.Key.WordName + " [" + currentWord.Value.Count + "]";
+                lnkKeyword.Attributes["OnClick"] = this.JSVarName + ".SetGridVisibility(this);";
                 //tbRevenue.Attributes["OnBlur"] += this.JavaScriptVariableName + ".UpdateData(" + this.JavaScriptVariableName + ".RevenueIds, " + this.JavaScriptVariableName + ".RevenueValues, this.id, event);";
 
                 //lblGroupName.Text = currentGroup.Name;
+
+                gvLinks.DataSource = currentWord.Value.FilesList;
+                gvLinks.DataBind();
             }
 
             //if (e.Row.RowType == DataControlRowType.Footer)
@@ -128,8 +122,7 @@ namespace MMarinov.WebCrawler.UI
 
         private void LoadDataSource(string query)
         {
-            DataFetcher fetcher = new DataFetcher(query);
-            gvKeywords.DataSource = fetcher.Files;
+            gvKeywords.DataSource = DataFetcher.FetchResults(query);
             gvKeywords.DataBind();
         }
 

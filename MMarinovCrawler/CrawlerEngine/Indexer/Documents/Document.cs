@@ -18,6 +18,8 @@ namespace MMarinov.WebCrawler.Indexer
         private string _MimeType = "";
         private string _Title;
         private string _Description = "";
+        private byte _fileType =0;
+        private string _keywords ="";
 
         public static Int64 FoundValidLinks = 0;
         public static Int64 FoundTotalLinks = 0;
@@ -84,6 +86,18 @@ namespace MMarinov.WebCrawler.Indexer
         {
             get { return _MimeType; }
             set { _MimeType = value; }
+        }
+
+        public virtual string Keywords
+        {
+            get { return _keywords; }
+            set { _keywords = value; }
+        }
+
+        public virtual byte FileType
+        {
+            get { return _fileType; }
+            set { _fileType = value; }
         }
 
         public abstract string WordsOnly { get; }
