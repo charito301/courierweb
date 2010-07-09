@@ -30,7 +30,6 @@ namespace MMarinov.WebCrawler.Indexer
 
         public CrawlingManager()
         {
-            DBLibrary.StoredProceduresManager.InitAllStoredProcedures();
             ResetFolders();
         }
 

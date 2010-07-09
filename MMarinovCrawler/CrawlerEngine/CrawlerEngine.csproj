@@ -57,23 +57,23 @@
   <ItemGroup>
     <Reference Include="CSLA, Version=1.52.2049.30762, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.dll</HintPath>
+      <HintPath>DLLs\CSLA.dll</HintPath>
     </Reference>
     <Reference Include="CSLA.Core.BindableBase, Version=1.52.2049.30762, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Core.BindableBase.dll</HintPath>
+      <HintPath>DLLs\CSLA.Core.BindableBase.dll</HintPath>
     </Reference>
     <Reference Include="CSLA.Resources, Version=1.52.2049.30760, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Resources.dll</HintPath>
+      <HintPath>DLLs\CSLA.Resources.dll</HintPath>
     </Reference>
     <Reference Include="CSLA.Server.DataPortal, Version=1.52.2049.30762, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Server.DataPortal.dll</HintPath>
+      <HintPath>DLLs\CSLA.Server.DataPortal.dll</HintPath>
     </Reference>
     <Reference Include="CSLA.Server.ServicedDataPortal, Version=1.52.2049.30762, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Server.ServicedDataPortal.dll</HintPath>
+      <HintPath>DLLs\CSLA.Server.ServicedDataPortal.dll</HintPath>
     </Reference>
     <Reference Include="FontBox-0.1.0-dev, Version=0.0.0.0, Culture=neutral" />
     <Reference Include="IKVM.GNU.Classpath, Version=0.30.0.0, Culture=neutral, PublicKeyToken=13235d27fcbfff58" />
@@ -140,6 +140,7 @@
     <Content Include="DLLs\Ionic.Zip.dll" />
     <Content Include="DLLs\PDFBox-0.7.3.dll" />
     <Content Include="DLLs\UltraID3Lib.dll" />
+    <Content Include="DLLs\WPFToolkit.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DALWebCrawlerActive\DALWebCrawlerActive.csproj">

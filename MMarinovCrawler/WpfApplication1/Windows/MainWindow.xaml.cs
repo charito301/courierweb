@@ -60,6 +60,7 @@ namespace MMarinov.WebCrawler.UI
             System.ComponentModel.BackgroundWorker worker = (System.ComponentModel.BackgroundWorker)sender;
 
             System.Threading.Thread.Sleep(600);
+            DBLibrary.StoredProceduresManager.InitAllStoredProcedures();
             Library.DBCopier.TruncateDBTables();
 
             worker.ReportProgress(30, "Initializing crawling process...");

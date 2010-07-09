@@ -21,7 +21,7 @@ namespace MMarinov.WebCrawler.DBLibrary
                 cm.Connection = cn;
                 cm.CommandType = CommandType.Text;
 
-                cm.CommandText = dropIfExists("sp_CopyFromDBToActiveDB") + dropIfExists("sp_InsertFile") + dropIfExists("sp_InsertStatistics") + dropIfExists("sp_InsertWord") + dropIfExists("sp_InsertWordInFile") + dropIfExists("sp_SelectWordsAll") + dropIfExists("sp_TruncateAllTables") + dropIfExists("sp_TruncateTables");
+                cm.CommandText = dropIfExists("sp_CopyFromDBToActiveDB") + dropIfExists("sp_InsertFile") + dropIfExists("sp_InsertStatistics") + dropIfExists("sp_InsertWord") + dropIfExists("sp_InsertWordInFile") + dropIfExists("sp_SelectWordsAll") +dropIfExists("sp_TruncateTables");
                 cm.ExecuteNonQuery();
 
                 cm.CommandText = sp_CopyFromDBToActiveDB;
@@ -35,8 +35,6 @@ namespace MMarinov.WebCrawler.DBLibrary
                 cm.CommandText = sp_InsertWordInFile;
                 cm.ExecuteNonQuery();
                 cm.CommandText = sp_SelectWordsAll;
-                cm.ExecuteNonQuery();
-                cm.CommandText = sp_TruncateAllTables;
                 cm.ExecuteNonQuery();
                 cm.CommandText = sp_TruncateTables;
                 cm.ExecuteNonQuery();

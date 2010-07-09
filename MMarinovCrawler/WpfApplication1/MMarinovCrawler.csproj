@@ -55,20 +55,29 @@
   <ItemGroup>
     <Reference Include="CSLA, Version=1.52.2049.30762, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.dll</HintPath>
+      <HintPath>..\CrawlerEngine\DLLs\CSLA.dll</HintPath>
     </Reference>
     <Reference Include="CSLA.Core.BindableBase, Version=1.52.2049.30762, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Core.BindableBase.dll</HintPath>
+      <HintPath>..\CrawlerEngine\DLLs\CSLA.Core.BindableBase.dll</HintPath>
+    </Reference>
+    <Reference Include="CSLA.Resources, Version=1.52.2049.30760, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CrawlerEngine\DLLs\CSLA.Resources.dll</HintPath>
     </Reference>
     <Reference Include="CSLA.Server.DataPortal, Version=1.52.2049.30762, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DBLibrary\bin\x64\Debug\CSLA.Server.DataPortal.dll</HintPath>
+      <HintPath>..\CrawlerEngine\DLLs\CSLA.Server.DataPortal.dll</HintPath>
+    </Reference>
+    <Reference Include="CSLA.Server.ServicedDataPortal, Version=1.52.2049.30762, Culture=neutral, PublicKeyToken=01a35e0b34e0e2ee">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CrawlerEngine\DLLs\CSLA.Server.ServicedDataPortal.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -89,7 +98,10 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CrawlerEngine\DLLs\WPFToolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
