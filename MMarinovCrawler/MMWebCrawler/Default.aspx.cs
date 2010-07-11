@@ -1,26 +1,15 @@
 ﻿using System;
-using System.Text;
-using System.Data;
-using System.Configuration;
-using System.Collections;
 using System.Collections.Generic;
-using System.Web;
-using System.Web.Security;
+using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Globalization;
-using System.Net.Mail;
-using System.Threading;
-using System.IO;
+using System.Linq;
 
-namespace MMarinov.WebCrawler.UI
+namespace Margent.UI
 {
     public partial class _Default : System.Web.UI.Page
     {
+        private Dictionary<DALWebCrawlerActive.Word, DataFetcher.CountFileList> resultsList = null;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -39,44 +28,6 @@ namespace MMarinov.WebCrawler.UI
             }
 
             gvKeywords.RowDataBound += new GridViewRowEventHandler(gvKeywords_RowDataBound);
-
-            //Create an instance of a javascript class.
-            string javaScriptInstance = "<script type='text/javascript'>" + this.JSVarName + " = new WebCrawlerJS();</script>";
-
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "MakeAnInstance", javaScriptInstance, false);
-        }
-
-        protected override void OnPreRender(EventArgs e)
-        {
-            LoadJavaScriptData();
-
-            base.OnPreRender(e);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void LoadJavaScriptData()
-        {
-            // string loadValues = "";
-
-            //Get payment values from form and save them in javascript class.
-            foreach (GridViewRow row in gvKeywords.Rows)
-            {
-                GridView gvLinks = (GridView)row.FindControl("gvLinks");
-                //gvLinks.Style["display"] = "none";
-            }
-
-            //Page.ClientScript.RegisterStartupScript(this.GetType(), "LoadValues; ", loadValues, true);
-
-            //GridViewRow currentRow = grPayments.FooterRow;
-            //TextBox tbRegisteredFooter = (TextBox)currentRow.FindControl("tbRegisteredFooter");
-
-            ////Register field's ids in wich result sum is calculated.
-            //Page.ClientScript.RegisterStartupScript(this.GetType(), "SetProperties1", this.JavaScriptVariableName + ".TbDifferenceId ='" + tbDifferenceFooter.ClientID + "';", true);
-
-            //GridViewRow groupsFooterRow = grRevenueGroups.FooterRow;
-
         }
 
         void gvKeywords_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -85,30 +36,46 @@ namespace MMarinov.WebCrawler.UI
             {
                 System.Collections.Generic.KeyValuePair<DALWebCrawlerActive.Word, DataFetcher.CountFileList> currentWord = (System.Collections.Generic.KeyValuePair<DALWebCrawlerActive.Word, DataFetcher.CountFileList>)e.Row.DataItem;
 
-                HyperLink lnkKeyword = (HyperLink)e.Row.FindControl("lnkKeyword");
-                GridView gvLinks = (GridView)e.Row.FindControl("gvLinks");
+                LinkButton lnkKeyword = (LinkButton)e.Row.FindControl("lnkKeyword");
+                ImageButton btnToggle = (ImageButton)e.Row.FindControl("btnToggle");
 
                 lnkKeyword.Text = currentWord.Key.WordName + " [" + currentWord.Value.Count + "]";
-                lnkKeyword.Attributes["OnClick"] = this.JSVarName + ".SetGridVisibility(this);";
-                //tbRevenue.Attributes["OnBlur"] += this.JavaScriptVariableName + ".UpdateData(" + this.JavaScriptVariableName + ".RevenueIds, " + this.JavaScriptVariableName + ".RevenueValues, this.id, event);";
 
-                //lblGroupName.Text = currentGroup.Name;
+                //System.Data.DataTable dtLinks = new System.Data.DataTable();
+                //dtLinks.Columns.Add("LiteralData");
 
+                //StringBuilder sbGridLinks;
+
+                //foreach (DALWebCrawlerActive.File file in currentWord.Value.FilesList)
+                //{
+                //    sbGridLinks = new StringBuilder();
+                //    sbGridLinks.AppendLine("<div class='LinkTitle'>");
+                //    if (file.Title != "")
+                //    {
+                //        sbGridLinks.AppendLine("<a href='" + file.URL + "'>" + file.Title + "</a>");
+                //    }
+                //    else
+                //    {
+                //        sbGridLinks.AppendLine("<a href='" + file.URL + "'>" + file.URL + "</a>");
+                //    }
+                //    sbGridLinks.AppendLine("</div>");
+                //    sbGridLinks.AppendLine("<div class='LinkDescription'>" + file.Description + "</div>");
+                //    sbGridLinks.AppendLine("<br/>");
+
+                //    dtLinks.Rows.Add(new object[] { sbGridLinks.ToString() });
+                //}
+
+                Literal ltrl = (Literal)e.Row.FindControl("lit1");
+                ltrl.Text = ltrl.Text.Replace("trCollapseGrid", "trCollapseGrid" + e.Row.RowIndex.ToString());
+                string str = "trCollapseGrid" + (e.Row.RowIndex + 1).ToString();
+                lnkKeyword.Attributes["OnClick"] = "return OpenTable('" + str + "','" + btnToggle.ClientID + "');";
+                btnToggle.Attributes["OnClick"] = "return OpenTable('" + str + "','" + btnToggle.ClientID + "');";
+
+                GridView gvLinks = (GridView)e.Row.FindControl("gvLinks");
                 gvLinks.DataSource = currentWord.Value.FilesList;
                 gvLinks.DataBind();
             }
-
-            //if (e.Row.RowType == DataControlRowType.Footer)
-            //{
-            //    Label lblSumRevenueGrups = (Label)e.Row.FindControl("lblSumRevenueGrups");
-
-            //    //This fixes the Tab problem of focus losing after UpdateData()
-            //    tbRevenueSum.Attributes["OnFocus"] = "this.select()";
-
-            //    Page.ClientScript.RegisterStartupScript(this.GetType(), "SetProperties", this.JavaScriptVariableName + ".TbRevenueSumId='" + tbRevenueSum.ClientID + "';", true);
-            //}
         }
-
 
         protected void btnDoSearch_Click(object sender, ImageClickEventArgs e)
         {
@@ -122,7 +89,9 @@ namespace MMarinov.WebCrawler.UI
 
         private void LoadDataSource(string query)
         {
-            gvKeywords.DataSource = DataFetcher.FetchResults(query);
+            resultsList = DataFetcher.FetchResults(query);
+
+            gvKeywords.DataSource = resultsList;
             gvKeywords.DataBind();
         }
 

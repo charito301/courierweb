@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagrams\Commons.cd" />
-    <None Include="ClassDiagrams\DALWebCrawler.cd" />
+    <None Include="ClassDiagrams\DALWebCrawlerActive.cd" />
     <None Include="ClassDiagrams\Documents.cd" />
     <None Include="ClassDiagrams\Indexer.cd" />
     <None Include="ClassDiagrams\Library.cd" />

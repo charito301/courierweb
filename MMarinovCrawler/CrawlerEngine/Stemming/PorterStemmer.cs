@@ -279,15 +279,19 @@ namespace MMarinov.WebCrawler.Stemming
             return true;
         }
 
-        /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
-            k. */
+        /// <summary>
+        /// setto(s) sets (j+1),...k to the characters in the string s, readjusting k.
+        /// </summary>
+        /// <param name="s"></param>
         private void setto(String s)
         {
             int l = s.Length;
             int o = j + 1;
             char[] sc = s.ToCharArray();
             for (int i = 0; i < l; i++)
+            {
                 b[o + i] = sc[i];
+            }
             k = j + l;
         }
 
@@ -295,9 +299,10 @@ namespace MMarinov.WebCrawler.Stemming
         private void r(String s)
         {
             if (ConsonantSequencesCount() > 0)
+            {
                 setto(s);
+            }
         }
-
 
         /// <summary>
         /// gets rid of plurals and -ed or -ing. e.g.
@@ -357,10 +362,11 @@ namespace MMarinov.WebCrawler.Stemming
                 b[k] = 'i';
         }
 
-        /* step3() maps double suffices to single ones. so -ization ( = -ize plus
-            -ation) maps to -ize etc. note that the string before the suffix must give
-            ConsonantSequencesCount() > 0. */
-        private void step3()
+        /// <summary>
+        ///  maps double suffices to single ones. so -ization ( = -ize plus -ation) maps to -ize etc. 
+        ///  note that the string before the suffix must give ConsonantSequencesCount() > 0. 
+        /// </summary>
+        private void Step3MapsDoubleSuffices()
         {
             if (k == 0)
                 return;
@@ -410,7 +416,7 @@ namespace MMarinov.WebCrawler.Stemming
             }
         }
 
-        /* step4() deals with -ic-, -full, -ness etc. similar strategy to step3. */
+        /* step4() deals with -ic-, -full, -ness etc. similar strategy to Step3MapsDoubleSuffices. */
         private void step4()
         {
             switch (b[k])
@@ -509,7 +515,7 @@ namespace MMarinov.WebCrawler.Stemming
             {
                 step1RemovesPluralEdIng();
                 step2();
-                step3();
+                Step3MapsDoubleSuffices();
                 step4();
                 step5();
                 step6();

@@ -1,0 +1,166 @@
+﻿/*GridViewCSS*/
+.GridKeywords
+{
+    text-align: left;
+    min-width: 300px;
+    width: 100%;
+    font-size: small;
+    table-layout: auto;
+    border-collapse: collapse;
+    border: #1d1d1d 5px solid;
+}
+
+.PositionGrids
+{
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    margin-top: 30px;
+}
+
+/*Header and Pager styles*/
+.HeaderStyle, .PagerStyle /*Common Styles*/
+{
+    background-image: url(../Images/HeaderGlass.png);
+    background-position: center;
+    background-repeat: repeat-x;
+    background-color: #1d1d1d;
+}
+
+.HeaderStyle th
+{
+    padding: 5px;
+    color: #ffffff;
+}
+.HeaderStyle a
+{
+    text-decoration: none;
+    color: #ffffff;
+    display: block;
+    text-align: left;
+    font-weight: normal;
+}
+.PagerStyle table
+{
+    text-align: center;
+    margin: auto;
+}
+.PagerStyle table td
+{
+    border: 0px;
+    padding: 5px;
+}
+.PagerStyle td
+{
+    border-top: #1d1d1d 3px solid;
+}
+.PagerStyle a
+{
+    color: #ffffff;
+    text-decoration: none;
+    padding: 2px 10px 2px 10px;
+    border-top: solid 1px #777777;
+    border-right: solid 1px #333333;
+    border-bottom: solid 1px #333333;
+    border-left: solid 1px #777777;
+}
+.PagerStyle span
+{
+    font-weight: bold;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 2px 10px 2px 10px;
+}
+
+/*RowStyles*/
+.RowStyle td, .AltRowStyle td, .SelectedRowStyle td /*Common Styles*/
+{
+    padding: 5px;
+}
+.RowStyle td
+{
+    background-color: #c9c9c9;
+}
+.AltRowStyle td
+{
+    background-color: #f0f0f0;
+}
+
+.NoResults
+{
+    color: Red;
+    text-align: center;
+    font-size: medium;
+}
+
+/*==============GridLinks================*/
+
+.GridLinks
+{
+    text-align: left;
+    margin:5px 5px 5px 20px;
+    border-collapse: collapse;
+    border: #1d1d1d 5px solid;
+    table-layout: auto;
+}
+
+.Keywords
+{
+    width: 100%;
+    font-weight: bold;
+    font-size: x-large;
+    left: 30px;
+    text-align: left;
+}
+
+.LinkTitle
+{
+    font-weight: bold;
+    font-size: large;
+    text-align: left;
+}
+
+.LinkDescription
+{
+    font-weight: normal;
+    font-size: medium;
+    text-align: left;
+}
+
+.PagerStyleLinks
+{
+    background-image: url(../Images/HeaderGlass.png);
+    background-position: center;
+    background-repeat: repeat-x;
+    background-color: #1d1d1d;
+}
+
+.PagerStyleLinks table
+{
+    text-align: center;
+    margin: auto;
+}
+
+.PagerStyleLinks table td
+{
+    border: 0px;
+    padding: 2px;
+}
+
+.PagerStyleLinks a
+{
+    color: #000000;
+    text-decoration: none;
+    padding: 2px 10px 2px 10px;
+    border-top: solid 1px #777777;
+    border-right: solid 1px #333333;
+    border-bottom: solid 1px #333333;
+    border-left: solid 1px #777777;
+}
+.PagerStyleLinks span
+{
+    font-weight: bold;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 2px 10px 2px 10px;
+}

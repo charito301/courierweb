@@ -1,46 +1,152 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="MMarinov.WebCrawler.Library.DBCopier">
-    <Position X="4" Y="3" Width="2" />
+    <Position X="0.5" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>BQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAACAAAAA=</HashCode>
-      <FileName>Library\DBCopier.cs</FileName>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAACAAEAA=</HashCode>
+      <FileName>DBLibrary\DBCopier.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MMarinov.WebCrawler.Library.FileManipulator">
-    <Position X="6.25" Y="0.75" Width="1.75" />
+  <Class Name="MMarinov.WebCrawler.Library.WordsInFileCollection">
+    <Position X="5.75" Y="3.75" Width="2.25" />
+    <NestedTypes>
+      <Class Name="MMarinov.WebCrawler.Library.WordsInFileCollection.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\WordsInFileCollection.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>CAAAIAAAgAAAAAAAAAAAAAAAAAAAAAAAAABABAAAAAQ=</HashCode>
-      <FileName>Library\FileManipulator.cs</FileName>
+      <HashCode>AAYAAAAAAAAAABAASAAIAAEAAAAAAAAAAAAAIAAQCAA=</HashCode>
+      <FileName>DBLibrary\WordsInFileCollection.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="MMarinov.WebCrawler.Library.WebsiteCatalog">
-    <Position X="0.75" Y="0.75" Width="3" />
+  <Class Name="MMarinov.WebCrawler.Library.File">
+    <Position X="8.25" Y="4.5" Width="1.75" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <TypeIdentifier>
-      <HashCode>BEAEAAIAAAAAAoCAAlgAIMAAAgAEACAAgAAAAABEgAA=</HashCode>
-      <FileName>Library\WebsiteCatalog.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="MMarinov.WebCrawler.Library.WordManipulator">
-    <Position X="4" Y="0.75" Width="2" />
     <NestedTypes>
-      <Struct Name="MMarinov.WebCrawler.Library.WordManipulator.FileCountPair" Collapsed="true">
+      <Class Name="MMarinov.WebCrawler.Library.File.Criteria" Collapsed="true">
         <TypeIdentifier>
-          <NewMemberFileName>Library\WordManipulator.cs</NewMemberFileName>
+          <NewMemberFileName>DBLibrary\File.cs</NewMemberFileName>
         </TypeIdentifier>
-      </Struct>
-      <Struct Name="MMarinov.WebCrawler.Library.WordManipulator.WordFilesPair" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Library\WordManipulator.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Struct>
+      </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAABAAAAQAAIAAAAAAA=</HashCode>
-      <FileName>Library\WordManipulator.cs</FileName>
+      <HashCode>CAQAAgAAAIAggEAEgEDIAAAIACQAAIAAAAAAQAAAiAA=</HashCode>
+      <FileName>DBLibrary\File.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.FileCollection">
+    <Position X="5.5" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="MMarinov.WebCrawler.Library.FileCollection.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\FileCollection.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ABIAAAAAAAAAAAAACAAIAAAAAAAAAAEAAAAAIAAQCAA=</HashCode>
+      <FileName>DBLibrary\FileCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.Statistics">
+    <Position X="10.25" Y="3.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="MMarinov.WebCrawler.Library.Statistics.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\Statistics.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AoAABgCBAAECoAgEgBBIgAEEAAAAAIMAAABAAAAgGAA=</HashCode>
+      <FileName>DBLibrary\Statistics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.StatisticsCollectionReadOnly">
+    <Position X="10.25" Y="0.5" Width="3" />
+    <NestedTypes>
+      <Class Name="MMarinov.WebCrawler.Library.StatisticsCollectionReadOnly.Statistics" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\StatisticsCollectionReadOnly.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="MMarinov.WebCrawler.Library.StatisticsCollectionReadOnly.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\StatisticsCollectionReadOnly.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAABAAACAAAAAAAAAAAAAAAAgAAAAAQAAA=</HashCode>
+      <FileName>DBLibrary\StatisticsCollectionReadOnly.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.Word">
+    <Position X="3.5" Y="4" Width="2" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="MMarinov.WebCrawler.Library.Word.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\Word.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CQQBAAAAAAAAgAoEgAFIAAAAAAAAAIEAAAAAAAAACAA=</HashCode>
+      <FileName>DBLibrary\Word.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.WordCollection">
+    <Position X="8" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="MMarinov.WebCrawler.Library.WordCollection.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\WordCollection.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CAIAAAAACAAABAAACAAIEAAAAAQAAAEAAAAAIAAUCAA=</HashCode>
+      <FileName>DBLibrary\WordCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.Library.WordsInFile">
+    <Position X="0.5" Y="4" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="MMarinov.WebCrawler.Library.WordsInFile.Criteria" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DBLibrary\WordsInFile.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAgAAEgABoAAQAAAQAAIAAIACAAAIACQA=</HashCode>
+      <FileName>DBLibrary\WordsInFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MMarinov.WebCrawler.DBLibrary.StoredProceduresManager">
+    <Position X="2.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAAgAAAAAAIAAAAAAAAAgAAAEAIAAAQBAAAAAgAAAAI=</HashCode>
+      <FileName>DBLibrary\StoredProceduresManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
