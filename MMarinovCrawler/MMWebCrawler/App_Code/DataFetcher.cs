@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using DALWebCrawlerActive;
+using System;
 
 namespace Margent
 {
@@ -26,38 +27,26 @@ namespace Margent
 
         public static Dictionary<Word, CountFileList> FetchResults(string query)
         {
+            IQueryable<DALWebCrawlerActive.WordsInFile> wordsInFiles;
+            Dictionary<Word, CountFileList> results = new Dictionary<Word, CountFileList>();
+
             using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(connectionString))
             {
+                long ticks1 = DateTime.Now.Ticks;
                 string[] queryWords = query.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
 
-                IQueryable<IEnumerable<long>> innerQuery = from w in dataContext.Words
-                                                           where queryWords.Contains(w.WordName)
-                                                           orderby w.WordsInFiles.Count descending
-                                                           select w.WordsInFiles.Select(wif => wif.FileID);//all files that contain the words ordered by count desc
+                wordsInFiles = from wif in
+                                   dataContext.WordsInFiles.Where(wif2 => (from wif in dataContext.WordsInFiles.Where(wif3 => queryWords.Contains(wif3.Word.WordName))
+                                                                           select wif.FileID).Contains(wif2.FileID))
+                               select wif;
 
-                List<long> fileIDs = new List<long>();
-                foreach (IEnumerable<long> allFileIDs in innerQuery)
+                foreach (WordsInFile wif in wordsInFiles)
                 {
-                    foreach (long fileId in allFileIDs)
+                    if (wif.Word.WordName == query)
                     {
-                        if (!fileIDs.Contains(fileId))
-                        {
-                            fileIDs.Add(fileId);
-                        }
-                        else
-                        {//debug
-                        }
+                        continue; // need improvment
                     }
-                }
 
-                IOrderedQueryable<WordsInFile> wordsinfileList = from wif in dataContext.WordsInFiles
-                                                                 where fileIDs.Contains(wif.FileID)
-                                                                 orderby wif.Count descending
-                                                                 select wif;
-
-                Dictionary<Word, CountFileList> results = new Dictionary<Word, CountFileList>();
-                foreach (WordsInFile wif in wordsinfileList)
-                {
                     if (results.Keys.Contains(wif.Word))
                     {
                         CountFileList cfl = results[wif.Word];
@@ -69,17 +58,18 @@ namespace Margent
                         results.Add(wif.Word, new CountFileList(wif.Count, wif.File));
                     }
                 }
-
-                return results;
-
-                //            select * from Words 
-                //inner join WordsInFiles on WordsInFiles.WordID = Words.ID
-                //where Words.ID in (
-                //select top 100 WordsInFiles.FileID from Words
-                //inner join WordsInFiles on WordsInFiles.WordID = Words.ID
-                //where WordName='live' )
-                // order by count desc
             }
+
+            var orderedResults = from r in results.Take(200)
+                                 orderby r.Value.Count descending
+                                 select r;
+
+            Dictionary<Word, CountFileList> orderedResultsList = new Dictionary<Word, CountFileList>(200);
+            foreach (KeyValuePair<Word, CountFileList> kvp in orderedResults)
+            {
+                orderedResultsList.Add(kvp.Key, kvp.Value);
+            }
+            return orderedResultsList;
         }
     }
 }
