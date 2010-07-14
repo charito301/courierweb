@@ -9,7 +9,8 @@ namespace Margent.UI
 {
     public partial class _Default : System.Web.UI.Page
     {
-        private Dictionary<DALWebCrawlerActive.Word, DataFetcher.CountFileList> resultsList = null;
+        private static string _emptyDataText = "No records could be retrieved from the database. We apologize for the inconvenience.";
+        private static Dictionary<DALWebCrawlerActive.Word, DataFetcher.CountFileList> _resultsList = null;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,6 +29,21 @@ namespace Margent.UI
             }
 
             gvKeywords.RowDataBound += new GridViewRowEventHandler(gvKeywords_RowDataBound);
+            gvKeywords.PageIndexChanging += new GridViewPageEventHandler(gvKeywords_PageIndexChanging);
+            gvKeywords.RowCommand += new GridViewCommandEventHandler(gvKeywords_RowCommand);
+            gvKeywords.EmptyDataText = _emptyDataText;
+
+            btnDoSearch.Click += new ImageClickEventHandler(btnDoSearch_Click);
+        }
+
+        void btnDoSearch_Click(object sender, ImageClickEventArgs e)
+        {
+            if (tbSearchQuery.Text.Trim() == "")
+            {
+                return;
+            }
+
+            FetchData(tbSearchQuery.Text.Trim().ToLower());
         }
 
         void gvKeywords_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -38,69 +54,131 @@ namespace Margent.UI
 
                 LinkButton lnkKeyword = (LinkButton)e.Row.FindControl("lnkKeyword");
                 ImageButton btnToggle = (ImageButton)e.Row.FindControl("btnToggle");
+                Label lblTotalCount = (Label)e.Row.FindControl("lblTotalCount");
 
-                lnkKeyword.Text = currentWord.Key.WordName + " [" + currentWord.Value.Count + "]";
-
-                //System.Data.DataTable dtLinks = new System.Data.DataTable();
-                //dtLinks.Columns.Add("LiteralData");
-
-                //StringBuilder sbGridLinks;
-
-                //foreach (DALWebCrawlerActive.File file in currentWord.Value.FilesList)
-                //{
-                //    sbGridLinks = new StringBuilder();
-                //    sbGridLinks.AppendLine("<div class='LinkTitle'>");
-                //    if (file.Title != "")
-                //    {
-                //        sbGridLinks.AppendLine("<a href='" + file.URL + "'>" + file.Title + "</a>");
-                //    }
-                //    else
-                //    {
-                //        sbGridLinks.AppendLine("<a href='" + file.URL + "'>" + file.URL + "</a>");
-                //    }
-                //    sbGridLinks.AppendLine("</div>");
-                //    sbGridLinks.AppendLine("<div class='LinkDescription'>" + file.Description + "</div>");
-                //    sbGridLinks.AppendLine("<br/>");
-
-                //    dtLinks.Rows.Add(new object[] { sbGridLinks.ToString() });
-                //}
+                lnkKeyword.Text = currentWord.Key.WordName;
+                lblTotalCount.Text = " [" + currentWord.Value.Count + "]";
 
                 Literal ltrl = (Literal)e.Row.FindControl("lit1");
-                ltrl.Text = ltrl.Text.Replace("trCollapseGrid", "trCollapseGrid" + e.Row.RowIndex.ToString());
-                string str = "trCollapseGrid" + (e.Row.RowIndex + 1).ToString();
+                ltrl.Text = ltrl.Text.Replace("trCollapseGrid", "trCollapseGrid" + e.Row.RowIndex);
+                string str = "trCollapseGrid" + e.Row.RowIndex;
                 lnkKeyword.Attributes["OnClick"] = "return OpenTable('" + str + "','" + btnToggle.ClientID + "');";
                 btnToggle.Attributes["OnClick"] = "return OpenTable('" + str + "','" + btnToggle.ClientID + "');";
 
                 GridView gvLinks = (GridView)e.Row.FindControl("gvLinks");
+                gvLinks.RowDataBound += new GridViewRowEventHandler(gvLinks_RowDataBound);
                 gvLinks.DataSource = currentWord.Value.FilesList;
+                gvLinks.EmptyDataText = _emptyDataText;
                 gvLinks.DataBind();
             }
         }
 
-        protected void btnDoSearch_Click(object sender, ImageClickEventArgs e)
+        void gvLinks_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (tbSearchQuery.Text.Trim() == "")
+            if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                return;
-            }
+                DALWebCrawlerActive.File file = (DALWebCrawlerActive.File)e.Row.DataItem;
 
-            LoadDataSource(tbSearchQuery.Text.Trim().ToLower());
+                HyperLink lnkWebLink = (HyperLink)e.Row.FindControl("lnkLinkTitle");
+                Label lblLinkDescription = (Label)e.Row.FindControl("lblLinkDescription");
+                HyperLink lnkLink = (HyperLink)e.Row.FindControl("lnkLink");
+
+                lnkWebLink.NavigateUrl = file.URL;
+                if (file.Title != "")
+                {
+                    lnkWebLink.Text = file.Title;
+                }
+                else
+                {
+                    lnkWebLink.Text = file.URL;
+                }
+
+                if (file.Description != "/")
+                {
+                    lblLinkDescription.Text = file.Description;
+                }
+
+                lnkLink.NavigateUrl = file.URL;
+                lnkLink.Text = file.URL;
+            }
         }
 
-        private void LoadDataSource(string query)
+        private void FetchData(string query)
         {
-            resultsList = DataFetcher.FetchResults(query);
+            _resultsList = DataFetcher.FetchResults(query);
 
-            gvKeywords.DataSource = resultsList;
+            SetDataSource();
+        }
+
+        private void SetDataSource()
+        {
+            gvKeywords.DataSource = _resultsList;
             gvKeywords.DataBind();
         }
 
-        public string JSVarName
+        #region gvKeywords paging
+
+        protected void txtSlide_Changed(object sender, EventArgs e)
         {
-            get
+            TextBox txtCurrentPage = sender as TextBox;
+            GridViewRow rowPager = gvKeywords.BottomPagerRow;
+            TextBox txtSliderExt = (TextBox)rowPager.Cells[0].FindControl("txtSlide");
+
+            gvKeywords.PageIndex = Int32.Parse(txtSliderExt.Text) - 1;
+            SetDataSource();
+        }
+
+        protected void pager_PreRender(object sender, EventArgs e)
+        {
+            SetDataSource();
+        }
+
+        void gvKeywords_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvKeywords.PageIndex = e.NewPageIndex;
+
+            SetDataSource();
+        }
+
+        void gvKeywords_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            GridViewRow rowPager = gvKeywords.BottomPagerRow;
+            TextBox txtSliderExt = (TextBox)rowPager.Cells[0].FindControl("txtSlide");
+            int pageIndex = Int32.Parse(txtSliderExt.Text);
+
+            switch (e.CommandName)
             {
-                return "mmWebCrawler";
+                case "Next":
+                    if (gvKeywords.PageCount - 1 > pageIndex)
+                    {
+                        txtSliderExt.Text = (pageIndex + 1).ToString();
+                        gvKeywords.PageIndex = pageIndex;
+                        SetDataSource();
+                    }
+                    break;
+                case "Previous":
+                    if (pageIndex > 1)
+                    {
+                        txtSliderExt.Text = (--pageIndex).ToString();
+                        gvKeywords.PageIndex = pageIndex - 1;
+                        SetDataSource();
+                    }
+                    break;
+                case "Last":
+                    txtSliderExt.Text = gvKeywords.PageCount.ToString();
+                    gvKeywords.PageIndex = gvKeywords.PageCount - 1;
+                    SetDataSource();
+                    break;
+                case "First":
+                default:
+                    txtSliderExt.Text = "1";
+                    gvKeywords.PageIndex = 0;
+                    SetDataSource();
+                    break;
             }
         }
+
+        #endregion
+
     }
 }

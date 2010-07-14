@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Margent.UI._Default" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <%@ Register Assembly="System.Web.DynamicData, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
     Namespace="System.Web.DynamicData" TagPrefix="cc1" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -31,61 +32,95 @@ body { overflow-y: auto; }
         </div>
         <table width="100%">
             <tr>
-                <td class="CellLabelSearch" width="30%">
+                <td class="CellLabelSearch" width="35%">
                     <asp:Label ID="lblSearch" runat="server" Text="Search the knowledge base:"></asp:Label>
                 </td>
-                <td width="40%">
+                <td width="30%">
                     <asp:TextBox ID="tbSearchQuery" runat="server" CssClass="SearchQuery"></asp:TextBox>
                 </td>
-                <td width="30%">
+                <td width="35%">
                     <asp:ImageButton ID="btnDoSearch" runat="server" Height="35px" ImageUrl="~/Images/binoc.png"
-                        OnClick="btnDoSearch_Click" onmouseover="this.src='Images/binoc_hover.png';"
+                       onmouseover="this.src='Images/binoc_hover.png';"
                         onmouseout="this.src='Images/binoc.png';" />
                 </td>
             </tr>
         </table>
         <div class="PositionGrids">
-            <asp:GridView ID="gvKeywords" runat="server" AutoGenerateColumns="False" AllowSorting="True"
-                CssClass="GridKeywords" AllowPaging="True" GridLines="None" CellPadding="2">
-                <EmptyDataTemplate>
-                    No records could be retrieved from the database. We apologize for the invonvenience.
-                </EmptyDataTemplate>
-                <RowStyle CssClass="RowStyle" />
-                <PagerStyle CssClass="PagerStyle" />
-                <EmptyDataRowStyle CssClass="NoResults" />
-                <HeaderStyle CssClass="HeaderStyle" />
-                <AlternatingRowStyle CssClass="AltRowStyle" />
-                <Columns>
-                    <asp:TemplateField>
-                        <ItemTemplate>
-                            <div class="Keywords">
-                                <asp:ImageButton ID="btnToggle" runat="server" ImageUrl="~/Images/Plus.gif" />
-                                <asp:LinkButton runat="server" ID="lnkKeyword">keyword</asp:LinkButton></div>
-                            <!-- nested view->
-                            <asp:Literal ID="litGridLinks" runat="server"></asp:Literal>
-                            <asp:Literal runat="server" ID="lit1" Text="</td><tr id='trCollapseGrid' class='RowStyle' style='display:none' ><td>" />
-                            <asp:GridView ID="gvLinks" runat="server" AutoGenerateColumns="true" ShowHeader="false"
-                                EnableViewState="False" CssClass="GridLinks" AllowPaging="True" GridLines="None">
-                                <PagerStyle CssClass="PagerStyleLinks" />
-                                <RowStyle CssClass="RowStyle" />
-                                <EmptyDataRowStyle CssClass="NoResults" />
-                                <EmptyDataTemplate>
-                                    No records could be retrieved from the database. We apologize for the invonvenience.
-                                </EmptyDataTemplate>
-                                <Columns>
-                                    <asp:TemplateField>
-                                        <ItemTemplate>
-                                            <asp:HyperLink runat="server" ID="lnkWebLink" CssClass="LinkTitle">title - follow me</asp:HyperLink>
-                                            <asp:Label runat="server" ID="lblLinkDescription" CssClass="LinkDescription"></asp:Label>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
-                                </Columns>
-                            </asp:GridView>
-                            <asp:Literal runat="server" ID="lit2" Text="</td></tr>" />
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                </Columns>
-            </asp:GridView>
+            <asp:UpdatePanel ID="updPanel" runat="server">
+                <ContentTemplate>
+                    <asp:GridView ID="gvKeywords" runat="server" AutoGenerateColumns="False" AllowSorting="True"
+                        CssClass="GridKeywords" AllowPaging="True" ShowHeader="true" GridLines="None"
+                        CellPadding="2">
+                        <RowStyle CssClass="RowStyle" />
+                        <PagerStyle CssClass="PagerStyle" />
+                        <EmptyDataRowStyle CssClass="NoResults" />
+                        <AlternatingRowStyle CssClass="AltRowStyle" />
+                        <FooterStyle />
+                        <Columns>
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <div class="Keywords">
+                                        <asp:ImageButton ID="btnToggle" runat="server" ImageUrl="~/Images/Plus.gif" />
+                                        <asp:LinkButton runat="server" ID="lnkKeyword">keyword</asp:LinkButton>
+                                        <asp:Label runat="server" ID="lblTotalCount" CssClass="TotalCount">total count</asp:Label>
+                                    </div>
+                                    <!-- ===============nested view ================= -->
+                                    <asp:Literal ID="litGridLinks" runat="server"></asp:Literal>
+                                    <asp:Literal runat="server" ID="lit1" Text="<div id='trCollapseGrid' class='RowStyle' style='display:none' >" />
+                                    <asp:GridView ID="gvLinks" runat="server" AutoGenerateColumns="false" ShowHeader="false"
+                                        EnableViewState="False" CssClass="GridLinks" AllowPaging="True" GridLines="None">
+                                        <PagerStyle CssClass="PagerStyleLinks" />
+                                        <RowStyle CssClass="RowStyleLinks" />
+                                        <EmptyDataRowStyle CssClass="NoResults" />
+                                        <AlternatingRowStyle CssClass="AltRowStyleLinks" />
+                                        <Columns>
+                                            <asp:TemplateField>
+                                                <ItemTemplate>
+                                                    <div class="LinkTitle">
+                                                        <asp:HyperLink runat="server" ID="lnkLinkTitle">title - follow me</asp:HyperLink>
+                                                    </div>
+                                                    <div class="LinkDescription">
+                                                        <asp:Label runat="server" ID="lblLinkDescription"></asp:Label>
+                                                    </div>
+                                                    <div class="LinkLink">
+                                                        <asp:HyperLink runat="server" ID="lnkLink">link follow me</asp:HyperLink>
+                                                    </div>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                                    <asp:Literal runat="server" ID="lit2" Text="</div>" />
+                                    <!-- ===============nested view end ============== -->
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                        <PagerTemplate>
+                            <div style="height: 30px;">
+                                <div class="command">
+                                    <asp:ImageButton ID="btnFirst" runat="server" CommandName="First" ImageUrl="images/first.gif"
+                                        AlternateText="First Page" ToolTip="First Page" />
+                                    <asp:ImageButton ID="btnPrevious" runat="server" CommandName="Previous" ImageUrl="images/prev.gif"
+                                        AlternateText="Previous Page" ToolTip="Previous Page" />
+                                </div>
+                                <div class="command">
+                                    <asp:TextBox ID="txtSlide" runat="server" Text='<%# gvKeywords.PageIndex + 1 %>'
+                                        AutoPostBack="true" OnTextChanged="txtSlide_Changed" />
+                                    <ajaxToolkit:SliderExtender ID="ajaxSlider" runat="server" TargetControlID="txtSlide"
+                                        RaiseChangeOnlyOnMouseUp="true" Orientation="Horizontal" Minimum="1" Steps='<%# gvKeywords.PageCount %>'
+                                        Maximum='<%# ((GridView)Container.NamingContainer).PageCount %>' />
+                                </div>
+                                <div class="command">
+                                    <asp:ImageButton ID="btnNext" runat="server" CommandName="Next" ImageUrl="images/next.gif"
+                                        AlternateText="Next Page" ToolTip="Next Page" />
+                                    <asp:ImageButton ID="btnLast" runat="server" CommandName="Last" ImageUrl="images/last.gif"
+                                        AlternateText="Last Page" ToolTip="Last Page" />
+                                    <asp:Label ID="lblPage" CssClass="PagerInfo" runat="server" Text='<%# "Page " + (gvKeywords.PageIndex + 1) + " of " + gvKeywords.PageCount %>' />
+                                </div>
+                            </div>
+                        </PagerTemplate>
+                    </asp:GridView>
+                </ContentTemplate>
+            </asp:UpdatePanel>
         </div>
     </div>
     </form>
