@@ -27,6 +27,8 @@ namespace MMarinov.WebCrawler.Indexer
         public static Int64 CrawledTotalLinks = 0;
         public static Int64 CrawledSuccessfulLinks = 0;
 
+        private int _localPagesCount = 0;
+
         /// <summary></summary>
         private FileCollection _fileColl;
         private static WordCollection _wordsCollGlobal = WordCollection.GetWordCollection();
@@ -180,6 +182,7 @@ namespace MMarinov.WebCrawler.Indexer
             _fileColl = FileCollection.NewFileCollection();
             _visitedLinks = new MMarinov.ThreadedGenerics.TList<string>();
             _externalLinks = new MMarinov.ThreadedGenerics.TList<string>();
+            _localPagesCount = 0;
 
             // Setup Stop, Go, Stemming
             SetPreferences();
@@ -266,7 +269,7 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         protected int ProcessUri(Uri uri, int level)
         {
-            if (level > Preferences.RecursionLimit || CrawlingManager.ShouldStopThreads)
+            if (level > Preferences.RecursionLimit || _localPagesCount > 10000 || CrawlingManager.ShouldStopThreads)
             {
                 return Preferences.RecursionLimit;
             }
@@ -296,6 +299,7 @@ namespace MMarinov.WebCrawler.Indexer
 
                         wordcount = AddToCatalog(downloadDocument);
 
+                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " " + _localPagesCount++));
                         ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " " + ++CrawledSuccessfulLinks + ": " + url + " [" + wordcount + " words]"));
                     }
                 }
