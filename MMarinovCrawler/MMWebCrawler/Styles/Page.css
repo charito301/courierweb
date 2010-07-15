@@ -35,7 +35,22 @@ img#bg
     font-size: x-large;
     font-weight: bold;
     font-family: Adobe Garamond Pro Bold;
-    margin: 5px 5px 5px 5px;
+    border: 2px solid #333198;
+    background-color: #f0f0f0;
+}
+
+.SearchQuery:focus
+{
+    background-color: #333198;
+    border: 3px solid #1d1d1d;
+    border-style: inset;
+    color: White;
+}
+
+.water
+{
+    font-family: Adobe Garamond Pro Bold;
+    color: gray;
 }
 
 .CellLabelSearch
@@ -45,4 +60,21 @@ img#bg
     font-size: x-large;
     color: White;
     margin: 5px 5px 5px 5px;
+}
+
+.FetchInfo
+{
+    font-size: 1em;
+    float: right;
+    color: #f0f0f0;
+    text-align: right;
+    padding: 5px 5px;
+}
+
+.ErrorMessage
+{ 
+    color: #333198;
+    text-align: center;
+    font-size: x-large;
+    border: solid 3px red;
 }

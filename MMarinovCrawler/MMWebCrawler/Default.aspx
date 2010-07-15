@@ -11,6 +11,8 @@
 
     <script type="text/javascript" src="JavaScripts/GridActions.js" language="javascript"></script>
 
+    <script type="text/javascript" src="JavaScripts/JQuery.js" language="javascript"></script>
+
     <!--[if IE 6]>
 <style type="text/css">
 html { overflow-y: hidden; }
@@ -25,7 +27,7 @@ body { overflow-y: auto; }
     <form id="form1" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true">
     </asp:ScriptManager>
-    <img src="Images/2-brush-light.jpg" alt="background image" id="bg" />
+    <img src="Images/backgroundMain.jpg" alt="background image" id="bg" />
     <div id="content">
         <div class="Title">
             <img src="Images/MargentTitle.PNG" alt="MMairnov Search Agent" />
@@ -38,14 +40,14 @@ body { overflow-y: auto; }
                 <td width="30%">
                     <asp:TextBox ID="tbSearchQuery" runat="server" CssClass="SearchQuery"></asp:TextBox>
                 </td>
-                <td width="35%">
-                    <asp:ImageButton ID="btnDoSearch" runat="server" Height="35px" ImageUrl="~/Images/binoc.png"
-                       onmouseover="this.src='Images/binoc_hover.png';"
-                        onmouseout="this.src='Images/binoc.png';" />
+                <td width="35%" style="padding-left:5px;" >
+                    <asp:ImageButton ID="btnDoSearch" runat="server" Height="37px" ImageUrl="~/Images/binoc.png"
+                        onmouseover="this.src='Images/binoc_hover.png';" onmouseout="this.src='Images/binoc.png';" />
                 </td>
             </tr>
         </table>
         <div class="PositionGrids">
+            <asp:Label runat="server" ID="lblError" CssClass="ErrorMessage"> error message</asp:Label>
             <asp:UpdatePanel ID="updPanel" runat="server">
                 <ContentTemplate>
                     <asp:GridView ID="gvKeywords" runat="server" AutoGenerateColumns="False" AllowSorting="True"
@@ -88,6 +90,30 @@ body { overflow-y: auto; }
                                                 </ItemTemplate>
                                             </asp:TemplateField>
                                         </Columns>
+                                        <PagerTemplate>
+                                            <div style="height: 20px;">
+                                                <div class="command">
+                                                    <asp:ImageButton ID="btnFirst" runat="server" CommandName="First" ImageUrl="~/Images/btnFirst.PNG"
+                                                        AlternateText="First Page" ToolTip="First Page" />
+                                                    <asp:ImageButton ID="btnPrevious" runat="server" CommandName="Previous" ImageUrl="~/Images/btnPrev.PNG"
+                                                        AlternateText="Previous Page" ToolTip="Previous Page" />
+                                                </div>
+                                                <div class="command">
+                                                    <asp:TextBox ID="txtSlide" runat="server" AutoPostBack="true" OnTextChanged="txtSlideLinks_Changed" />
+                                                    <ajaxToolkit:SliderExtender ID="ajaxSlider" runat="server" TargetControlID="txtSlide"
+                                                        RaiseChangeOnlyOnMouseUp="true" Orientation="Horizontal" Minimum="1" />
+                                                </div>
+                                                <div class="command">
+                                                    <asp:ImageButton ID="btnNext" runat="server" CommandName="Next" ImageUrl="~/Images/btnNext.PNG"
+                                                        AlternateText="Next Page" ToolTip="Next Page" />
+                                                    <asp:ImageButton ID="btnLast" runat="server" CommandName="Last" ImageUrl="~/Images/btnLast.PNG"
+                                                        AlternateText="Last Page" ToolTip="Last Page" />
+                                                </div>
+                                                <div class="PagerInfo">
+                                                    <asp:Label ID="lblPage" CssClass="PagerInfo" runat="server" />
+                                                </div>
+                                            </div>
+                                        </PagerTemplate>
                                     </asp:GridView>
                                     <asp:Literal runat="server" ID="lit2" Text="</div>" />
                                     <!-- ===============nested view end ============== -->
@@ -97,9 +123,9 @@ body { overflow-y: auto; }
                         <PagerTemplate>
                             <div style="height: 30px;">
                                 <div class="command">
-                                    <asp:ImageButton ID="btnFirst" runat="server" CommandName="First" ImageUrl="images/first.gif"
+                                    <asp:ImageButton ID="btnFirst" runat="server" CommandName="First" ImageUrl="~/Images/btnFirst.PNG"
                                         AlternateText="First Page" ToolTip="First Page" />
-                                    <asp:ImageButton ID="btnPrevious" runat="server" CommandName="Previous" ImageUrl="images/prev.gif"
+                                    <asp:ImageButton ID="btnPrevious" runat="server" CommandName="Previous" ImageUrl="~/Images/btnPrev.PNG"
                                         AlternateText="Previous Page" ToolTip="Previous Page" />
                                 </div>
                                 <div class="command">
@@ -110,10 +136,12 @@ body { overflow-y: auto; }
                                         Maximum='<%# ((GridView)Container.NamingContainer).PageCount %>' />
                                 </div>
                                 <div class="command">
-                                    <asp:ImageButton ID="btnNext" runat="server" CommandName="Next" ImageUrl="images/next.gif"
+                                    <asp:ImageButton ID="btnNext" runat="server" CommandName="Next" ImageUrl="~/Images/btnNext.PNG"
                                         AlternateText="Next Page" ToolTip="Next Page" />
-                                    <asp:ImageButton ID="btnLast" runat="server" CommandName="Last" ImageUrl="images/last.gif"
+                                    <asp:ImageButton ID="btnLast" runat="server" CommandName="Last" ImageUrl="~/Images/btnLast.PNG"
                                         AlternateText="Last Page" ToolTip="Last Page" />
+                                </div>
+                                <div class="PagerInfo">
                                     <asp:Label ID="lblPage" CssClass="PagerInfo" runat="server" Text='<%# "Page " + (gvKeywords.PageIndex + 1) + " of " + gvKeywords.PageCount %>' />
                                 </div>
                             </div>
@@ -121,6 +149,9 @@ body { overflow-y: auto; }
                     </asp:GridView>
                 </ContentTemplate>
             </asp:UpdatePanel>
+            <div class="FetchInfo">
+                <asp:Label runat="server" ID="lblSummary"></asp:Label>
+            </div>
         </div>
     </div>
     </form>

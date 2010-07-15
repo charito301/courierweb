@@ -9,6 +9,7 @@ namespace Margent.UI
 {
     public partial class _Default : System.Web.UI.Page
     {
+        private static string _connectionError = "An error occured when trying to fetch data from the DB.";
         private static string _emptyDataText = "No records could be retrieved from the database. We apologize for the inconvenience.";
         private static Dictionary<DALWebCrawlerActive.Word, DataFetcher.CountFileList> _resultsList = null;
 
@@ -34,6 +35,9 @@ namespace Margent.UI
             gvKeywords.EmptyDataText = _emptyDataText;
 
             btnDoSearch.Click += new ImageClickEventHandler(btnDoSearch_Click);
+
+            lblError.Visible = false;
+            lblError.Text = _connectionError;
         }
 
         void btnDoSearch_Click(object sender, ImageClickEventArgs e)
@@ -42,6 +46,10 @@ namespace Margent.UI
             {
                 return;
             }
+
+            //TextBox txtSliderExt = (TextBox) gvKeywords.BottomPagerRow.Cells[0].FindControl("txtSlide");
+            //txtSliderExt.Text = "1";
+            gvKeywords.PageIndex = 0;
 
             FetchData(tbSearchQuery.Text.Trim().ToLower());
         }
@@ -57,7 +65,7 @@ namespace Margent.UI
                 Label lblTotalCount = (Label)e.Row.FindControl("lblTotalCount");
 
                 lnkKeyword.Text = currentWord.Key.WordName;
-                lblTotalCount.Text = " [" + currentWord.Value.Count + "]";
+                lblTotalCount.Text = "[" + currentWord.Value.Count + "]";
 
                 Literal ltrl = (Literal)e.Row.FindControl("lit1");
                 ltrl.Text = ltrl.Text.Replace("trCollapseGrid", "trCollapseGrid" + e.Row.RowIndex);
@@ -67,6 +75,8 @@ namespace Margent.UI
 
                 GridView gvLinks = (GridView)e.Row.FindControl("gvLinks");
                 gvLinks.RowDataBound += new GridViewRowEventHandler(gvLinks_RowDataBound);
+                gvLinks.PageIndexChanging += new GridViewPageEventHandler(gvLinks_PageIndexChanging);
+                gvLinks.RowCommand += new GridViewCommandEventHandler(gvLinks_RowCommand);
                 gvLinks.DataSource = currentWord.Value.FilesList;
                 gvLinks.EmptyDataText = _emptyDataText;
                 gvLinks.DataBind();
@@ -106,8 +116,20 @@ namespace Margent.UI
         private void FetchData(string query)
         {
             _resultsList = DataFetcher.FetchResults(query);
+            if (_resultsList != null)
+            {
+                SetDataSource();
 
-            SetDataSource();
+                lblSummary.Text = "fetch[" + DataFetcher.FetchTimeInSec.ToString("###0.00") + " sec]; sort[" +
+                    DataFetcher.SortTimeInSec.ToString("###0.00") + " sec]; found links[" + DataFetcher.TotalLinksFound +
+                    "]; shown links[" + DataFetcher.ShownLinks + "]";
+                lblError.Visible = false;
+            }
+            else
+            {
+                lblError.Visible = true;
+                gvKeywords.DataSource = null;
+            }
         }
 
         private void SetDataSource()
@@ -120,30 +142,20 @@ namespace Margent.UI
 
         protected void txtSlide_Changed(object sender, EventArgs e)
         {
-            TextBox txtCurrentPage = sender as TextBox;
-            GridViewRow rowPager = gvKeywords.BottomPagerRow;
-            TextBox txtSliderExt = (TextBox)rowPager.Cells[0].FindControl("txtSlide");
+            TextBox txtSliderExt = (TextBox)gvKeywords.BottomPagerRow.Cells[0].FindControl("txtSlide");
 
             gvKeywords.PageIndex = Int32.Parse(txtSliderExt.Text) - 1;
-            SetDataSource();
-        }
-
-        protected void pager_PreRender(object sender, EventArgs e)
-        {
             SetDataSource();
         }
 
         void gvKeywords_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvKeywords.PageIndex = e.NewPageIndex;
-
-            SetDataSource();
         }
 
         void gvKeywords_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            GridViewRow rowPager = gvKeywords.BottomPagerRow;
-            TextBox txtSliderExt = (TextBox)rowPager.Cells[0].FindControl("txtSlide");
+            TextBox txtSliderExt = (TextBox)gvKeywords.BottomPagerRow.Cells[0].FindControl("txtSlide");
             int pageIndex = Int32.Parse(txtSliderExt.Text);
 
             switch (e.CommandName)
@@ -180,5 +192,56 @@ namespace Margent.UI
 
         #endregion
 
+        void gvLinks_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            ((GridView)sender).PageIndex = e.NewPageIndex;
+        }
+
+        void gvLinks_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            GridView gv = ((GridView)sender);
+            TextBox txtSliderExt = (TextBox)gv.BottomPagerRow.Cells[0].FindControl("txtSlide");
+            int pageIndex = Int32.Parse(txtSliderExt.Text);
+
+            switch (e.CommandName)
+            {
+                case "Next":
+                    if (gvKeywords.PageCount - 1 > pageIndex)
+                    {
+                        txtSliderExt.Text = (pageIndex + 1).ToString();
+                        gvKeywords.PageIndex = pageIndex;
+                        SetDataSource();
+                    }
+                    break;
+                case "Previous":
+                    if (pageIndex > 1)
+                    {
+                        txtSliderExt.Text = (--pageIndex).ToString();
+                        gvKeywords.PageIndex = pageIndex - 1;
+                        SetDataSource();
+                    }
+                    break;
+                case "Last":
+                    txtSliderExt.Text = gvKeywords.PageCount.ToString();
+                    gvKeywords.PageIndex = gvKeywords.PageCount - 1;
+                    SetDataSource();
+                    break;
+                case "First":
+                default:
+                    txtSliderExt.Text = "1";
+                    gvKeywords.PageIndex = 0;
+                    SetDataSource();
+                    break;
+            }
+        }
+
+        protected void txtSlideLinks_Changed(object sender, EventArgs e)
+        {
+            GridView gv = ((GridView)sender);
+            TextBox txtSliderExt = (TextBox)gv.BottomPagerRow.Cells[0].FindControl("txtSlide");
+
+            gv.PageIndex = Int32.Parse(txtSliderExt.Text) - 1;
+            SetDataSource();
+        }
     }
 }

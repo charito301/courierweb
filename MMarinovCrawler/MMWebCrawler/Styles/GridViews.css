@@ -22,7 +22,7 @@
 /*RowStyles*/
 .RowStyle td, .AltRowStyle td /*Common Styles*/
 {
-    padding: 5px;
+    padding: 2px;
 }
 .RowStyle td
 {
@@ -30,7 +30,7 @@
 }
 .AltRowStyle td
 {
-    background-color: #fafafa;
+    background-color: #f0f0f0;
 }
 
 .NoResults
@@ -50,38 +50,44 @@
 
 .Keywords a
 {
-    text-decoration:none;
+    text-decoration: none;
+}
+
+.Keywords a:hover
+{
+    text-decoration: underline;
+    color: #333198;
 }
 
 .TotalCount
 {
-    position:absolute;
-    text-align:right;
-    right:10px;
-    font-size:0.8em;
-    vertical-align:middle;
+    position: absolute;
+    text-align: right;
+    right: 15px;
+    font-size: 0.8em;
+    vertical-align: middle;
 }
 
 .PagerStyle
 {
-    height:30px;
-}
-.PagerStyle .container
-{
-    padding:4px;
+    background-image: url(../images/pagerBg.png);
+    background-repeat: repeat-x;
 }
 .PagerStyle .command
 {
-    float:left;
-    padding-right:5px;
-}    
+    float: left;
+    padding: 15px 5px 0px 15px;
+}
+
 .PagerStyle .PagerInfo
 {
-    font-size:1.3em;
-    padding:10px 10px;
-    float:right;
-    color:#ffffff;
+    font-size: 1.15em;
+    float: right;
+    color: #ffffff;
+    padding: 10px 5px 0px 10px;
+    vertical-align: super;
 }
+
 
 /*==============GridLinks================*/
 
@@ -120,7 +126,7 @@
     font-size: small;
     text-align: left;
     padding: 2px;
-    font-family:arial,sans-serif;
+    font-family: arial,sans-serif;
 }
 
 .PagerStyleLinks table
