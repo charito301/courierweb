@@ -17,6 +17,7 @@ namespace MMarinov.WebCrawler.Library
             try
             {
                 cm.Connection = cn;
+               cm.CommandTimeout = 150;
                 cm.CommandType = CommandType.StoredProcedure;
 
                 cm.CommandText = "sp_TruncateTables";

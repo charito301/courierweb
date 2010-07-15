@@ -299,7 +299,6 @@ namespace MMarinov.WebCrawler.Indexer
 
                         wordcount = AddToCatalog(downloadDocument);
 
-                        ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " " + _localPagesCount++));
                         ProgressEvent(new ProgressEventArgs(EventTypes.Crawling, thread.Name + " " + ++CrawledSuccessfulLinks + ": " + url + " [" + wordcount + " words]"));
                     }
                 }
