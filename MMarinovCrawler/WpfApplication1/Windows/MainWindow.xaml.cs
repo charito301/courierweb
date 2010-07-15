@@ -13,6 +13,7 @@ namespace MMarinov.WebCrawler.UI
         private MMarinov.WebCrawler.Indexer.CrawlingManager manager = null;
         private System.Threading.Timer timer;
         private Int64 elapsedSec = 0;
+        private bool _isWorking = false;
 
         public MainWindow()
         {
@@ -32,21 +33,27 @@ namespace MMarinov.WebCrawler.UI
             tbTimeoutEx.Text = "";
             tbWebEx.Text = "";
 
-            btnStop.IsEnabled = true;
-            btnStart.IsEnabled = !btnStop.IsEnabled;
-            btnSaveToDB.IsEnabled = !btnStop.IsEnabled;           
-        
+            _isWorking = true;
+            SetButtonsByStatus();
+            lblStatus.Text = "Crawling...";
 
             ProgressDialog dlg = new ProgressDialog("This procees will override the database! Truncating tables .. ", this, true);
             dlg.RunWorkerThread(StartCrawling);
 
+            SetButtonsByStatus();
             elapsedSec = 0;
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(ShowElapsedTimeAndDLSpeed), null, 0, 1000);
-  
-            lblStatus.Text = "Crawling...";
+              
             lblStartTime.Content = "Started on " + DateTime.Now.ToString(Common.DateFormat);
 
             Cursor = Cursors.Arrow;
+        }
+
+        private void SetButtonsByStatus()
+        {
+            btnStop.IsEnabled = _isWorking;
+            btnStart.IsEnabled = !btnStop.IsEnabled;
+            btnSaveToDB.IsEnabled = !btnStop.IsEnabled;
         }
 
         /// <summary>
@@ -60,12 +67,23 @@ namespace MMarinov.WebCrawler.UI
             System.ComponentModel.BackgroundWorker worker = (System.ComponentModel.BackgroundWorker)sender;
 
             System.Threading.Thread.Sleep(600);
-            DBLibrary.StoredProceduresManager.InitAllStoredProcedures();
+            try
+            {
+                DBLibrary.StoredProceduresManager.InitAllStoredProcedures();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                _isWorking = false;
+                MessageBox.Show("Error connection the database:" + Environment.NewLine + ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Stop);
+                worker.ReportProgress(100);
+                return;
+            }
+
             Library.DBCopier.TruncateDBTables();
 
             worker.ReportProgress(30, "Initializing crawling process...");
 
-            manager = new MMarinov.WebCrawler.Indexer.CrawlingManager();           
+            manager = new MMarinov.WebCrawler.Indexer.CrawlingManager();
             Indexer.CrawlingManager.CrawlerEvent += new Indexer.CrawlingManager.CrawlerEventHandler(CrawlingManager_CrawlerEvent);
             manager.StartSpider();
 
@@ -147,9 +165,8 @@ namespace MMarinov.WebCrawler.UI
             ProgressDialog dlg = new ProgressDialog("Finalizing crawling process.. ", this, true);
             dlg.RunWorkerThread(StopCrawling);
 
-            btnStop.IsEnabled = false;
-            btnStart.IsEnabled = !btnStop.IsEnabled;
-            btnSaveToDB.IsEnabled = !btnStop.IsEnabled;
+            _isWorking = false;
+            SetButtonsByStatus();
             lblStatus.Text = "Stopped.";
 
             Cursor = Cursors.Arrow;
