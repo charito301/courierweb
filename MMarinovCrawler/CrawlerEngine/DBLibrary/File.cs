@@ -1,7 +1,7 @@
 ﻿using System;
-using CSLA;
 using System.Data;
 using System.Data.SqlClient;
+using CSLA;
 
 namespace MMarinov.WebCrawler.Library
 {
@@ -164,7 +164,6 @@ namespace MMarinov.WebCrawler.Library
         }
 
         #endregion //Static Methods
-
 
         #region Data Access
 

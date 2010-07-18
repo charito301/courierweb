@@ -6,7 +6,6 @@ namespace MMarinov.WebCrawler.Stopper
     /// IStopper 
     /// </summary>
     /// <remarks>
-    /// http://libraries.mit.edu/tutorials/general/stopwords.html
     /// http://www.tbray.org/ongoing/When/200x/2003/07/11/Stopwords
     /// 
     /// slightly off-topic, anti-thesaurus or "site-configurable stop-words"

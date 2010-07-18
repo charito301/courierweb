@@ -1,8 +1,6 @@
 using System;
-using System.Data;
 using System.Data.SqlClient;
 using CSLA;
-using CSLA.Data;
 
 namespace MMarinov.WebCrawler.Library
 {

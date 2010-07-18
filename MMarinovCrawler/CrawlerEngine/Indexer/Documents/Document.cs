@@ -180,21 +180,6 @@ namespace MMarinov.WebCrawler.Indexer
             }
         }
 
-        //protected string GetDescriptionFromWordsOnly(string wordsonly)
-        //{
-        //    string description = "";
-        //    if (wordsonly.Length > Preferences.SummaryCharacters)
-        //    {
-        //        description = wordsonly.Substring(0, Preferences.SummaryCharacters);
-        //    }
-        //    else
-        //    {
-        //        description = WordsOnly;
-        //    }
-
-        //    return System.Text.RegularExpressions.Regex.Replace(description, @"\s+", " ").Trim();
-        //}
-
         /// <summary>
         /// Is the value of the href pointing to a web page?
         /// </summary>

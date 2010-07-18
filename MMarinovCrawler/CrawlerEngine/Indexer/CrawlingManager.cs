@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace MMarinov.WebCrawler.Indexer
 {
@@ -8,7 +7,6 @@ namespace MMarinov.WebCrawler.Indexer
     /// </summary>
     public class CrawlingManager
     {
-        //public static Library.WebsiteCatalog GlobalCatalog = new Library.WebsiteCatalog();
         public static volatile bool ShouldStopThreads = false;
         public static volatile int WaitingThreadsCount = 0;
 
