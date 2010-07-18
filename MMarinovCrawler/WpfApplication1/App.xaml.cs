@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 
 namespace MMarinov.WebCrawler.UI
 {
@@ -14,7 +9,7 @@ namespace MMarinov.WebCrawler.UI
     {
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            Exception ex = e.Exception;
+            System.Exception ex = e.Exception;
             // Process unhandled exception
             System.IO.StreamWriter wr = new System.IO.StreamWriter(System.Reflection.Assembly.GetEntryAssembly().Location.Substring(0, System.Reflection.Assembly.GetEntryAssembly().Location.LastIndexOf('\\')) + "\\log.txt", true);
             string str = "";
