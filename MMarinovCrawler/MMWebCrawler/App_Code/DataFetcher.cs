@@ -41,6 +41,8 @@ namespace Margent
             IQueryable<DALWebCrawlerActive.WordsInFile> wordsInFiles;
             Dictionary<Word, CountFileList> results = new Dictionary<Word, CountFileList>();
             tick1 = DateTime.Now.Ticks;
+            _shownLinks = 0;
+
             try
             {
                 string[] queryWords = query.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
@@ -49,7 +51,8 @@ namespace Margent
                 {
                     wordsInFiles = from wif in
                                        dataContext.WordsInFiles.Where(wif2 => (from wif in dataContext.WordsInFiles.Where(wif3 => queryWords.Contains(wif3.Word.WordName))
-                                                                               select wif.FileID).Contains(wif2.FileID))
+                                                                               orderby wif.Count descending
+                                                                               select wif.FileID).Take(50).Contains(wif2.FileID)).Take(1000)
                                    select wif;
 
                     _totalLinksFound = wordsInFiles.Count();
@@ -74,6 +77,8 @@ namespace Margent
                         }
                     }
                 }
+                long tick4 = DateTime.Now.Ticks;
+                double a4 = TimeSpan.FromTicks(tick4 - tick2).TotalSeconds;
 
                 var orderedResults = from r in results.Take(100)
                                      orderby r.Value.Count descending
@@ -86,6 +91,7 @@ namespace Margent
                     _shownLinks += kvp.Value.FilesList.Count;
                     orderedResultsList.Add(kvp.Key, kvp.Value);
                 }
+
                 tick3 = DateTime.Now.Ticks;
 
                 return orderedResultsList;

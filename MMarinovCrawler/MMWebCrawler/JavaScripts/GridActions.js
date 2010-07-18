@@ -12,29 +12,3 @@
 
     return false;
 }
-
-$(function() {
-    alert('asd');
-    $(".water").each(function() {
-        $tb = $(this);
-        if ($tb.val() != this.title) {
-            $tb.removeClass("water");
-        }
-    });
-
-    $(".water").focus(function() {
-        $tb = $(this);
-        if ($tb.val() == this.title) {
-            $tb.val("");
-            $tb.removeClass("water");
-        }
-    });
-
-    $(".water").blur(function() {
-        $tb = $(this);
-        if ($.trim($tb.val()) == "") {
-            $tb.val(this.title);
-            $tb.addClass("water");
-        }
-    });
-});   

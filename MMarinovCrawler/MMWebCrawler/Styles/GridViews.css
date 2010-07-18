@@ -64,8 +64,8 @@
     position: absolute;
     text-align: right;
     right: 15px;
-    font-size: 0.8em;
-    vertical-align: middle;
+    font-size: 0.75em;
+    padding-top:2px;
 }
 
 .PagerStyle
@@ -88,6 +88,27 @@
     vertical-align: super;
 }
 
+.HeaderStyle
+{
+    font-size: 1.25em;
+    color: #ffffff;
+    width: 100%;
+    background-image: url(../images/headerBg.png);
+    background-repeat: repeat-x;
+}
+
+.HeaderCol1
+{
+    padding: 0px 0px 10px 15px;
+    text-align: left;
+    float: left;
+}
+.HeaderCol2
+{
+    padding: 0px 12px 10px 0px;
+    text-align: right;
+    float: right;
+}
 
 /*==============GridLinks================*/
 
