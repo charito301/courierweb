@@ -29,6 +29,13 @@ body { overflow-y: auto; }
     </asp:ScriptManager>
     <img src="Images/backgroundMain.jpg" alt="background image" id="bg" />
     <div id="content">
+        <div id="divLoading">
+            <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="updPanel">
+                <ProgressTemplate>
+                    <asp:Image runat="server" ImageUrl="~/Images/LoadingAnimation.gif" Width="150px" />
+                </ProgressTemplate>
+            </asp:UpdateProgress>
+        </div>
         <div class="Title">
             <img src="Images/MargentTitle.PNG" alt="MMairnov Search Agent" />
         </div>
@@ -39,6 +46,12 @@ body { overflow-y: auto; }
                 </td>
                 <td width="30%">
                     <asp:TextBox ID="tbSearchQuery" runat="server" CssClass="SearchQuery"></asp:TextBox>
+                    <ajaxToolkit:AutoCompleteExtender EnableCaching="true" MinimumPrefixLength="3" CompletionSetCount="10"
+                        runat="server" ServicePath="MMWebService.asmx" ServiceMethod="GetSuggestions"
+                        TargetControlID="tbSearchQuery" CompletionListCssClass="autocomplete_completionListElement"
+                        CompletionListItemCssClass="autocomplete_listItem" CompletionListHighlightedItemCssClass="autocomplete_highlightedListItem"
+                        CompletionInterval="300">
+                    </ajaxToolkit:AutoCompleteExtender>
                 </td>
                 <td width="35%" style="padding-left: 10px;">
                     <asp:ImageButton ID="btnDoSearch" runat="server" Height="37px" ImageUrl="~/Images/binoc.png"
@@ -48,7 +61,10 @@ body { overflow-y: auto; }
         </table>
         <div class="PositionGrids">
             <asp:Label runat="server" ID="lblError" CssClass="ErrorMessage"> error message</asp:Label>
-            <asp:UpdatePanel ID="updPanel" runat="server">
+            <asp:UpdatePanel ID="updPanel" runat="server" UpdateMode="Conditional">
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="gvKeywords" EventName="SelectedIndexChanged" />
+                </Triggers>
                 <ContentTemplate>
                     <asp:GridView ID="gvKeywords" runat="server" AutoGenerateColumns="False" AllowSorting="True"
                         CssClass="GridKeywords" AllowPaging="True" ShowHeader="true" GridLines="None"
@@ -74,53 +90,62 @@ body { overflow-y: auto; }
                                     <!-- ===============nested view ================= -->
                                     <asp:Literal ID="litGridLinks" runat="server"></asp:Literal>
                                     <asp:Literal runat="server" ID="lit1" Text="<div id='trCollapseGrid' class='RowStyle' style='display:none' >" />
-                                    <asp:GridView ID="gvLinks" runat="server" AutoGenerateColumns="false" ShowHeader="false"
-                                        EnableViewState="False" CssClass="GridLinks" AllowPaging="True" GridLines="None"
-                                        OnRowCommand="gvLinks_RowCommand" OnPageIndexChanging="gvLinks_PageIndexChanging">
-                                        <PagerStyle CssClass="PagerStyle" />
-                                        <RowStyle CssClass="RowStyleLinks" />
-                                        <EmptyDataRowStyle CssClass="NoResults" />
-                                        <AlternatingRowStyle CssClass="AltRowStyleLinks" />
-                                        <Columns>
-                                            <asp:TemplateField>
-                                                <ItemTemplate>
-                                                    <div class="LinkTitle">
-                                                        <asp:HyperLink runat="server" ID="lnkLinkTitle">title - follow me</asp:HyperLink>
+                                    <asp:UpdateProgress ID="UpdateProgress2" runat="server" AssociatedUpdatePanelID="updPanelLinks">
+                                        <ProgressTemplate>
+                                            <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/LoadingAnimation.gif" Width="150px" />
+                                        </ProgressTemplate>
+                                    </asp:UpdateProgress>
+                                    <asp:UpdatePanel ID="updPanelLinks" runat="server">
+                                        <ContentTemplate>
+                                            <asp:GridView ID="gvLinks" runat="server" AutoGenerateColumns="false" ShowHeader="false"
+                                                EnableViewState="False" CssClass="GridLinks" AllowPaging="True" GridLines="None"
+                                                OnRowCommand="gvLinks_RowCommand" OnPageIndexChanging="gvLinks_PageIndexChanging">
+                                                <PagerStyle CssClass="PagerStyle" />
+                                                <RowStyle CssClass="RowStyleLinks" />
+                                                <EmptyDataRowStyle CssClass="NoResults" />
+                                                <AlternatingRowStyle CssClass="AltRowStyleLinks" />
+                                                <Columns>
+                                                    <asp:TemplateField>
+                                                        <ItemTemplate>
+                                                            <div class="LinkTitle">
+                                                                <asp:HyperLink runat="server" ID="lnkLinkTitle">title - follow me</asp:HyperLink>
+                                                            </div>
+                                                            <div class="LinkDescription">
+                                                                <asp:Label runat="server" ID="lblLinkDescription"></asp:Label>
+                                                            </div>
+                                                            <div class="LinkLink">
+                                                                <asp:HyperLink runat="server" ID="lnkLink">link follow me</asp:HyperLink>
+                                                            </div>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                                <PagerTemplate>
+                                                    <div style="height: 20px;">
+                                                        <div class="command">
+                                                            <asp:ImageButton ID="btnFirstLinks" runat="server" CommandName="FirstLinks" ImageUrl="~/Images/btnFirst.PNG"
+                                                                AlternateText="First Page" ToolTip="First Page" />
+                                                            <asp:ImageButton ID="btnPreviousLinks" runat="server" CommandName="PreviousLinks"
+                                                                ImageUrl="~/Images/btnPrev.PNG" AlternateText="Previous Page" ToolTip="Previous Page" />
+                                                        </div>
+                                                        <div class="command">
+                                                            <asp:TextBox ID="txtSlideLinks" runat="server" AutoPostBack="true" OnTextChanged="txtSlideLinks_Changed" />
+                                                            <ajaxToolkit:SliderExtender ID="ajaxSliderLinks" runat="server" TargetControlID="txtSlideLinks"
+                                                                RaiseChangeOnlyOnMouseUp="true" Orientation="Horizontal" Minimum="1" />
+                                                        </div>
+                                                        <div class="command">
+                                                            <asp:ImageButton ID="btnNextLinks" runat="server" CommandName="NextLinks" ImageUrl="~/Images/btnNext.PNG"
+                                                                AlternateText="Next Page" ToolTip="Next Page" />
+                                                            <asp:ImageButton ID="btnLastLinks" runat="server" CommandName="LastLinks" ImageUrl="~/Images/btnLast.PNG"
+                                                                AlternateText="Last Page" ToolTip="Last Page" />
+                                                        </div>
+                                                        <div class="PagerInfo">
+                                                            <asp:Label ID="lblPageLinks" CssClass="PagerInfo" runat="server" />
+                                                        </div>
                                                     </div>
-                                                    <div class="LinkDescription">
-                                                        <asp:Label runat="server" ID="lblLinkDescription"></asp:Label>
-                                                    </div>
-                                                    <div class="LinkLink">
-                                                        <asp:HyperLink runat="server" ID="lnkLink">link follow me</asp:HyperLink>
-                                                    </div>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                        </Columns>
-                                       <%-- <PagerTemplate>
-                                            <div style="height: 20px;">
-                                                <div class="command">
-                                                    <asp:ImageButton ID="btnFirstLinks" runat="server" CommandName="FirstLinks" ImageUrl="~/Images/btnFirst.PNG"
-                                                        AlternateText="First Page" ToolTip="First Page" />
-                                                    <asp:ImageButton ID="btnPreviousLinks" runat="server" CommandName="PreviousLinks"
-                                                        ImageUrl="~/Images/btnPrev.PNG" AlternateText="Previous Page" ToolTip="Previous Page" />
-                                                </div>
-                                                <div class="command">
-                                                    <asp:TextBox ID="txtSlideLinks" runat="server" AutoPostBack="true" OnTextChanged="txtSlideLinks_Changed" />
-                                                    <ajaxToolkit:SliderExtender ID="ajaxSliderLinks" runat="server" TargetControlID="txtSlideLinks"
-                                                        RaiseChangeOnlyOnMouseUp="true" Orientation="Horizontal" Minimum="1" />
-                                                </div>
-                                                <div class="command">
-                                                    <asp:ImageButton ID="btnNextLinks" runat="server" CommandName="NextLinks" ImageUrl="~/Images/btnNext.PNG"
-                                                        AlternateText="Next Page" ToolTip="Next Page" />
-                                                    <asp:ImageButton ID="btnLastLinks" runat="server" CommandName="LastLinks" ImageUrl="~/Images/btnLast.PNG"
-                                                        AlternateText="Last Page" ToolTip="Last Page" />
-                                                </div>
-                                                <div class="PagerInfo">
-                                                    <asp:Label ID="lblPageLinks" CssClass="PagerInfo" runat="server" />
-                                                </div>
-                                            </div>
-                                        </PagerTemplate>--%>
-                                    </asp:GridView>
+                                                </PagerTemplate>
+                                            </asp:GridView>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
                                     <asp:Literal runat="server" ID="lit2" Text="</div>" />
                                     <!-- ===============nested view end ============== -->
                                 </ItemTemplate>

@@ -22,6 +22,13 @@ img#bg
     z-index: 1;
 }
 
+#divLoading {
+ position:absolute;
+ top:0;
+ right:0px;
+}
+
+
 .Title
 {
     text-align: center;
@@ -37,6 +44,21 @@ img#bg
     font-family: Adobe Garamond Pro Bold;
     border: 2px solid #333198;
     background-color: #f0f0f0;
+}
+
+.autocomplete_completionListElement
+{
+     z-index: 1;
+    font-size: large;
+    font-weight: bold;
+    font-family: Adobe Garamond Pro Bold;
+    border: 2px solid #333198;
+    background-color: #f0f0f0;
+}
+
+.autocomplete_highlightedListItem
+{
+   font-size: x-large;
 }
 
 .SearchQuery:focus

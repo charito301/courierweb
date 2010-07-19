@@ -37,6 +37,8 @@ namespace Margent
 
             btnDoSearch.Click += new ImageClickEventHandler(btnDoSearch_Click);
 
+            lblSearch.Focus();
+
             lblError.Visible = false;
             lblError.Text = _connectionError;
         }
@@ -85,7 +87,7 @@ namespace Margent
                 GridView gvLinks = (GridView)e.Row.FindControl("gvLinks");
                 gvLinks.RowDataBound += new GridViewRowEventHandler(gvLinks_RowDataBound);
                 gvLinks.PageIndexChanging += new GridViewPageEventHandler(gvLinks_PageIndexChanging);
-                //gvLinks.RowCommand += new GridViewCommandEventHandler(gvLinks_RowCommand);
+                gvLinks.RowCommand += new GridViewCommandEventHandler(gvLinks_RowCommand);
                 gvLinks.DataSource = currentWord.Value.FilesList;
                 gvLinks.EmptyDataText = _emptyDataText;
                 gvLinks.DataBind();
@@ -120,10 +122,16 @@ namespace Margent
                 lnkLink.NavigateUrl = file.URL;
                 lnkLink.Text = file.URL;
             }
-            //else if (e.Row.RowType == DataControlRowType.Header)
-            //{
-            //    TextBox txtSlideLinks = (TextBox)e.Row.FindControl("txtSlideLinks");
-            //}
+            else if (e.Row.RowType == DataControlRowType.Pager)
+            {
+                TextBox txtSlideLinks = (TextBox)e.Row.FindControl("txtSlideLinks"); 
+                txtSlideLinks.Text = (gvLinks.PageIndex + 1).ToString();
+                
+                AjaxControlToolkit.SliderExtender ajaxSliderLinks = (AjaxControlToolkit.SliderExtender)e.Row.FindControl("ajaxSliderLinks");
+                ajaxSliderLinks.Steps = gvLinks.PageCount;
+                ajaxSliderLinks.Maximum = gvLinks.PageCount;
+
+            }
         }
 
         private void FetchData(string query)
@@ -145,7 +153,7 @@ namespace Margent
                 SetDataSource();
             }
             else
-            {              
+            {
                 lblError.Visible = true;
                 gvKeywords.DataSource = null;
             }
@@ -196,6 +204,57 @@ namespace Margent
                     }
                     break;
                 case "Last":
+                    if (gvKeywords.PageCount - 1 > pageIndex)
+                    {
+                        txtSliderExt.Text = gvKeywords.PageCount.ToString();
+                        gvKeywords.PageIndex = gvKeywords.PageCount - 1;
+                        SetDataSource();
+                    }
+                    break;
+                case "First":
+                default:
+                    if (pageIndex > 1)
+                    {
+                        txtSliderExt.Text = "1";
+                        gvKeywords.PageIndex = 0;
+                        SetDataSource();
+                    }
+                    break;
+            }
+        }
+
+        #endregion
+
+        protected void gvLinks_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            ((GridView)sender).PageIndex = e.NewPageIndex;
+        }
+
+        protected void gvLinks_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            GridView gv = ((GridView)sender);
+            TextBox txtSliderExt = (TextBox)gv.FindControl("txtSlideLinks");
+            int pageIndex = Int32.Parse(txtSliderExt.Text);
+
+            switch (e.CommandName)
+            {
+                case "Next":
+                    if (gvKeywords.PageCount - 1 > pageIndex)
+                    {
+                        txtSliderExt.Text = (pageIndex + 1).ToString();
+                        gvKeywords.PageIndex = pageIndex;
+                        SetDataSource();
+                    }
+                    break;
+                case "Previous":
+                    if (pageIndex > 1)
+                    {
+                        txtSliderExt.Text = (--pageIndex).ToString();
+                        gvKeywords.PageIndex = pageIndex - 1;
+                        SetDataSource();
+                    }
+                    break;
+                case "Last":
                     txtSliderExt.Text = gvKeywords.PageCount.ToString();
                     gvKeywords.PageIndex = gvKeywords.PageCount - 1;
                     SetDataSource();
@@ -209,58 +268,11 @@ namespace Margent
             }
         }
 
-        #endregion
-
-        protected void gvLinks_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            ((GridView)sender).PageIndex = e.NewPageIndex;
-            e.Cancel = true;
-        }
-
-        protected void gvLinks_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            GridView gv = ((GridView)sender);
-            //TextBox txtSliderExt = (TextBox)gv.BottomPagerRow.Cells[0].FindControl("txtSlideLinks");
-            //int pageIndex = Int32.Parse(txtSliderExt.Text);
-
-            //switch (e.CommandName)
-            //{
-            //    case "Next":
-            //        if (gvKeywords.PageCount - 1 > pageIndex)
-            //        {
-            //            txtSliderExt.Text = (pageIndex + 1).ToString();
-            //            gvKeywords.PageIndex = pageIndex;
-            //            SetDataSource();
-            //        }
-            //        break;
-            //    case "Previous":
-            //        if (pageIndex > 1)
-            //        {
-            //            txtSliderExt.Text = (--pageIndex).ToString();
-            //            gvKeywords.PageIndex = pageIndex - 1;
-            //            SetDataSource();
-            //        }
-            //        break;
-            //    case "Last":
-            //        txtSliderExt.Text = gvKeywords.PageCount.ToString();
-            //        gvKeywords.PageIndex = gvKeywords.PageCount - 1;
-            //        SetDataSource();
-            //        break;
-            //    case "First":
-            //    default:
-            //        txtSliderExt.Text = "1";
-            //        gvKeywords.PageIndex = 0;
-            //        SetDataSource();
-            //        break;
-            //}
-        }
-
         protected void txtSlideLinks_Changed(object sender, EventArgs e)
         {
-            GridView gv = ((GridView)sender);
-            TextBox txtSliderExt = (TextBox)gv.BottomPagerRow.Cells[0].FindControl("txtSlide");
+            TextBox txtSliderExt = (TextBox)gvLinks.BottomPagerRow.Cells[0].FindControl("txtSlide");
 
-            gv.PageIndex = Int32.Parse(txtSliderExt.Text) - 1;
+            gvLinks.PageIndex = Int32.Parse(txtSliderExt.Text) - 1;
             SetDataSource();
         }
     }
