@@ -11,7 +11,7 @@ namespace Margent
     /// </summary>
     public static class DataFetcher
     {
-        private static string connectionString = System.Configuration.ConfigurationManager.AppSettings["ConnectionStringActive"].ToString();
+        public static string ConnectionString = System.Configuration.ConfigurationManager.AppSettings["ConnectionStringActive"].ToString();
         private static long tick1;
         private static long tick2;
         private static long tick3;
@@ -47,7 +47,7 @@ namespace Margent
             {
                 string[] queryWords = query.Split(new char[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
 
-                using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(connectionString))
+                using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(ConnectionString))
                 {
                     wordsInFiles = from wif in
                                        dataContext.WordsInFiles.Where(wif2 => (from wif in dataContext.WordsInFiles.Where(wif3 => queryWords.Contains(wif3.Word.WordName))

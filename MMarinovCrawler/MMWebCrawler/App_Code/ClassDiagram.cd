@@ -14,8 +14,15 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAkAAAQCAAAAgCACAAAAAAAAAAADEAAAAAAAAIAAA=</HashCode>
+      <HashCode>AAAAkAAAQCAAAAACACAAAAAAAAAAADEAACAAAAAIAAA=</HashCode>
       <FileName>App_Code\DataFetcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Margent.MMWebService">
+    <Position X="5.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Code\MMWebService.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
