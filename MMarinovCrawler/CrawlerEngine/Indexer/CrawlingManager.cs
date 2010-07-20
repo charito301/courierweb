@@ -77,12 +77,9 @@ namespace MMarinov.WebCrawler.Indexer
         public void StartSpider()
         {
             //SeedList.GetTheList();
-            Spider.GlobalURLsToVisit.Add("http://live.com");
-            Spider.GlobalURLsToVisit.Add("http://weblogs.asp.net");
-            Spider.GlobalURLsToVisit.Add("http://facebook.com");
-            Spider.GlobalURLsToVisit.Add("http://tweeter.com");
-            Spider.GlobalURLsToVisit.Add("http://msn.com");
-            Spider.GlobalURLsToVisit.Add("http://nike.com");
+            Spider.GlobalURLsToVisit.Add("http://www.uni-ruse.bg");
+            Spider.GlobalURLsToVisit.Add("http://bg.wikipedia.org/wiki/Русенски_университет");
+            Spider.GlobalURLsToVisit.Add("http://ru.acad.bg");
 
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 200, 3000);
             startDate = DateTime.Now;
