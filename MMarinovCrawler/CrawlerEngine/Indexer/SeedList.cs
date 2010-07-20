@@ -34,6 +34,8 @@ namespace MMarinov.WebCrawler.Indexer
             Spider.GlobalURLsToVisit.Add("http://erasmus.uni-ruse.bg");
             Spider.GlobalURLsToVisit.Add("http://ecet.ecs.ru.acad.bg");
             Spider.GlobalURLsToVisit.Add("http://ecs.ru.acad.bg");
+            //////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////
 
             using (System.IO.StreamReader readFile = new System.IO.StreamReader(Preferences.WorkingPath + "\\" + _csvFilename))
             {
