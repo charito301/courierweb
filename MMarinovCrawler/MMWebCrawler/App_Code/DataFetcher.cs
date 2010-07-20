@@ -49,6 +49,8 @@ namespace Margent
 
                 using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(ConnectionString))
                 {
+                    dataContext.CommandTimeout = 5;
+
                     wordsInFiles = from wif in
                                        dataContext.WordsInFiles.Where(wif2 => (from wif in dataContext.WordsInFiles.Where(wif3 => queryWords.Contains(wif3.Word.WordName))
                                                                                orderby wif.Count descending

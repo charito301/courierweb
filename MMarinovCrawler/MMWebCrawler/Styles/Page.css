@@ -22,12 +22,12 @@ img#bg
     z-index: 1;
 }
 
-#divLoading {
- position:absolute;
- top:0;
- right:0px;
+#divLoading
+{
+    position: fixed;
+    top: 0;
+    right: 0px;
 }
-
 
 .Title
 {
@@ -48,17 +48,31 @@ img#bg
 
 .autocomplete_completionListElement
 {
-     z-index: 1;
+    z-index: 1;
     font-size: large;
     font-weight: bold;
     font-family: Adobe Garamond Pro Bold;
     border: 2px solid #333198;
     background-color: #f0f0f0;
+    list-style-type: none;
+    list-style: none;
+    margin: 0px;
+    padding-left: 2px;
+    text-align: left;
+    vertical-align: middle;
+    width: 25% !important;
+    text-indent: -1;
+}
+
+autocomplete_completionListElement li
+{
+    padding: 0px 0px;
 }
 
 .autocomplete_highlightedListItem
 {
-   font-size: x-large;
+    background-color: #DDDDDD;
+    font-size: x-large;
 }
 
 .SearchQuery:focus
@@ -94,9 +108,14 @@ img#bg
 }
 
 .ErrorMessage
-{ 
+{
     color: #333198;
-    text-align: center;
     font-size: x-large;
     border: solid 3px red;
+}
+
+.CenterObject
+{
+    text-align: center;
+    width: 100%;
 }

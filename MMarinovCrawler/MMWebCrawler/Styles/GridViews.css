@@ -20,7 +20,7 @@
 }
 
 /*RowStyles*/
-.RowStyle td, .AltRowStyle td /*Common Styles*/
+.RowStyle td, .AltRowStyle td
 {
     padding: 2px;
 }
@@ -65,7 +65,7 @@
     text-align: right;
     right: 15px;
     font-size: 0.75em;
-    padding-top:2px;
+    padding-top: 2px;
 }
 
 .PagerStyle
@@ -188,7 +188,7 @@
 }
 
 /*RowStyles*/
-.RowStyleLinks td, .AltRowStyleLinks td /*Common Styles*/
+.RowStyleLinks td, .AltRowStyleLinks td
 {
     padding: 10px 3px 3px 3px;
     background-image: url(../images/childRow.png);

@@ -45,7 +45,8 @@ body { overflow-y: auto; }
                     <asp:Label ID="lblSearch" runat="server" Text="Search the knowledge base:"></asp:Label>
                 </td>
                 <td width="30%">
-                    <asp:TextBox ID="tbSearchQuery" runat="server" CssClass="SearchQuery"></asp:TextBox>
+                    <asp:TextBox ID="tbSearchQuery" runat="server" CssClass="SearchQuery" autocomplete="off"
+                        AutoCompleteType="None"></asp:TextBox>
                     <ajaxToolkit:AutoCompleteExtender EnableCaching="true" MinimumPrefixLength="3" CompletionSetCount="10"
                         runat="server" ServicePath="MMWebService.asmx" ServiceMethod="GetSuggestions"
                         TargetControlID="tbSearchQuery" CompletionListCssClass="autocomplete_completionListElement"
@@ -60,7 +61,9 @@ body { overflow-y: auto; }
             </tr>
         </table>
         <div class="PositionGrids">
-            <asp:Label runat="server" ID="lblError" CssClass="ErrorMessage"> error message</asp:Label>
+            <div class="CenterObject">
+                <asp:Label runat="server" ID="lblError" CssClass="ErrorMessage"> error message</asp:Label>
+            </div>
             <asp:UpdatePanel ID="updPanel" runat="server" UpdateMode="Conditional">
                 <Triggers>
                     <asp:AsyncPostBackTrigger ControlID="gvKeywords" EventName="SelectedIndexChanged" />

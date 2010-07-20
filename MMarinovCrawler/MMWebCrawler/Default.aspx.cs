@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Linq;
 
 namespace Margent
 {
     public partial class _Default : System.Web.UI.Page
     {
-        private static string _connectionError = "An error occured when trying to fetch data from the DB.";
+        private static string _connectionError = "An error occured while trying to fetch data from the DB.";
         private static string _emptyDataText = "There were not found words, associated to that query. We apologize for the inconvenience.";
         private static string _tooShortQuery = "Please enter a word, longer that two letters.";
         private static Dictionary<DALWebCrawlerActive.Word, DataFetcher.CountFileList> _resultsList = null;
@@ -46,21 +44,6 @@ namespace Margent
         void btnDoSearch_Click(object sender, ImageClickEventArgs e)
         {
             string query = tbSearchQuery.Text.Trim();
-
-            if (query == "")
-            {
-                return;
-            }
-
-            if (query.Length < 3)
-            {
-                lblError.Text = _tooShortQuery;
-                return;
-            }
-
-            //TextBox txtSliderExt = (TextBox) gvKeywords.BottomPagerRow.Cells[0].FindControl("txtSlide");
-            //txtSliderExt.Text = "1";
-            gvKeywords.PageIndex = 0;
 
             FetchData(query.ToLower());
         }
@@ -124,9 +107,9 @@ namespace Margent
             }
             else if (e.Row.RowType == DataControlRowType.Pager)
             {
-                TextBox txtSlideLinks = (TextBox)e.Row.FindControl("txtSlideLinks"); 
+                TextBox txtSlideLinks = (TextBox)e.Row.FindControl("txtSlideLinks");
                 txtSlideLinks.Text = (gvLinks.PageIndex + 1).ToString();
-                
+
                 AjaxControlToolkit.SliderExtender ajaxSliderLinks = (AjaxControlToolkit.SliderExtender)e.Row.FindControl("ajaxSliderLinks");
                 ajaxSliderLinks.Steps = gvLinks.PageCount;
                 ajaxSliderLinks.Maximum = gvLinks.PageCount;
@@ -136,7 +119,22 @@ namespace Margent
 
         private void FetchData(string query)
         {
+            if (query == "")
+            {
+                gvKeywords.Visible = false;
+                return;
+            }
+
+            if (query.Length < 3)
+            {
+                lblError.Text = _tooShortQuery;
+                lblError.Visible = true;
+                gvKeywords.Visible = false;
+                return;
+            }
+
             _resultsList = DataFetcher.FetchResults(query);
+
             if (_resultsList != null)
             {
                 if (_resultsList.Count > 0)
@@ -149,13 +147,15 @@ namespace Margent
                     lblSummary.Text = "";
                 }
 
+                gvKeywords.PageIndex = 0;
+                gvKeywords.Visible = true;
                 lblError.Visible = false;
                 SetDataSource();
             }
             else
             {
                 lblError.Visible = true;
-                gvKeywords.DataSource = null;
+                gvKeywords.Visible = false;
             }
         }
 
@@ -188,7 +188,7 @@ namespace Margent
             switch (e.CommandName)
             {
                 case "Next":
-                    if (gvKeywords.PageCount - 1 > pageIndex)
+                    if (gvKeywords.PageCount > pageIndex)
                     {
                         txtSliderExt.Text = (pageIndex + 1).ToString();
                         gvKeywords.PageIndex = pageIndex;
@@ -204,7 +204,7 @@ namespace Margent
                     }
                     break;
                 case "Last":
-                    if (gvKeywords.PageCount - 1 > pageIndex)
+                    if (gvKeywords.PageCount > pageIndex)
                     {
                         txtSliderExt.Text = gvKeywords.PageCount.ToString();
                         gvKeywords.PageIndex = gvKeywords.PageCount - 1;
