@@ -24,6 +24,17 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         private static void FetchFromCVS()
         {
+            Spider.GlobalURLsToVisit.Add("http://uni-ruse.bg/");
+            Spider.GlobalURLsToVisit.Add("http://bg.wikipedia.org/wiki/Русенски_университет/");
+            Spider.GlobalURLsToVisit.Add("http://en.wikipedia.org/wiki/University_of_Ruse");
+            Spider.GlobalURLsToVisit.Add("http://ru.acad.bg/");
+            Spider.GlobalURLsToVisit.Add("http://htw-berlin.de/");
+            Spider.GlobalURLsToVisit.Add("http://impact.htw-berlin.de/");
+            Spider.GlobalURLsToVisit.Add("http://university-directory.eu");
+            Spider.GlobalURLsToVisit.Add("http://erasmus.uni-ruse.bg");
+            Spider.GlobalURLsToVisit.Add("http://ecet.ecs.ru.acad.bg");
+            Spider.GlobalURLsToVisit.Add("http://ecs.ru.acad.bg");
+
             using (System.IO.StreamReader readFile = new System.IO.StreamReader(Preferences.WorkingPath + "\\" + _csvFilename))
             {
                 string fileContent = System.Text.RegularExpressions.Regex.Replace(readFile.ReadToEnd(), @"\d+,", "");

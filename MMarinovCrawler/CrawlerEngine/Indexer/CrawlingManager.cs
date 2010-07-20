@@ -75,11 +75,8 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         /// <param name="p"></param>
         public void StartSpider()
-        {
-            //SeedList.GetTheList();
-            Spider.GlobalURLsToVisit.Add("http://www.uni-ruse.bg");
-            Spider.GlobalURLsToVisit.Add("http://bg.wikipedia.org/wiki/Русенски_университет");
-            Spider.GlobalURLsToVisit.Add("http://ru.acad.bg");
+        {           
+            SeedList.GetTheList();
 
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 200, 3000);
             startDate = DateTime.Now;
