@@ -28,13 +28,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMarinovCrawler", "WpfAppli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DALWebCrawlerActive", "DALWebCrawlerActive\DALWebCrawlerActive.csproj", "{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiscItems", "MiscItems", "{519C5AD6-6370-469E-B7AE-4244FC76674F}"
-	ProjectSection(SolutionItems) = preProject
-		WpfApplication1\Diagrams\MMarinovThesis.docx = WpfApplication1\Diagrams\MMarinovThesis.docx
-		..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsDE.csv = ..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsDE.csv
-		..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsEN.csv = ..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsEN.csv
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
