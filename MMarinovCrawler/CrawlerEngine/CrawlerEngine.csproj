@@ -149,15 +149,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagrams\Commons.cd" />
-    <None Include="ClassDiagrams\DALWebCrawlerActive.cd" />
-    <None Include="ClassDiagrams\Documents.cd" />
-    <None Include="ClassDiagrams\Indexer.cd" />
-    <None Include="ClassDiagrams\Library.cd" />
-    <None Include="ClassDiagrams\Report.cd" />
-    <None Include="ClassDiagrams\Stemming.cd" />
-    <None Include="ClassDiagrams\Stopper.cd" />
-    <None Include="ClassDiagrams\ThreadedGenerics.cd" />
+    <None Include="ExtraStuff\Commons.cd" />
+    <None Include="ExtraStuff\DALWebCrawlerActive.cd" />
+    <None Include="ExtraStuff\Documents.cd" />
+    <None Include="ExtraStuff\Indexer.cd" />
+    <None Include="ExtraStuff\Library.cd" />
+    <None Include="ExtraStuff\Report.cd" />
+    <None Include="ExtraStuff\Stemming.cd" />
+    <None Include="ExtraStuff\Stopper.cd" />
+    <None Include="ExtraStuff\StopWordsDE.csv" />
+    <None Include="ExtraStuff\StopWordsEN.csv" />
+    <None Include="ExtraStuff\ThreadedGenerics.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
