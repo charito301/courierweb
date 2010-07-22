@@ -77,6 +77,7 @@ namespace MMarinov.WebCrawler.Indexer
         public void StartSpider()
         {           
             SeedList.GetTheList();
+            Stopper.ListStopper.LoadStopLists();
 
             timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 200, 3000);
             startDate = DateTime.Now;

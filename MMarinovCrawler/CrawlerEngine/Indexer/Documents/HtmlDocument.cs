@@ -228,7 +228,7 @@ namespace MMarinov.WebCrawler.Indexer
                 this._Title = Regex.Match(_htmlCode, @"(?<=<title[^\>]*>).*?(?=</title>)", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture).Value;
             }
 
-            ParseLanguage();
+            //ParseLanguage();
             ParseMetaTags();
             ParseLinks();
 

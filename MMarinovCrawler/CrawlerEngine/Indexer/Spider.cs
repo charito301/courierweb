@@ -415,34 +415,41 @@ namespace MMarinov.WebCrawler.Indexer
             {
                 wordName = rawWord.ToLower();
 
+                if (System.Text.RegularExpressions.Regex.Match(wordName, @"\d+").Success)
+                {
+                    continue;
+                }
+
                 // Apply Stemming and stopping (set by preferences)
                 wordName = _Stemmer.StemWord(wordName);
                 wordName = _Stopper.StopWord(wordName);
 
-                if (wordName != "")
+                if (wordName == "")
                 {
-                    wordsCount++;
+                    continue;
+                }
 
-                    lock (_wordsCollGlobal)
+                wordsCount++;
+
+                lock (_wordsCollGlobal)
+                {
+                    Word w = _wordsCollGlobal.GetWord(wordName);
+
+                    if (w == null)
                     {
-                        Word w = _wordsCollGlobal.GetWord(wordName);
-
-                        if (w == null)
+                        if (!newWordsColl.Contains(wordName))
                         {
-                            if (!newWordsColl.Contains(wordName))
-                            {
-                                newWordsColl.Add(Word.NewWord(wordName));
-                            }
+                            newWordsColl.Add(Word.NewWord(wordName));
+                        }
 
-                            formatedNewWords.Add(wordName);
-                        }
-                        else
+                        formatedNewWords.Add(wordName);
+                    }
+                    else
+                    {
+                        if (w.ID == 0)
                         {
-                            if (w.ID == 0)
-                            {
-                            }
-                            infile.WordsInFileColl.AddOrIncrease(w.ID);
                         }
+                        infile.WordsInFileColl.AddOrIncrease(w.ID);
                     }
                 }
             } // foreach
