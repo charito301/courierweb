@@ -16,7 +16,7 @@ namespace MMarinov.WebCrawler.Library
             try
             {
                 cm.Connection = cn;
-               cm.CommandTimeout = 150;
+               cm.CommandTimeout = 600;
                 cm.CommandType = CommandType.StoredProcedure;
 
                 cm.CommandText = "sp_TruncateTables";
@@ -32,6 +32,7 @@ namespace MMarinov.WebCrawler.Library
         {
             using (DALWebCrawlerActive.WebCrawlerActiveDataContext dataContext = new DALWebCrawlerActive.WebCrawlerActiveDataContext(Preferences.ConnectionStringActive))
             {
+                dataContext.CommandTimeout = 600;
                 dataContext.sp_TruncateAllTables();
             }
         }
@@ -60,6 +61,7 @@ namespace MMarinov.WebCrawler.Library
 
                     cm.Transaction = tr;
                     cm.Connection = cn;
+                    cm.CommandTimeout = 600;
                     cm.CommandType = CommandType.StoredProcedure;
 
                     cm.CommandText = "sp_CopyFromDBToActiveDB";
