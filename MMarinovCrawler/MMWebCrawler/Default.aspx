@@ -29,6 +29,11 @@ body { overflow-y: auto; }
     </asp:ScriptManager>
     <img src="Images/backgroundMain.jpg" alt="background image" id="bg" />
     <div id="content">
+        <div id="divLanguages">
+            <asp:ImageButton ID="lnkLangEnglish" runat="server" ImageUrl="~/Images/flaguk.png" />
+            <asp:ImageButton ID="lnkLangGerman" runat="server" ImageUrl="~/Images/flagde.png" />
+            <asp:ImageButton ID="lnkLangBulgarian" runat="server" ImageUrl="~/Images/flagbg.png" />
+        </div>
         <div id="divLoading">
             <asp:UpdateProgress ID="UpdateProgress1" runat="server" AssociatedUpdatePanelID="updPanel">
                 <ProgressTemplate>

@@ -25,8 +25,16 @@ img#bg
 #divLoading
 {
     position: fixed;
-    top: 0;
+    top: -2px;
+    right: -2px;
+}
+
+#divLanguages
+{
+    position: absolute;
+    left: 0px;
     right: 0px;
+    padding: 5px 5px 5px 10px;
 }
 
 .Title

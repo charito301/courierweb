@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Globalization;
+using System.Threading;
+using System.Resources;
 
 namespace Margent
 {
@@ -11,22 +14,20 @@ namespace Margent
         private static string _emptyDataText = "There were not found words, associated to that query. We apologize for the inconvenience.";
         private static string _tooShortQuery = "Please enter a word, longer that two letters.";
         private static Dictionary<DALWebCrawlerActive.Word, DataFetcher.CountFileList> _resultsList = null;
+        private ResourceManager rm;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Set language
-            if (Request.QueryString["Language"] == "DE")
+            if (IsPostBack)
             {
-                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("de");
+                return;
             }
-            else if (Request.QueryString["Language"] == "BG")
-            {
-                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("bg");
-            }
-            else
-            {
-                System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en");
-            }
+
+            SetLanguage();
+
+            lnkLangBulgarian.Click += new ImageClickEventHandler(lnkLangBulgarian_Click);
+            lnkLangEnglish.Click += new ImageClickEventHandler(lnkLangEnglish_Click);
+            lnkLangGerman.Click += new ImageClickEventHandler(lnkLangGerman_Click);
 
             gvKeywords.RowDataBound += new GridViewRowEventHandler(gvKeywords_RowDataBound);
             gvKeywords.PageIndexChanging += new GridViewPageEventHandler(gvKeywords_PageIndexChanging);
@@ -40,6 +41,47 @@ namespace Margent
             lblError.Visible = false;
             lblError.Text = _connectionError;
         }
+
+        #region Multilanguage support
+
+        private void SetLanguage()
+        {
+            //Set language
+            if (Request.QueryString["Language"] == "DE")
+            {
+                LoadData("de-DE");
+            }
+            else if (Request.QueryString["Language"] == "BG")
+            {
+                LoadData("bg");
+            }
+            else
+            {
+                LoadData("en");
+            }
+        }
+
+        protected void lnkLangEnglish_Click(object sender, ImageClickEventArgs e)
+        {
+            LoadData("en");
+        }
+        protected void lnkLangGerman_Click(object sender, ImageClickEventArgs e)
+        {
+            LoadData("de-DE");
+        }
+        protected void lnkLangBulgarian_Click(object sender, ImageClickEventArgs e)
+        {
+            LoadData("bg");
+        }
+        public void LoadData(string language)
+        {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(language);
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(language);
+
+            //lblName.Text = rm.GetString("EventName", ci);
+        }
+
+        #endregion
 
         void btnDoSearch_Click(object sender, ImageClickEventArgs e)
         {

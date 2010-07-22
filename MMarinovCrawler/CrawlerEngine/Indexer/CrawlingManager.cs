@@ -28,7 +28,7 @@ namespace MMarinov.WebCrawler.Indexer
 
         public CrawlingManager()
         {
-            ResetFolders();
+           
         }
 
         private static void WriteLog(object o)
@@ -75,11 +75,14 @@ namespace MMarinov.WebCrawler.Indexer
         /// </summary>
         /// <param name="p"></param>
         public void StartSpider()
-        {           
+        {
+            CrawlingManager.ShouldStopThreads = false;
+
+            ResetFolders();
             SeedList.GetTheList();
             Stopper.ListStopper.LoadStopLists();
 
-            timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 200, 3000);
+            timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 100, 2000);
             startDate = DateTime.Now;
 
             spiderArray = new Spider[Preferences.ThreadsCount];

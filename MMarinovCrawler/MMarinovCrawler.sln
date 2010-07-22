@@ -21,12 +21,19 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MMWebCrawler", "MMWebCrawle
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "3164"
+		VWDPort = "12919"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMarinovCrawler", "WpfApplication1\MMarinovCrawler.csproj", "{19037456-B6C6-4E37-B64B-792AA2750E7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DALWebCrawlerActive", "DALWebCrawlerActive\DALWebCrawlerActive.csproj", "{0DB5468F-05AF-43EF-BBFB-7E7382DF2FBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiscItems", "MiscItems", "{519C5AD6-6370-469E-B7AE-4244FC76674F}"
+	ProjectSection(SolutionItems) = preProject
+		WpfApplication1\Diagrams\MMarinovThesis.docx = WpfApplication1\Diagrams\MMarinovThesis.docx
+		..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsDE.csv = ..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsDE.csv
+		..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsEN.csv = ..\..\MMarinov_docs\Universitet\Thesis\_CrawlerWorkingFolder\StopWordsEN.csv
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
