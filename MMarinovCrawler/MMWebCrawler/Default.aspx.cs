@@ -18,11 +18,6 @@ namespace Margent
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (IsPostBack)
-            {
-                return;
-            }
-
             SetLanguage();
 
             lnkLangBulgarian.Click += new ImageClickEventHandler(lnkLangBulgarian_Click);
@@ -83,14 +78,14 @@ namespace Margent
 
         #endregion
 
-        void btnDoSearch_Click(object sender, ImageClickEventArgs e)
+        protected void btnDoSearch_Click(object sender, ImageClickEventArgs e)
         {
             string query = tbSearchQuery.Text.Trim();
 
             FetchData(query.ToLower());
         }
 
-        void gvKeywords_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected void gvKeywords_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
@@ -119,7 +114,7 @@ namespace Margent
             }
         }
 
-        void gvLinks_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected void gvLinks_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
@@ -128,7 +123,7 @@ namespace Margent
                 HyperLink lnkWebLink = (HyperLink)e.Row.FindControl("lnkLinkTitle");
                 Label lblLinkDescription = (Label)e.Row.FindControl("lblLinkDescription");
                 HyperLink lnkLink = (HyperLink)e.Row.FindControl("lnkLink");
-
+                
                 lnkWebLink.NavigateUrl = file.URL;
                 if (file.Title != "")
                 {
@@ -156,6 +151,14 @@ namespace Margent
                 ajaxSliderLinks.Steps = gvLinks.PageCount;
                 ajaxSliderLinks.Maximum = gvLinks.PageCount;
 
+                //ImageButton btnFirstLinks = (ImageButton)e.Row.FindControl("btnFirstLinks");
+                //ImageButton btnPreviousLinks = (ImageButton)e.Row.FindControl("btnPreviousLinks");
+                //ImageButton btnNextLinks = (ImageButton)e.Row.FindControl("btnNextLinks");
+                //ImageButton btnLastLinks = (ImageButton)e.Row.FindControl("btnLastLinks");
+                //btnFirstLinks.Attributes["OnClick"] = "return false;";
+                //btnPreviousLinks.Attributes["OnClick"] = "return false;";
+                //btnNextLinks.Attributes["OnClick"] = "return false;";
+                //btnLastLinks.Attributes["OnClick"] = "return false;";
             }
         }
 
