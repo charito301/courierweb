@@ -76,11 +76,6 @@ namespace MMarinov.WebCrawler.Indexer
             get { return _allCode; }
             set { _allCode = value; }
         }
-        public virtual string ContentType
-        {
-            get { return _ContentType; }
-            set { _ContentType = value; }
-        }
 
         public virtual string MimeType
         {
@@ -299,8 +294,9 @@ namespace MMarinov.WebCrawler.Indexer
         /// <returns></returns>
         protected string ISOtoASCII(string strText)
         {
-            string[] strFrom = new string[131];
-            string[] strTo = new string[131];
+            string[] strFrom = new string[135];
+            string[] strTo = new string[135];
+
             strFrom[1] = "&Agrave;"; strTo[1] = "À"; //capital A, grave accent       
             strFrom[2] = "&agrave;"; strTo[2] = "à"; //small a, grave accent        
             strFrom[3] = "&Aacute;"; strTo[3] = "Á"; //capital A, acute accent      
@@ -430,7 +426,11 @@ namespace MMarinov.WebCrawler.Indexer
             strFrom[127] = "&#190;"; strTo[127] = "¾"; //fraction three-quarters       
             strFrom[128] = "&#191;"; strTo[128] = "¿"; //inverted question mark        
             strFrom[129] = "&#215;"; strTo[129] = "×"; //multiply sign                 
-            strFrom[130] = "&#247;"; strTo[130] = "÷"; //division sign             
+            strFrom[130] = "&#247;"; strTo[130] = "÷"; //division sign        
+            strFrom[131] = "&lt;"; strTo[131] = "<"; //
+            strFrom[132] = "&gt;"; strTo[132] = ">"; //  
+            strFrom[133] = "&quot;"; strTo[133] = "\"";
+            strFrom[134] = "&amp;"; strTo[134] = "&"; // ampersand
 
             int i;
             for (i = 1; i < strFrom.Length; i = i + 2)

@@ -82,7 +82,7 @@ namespace MMarinov.WebCrawler.Indexer
             SeedList.GetTheList();
             Stopper.ListStopper.LoadStopLists();
 
-            timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 100, 2000);
+            timer = new System.Threading.Timer(new System.Threading.TimerCallback(WriteLog), null, 100, 3000);
             startDate = DateTime.Now;
 
             spiderArray = new Spider[Preferences.ThreadsCount];

@@ -8,7 +8,8 @@ namespace MMarinov.WebCrawler.Indexer
         {
             Document newDoc = null;
             string mimeType = ParseMimeType(contentType.ContentType.ToString()).ToLower();
-            string encoding = contentType.CharacterSet;
+
+            System.Text.Encoding encoding = ParseEncoding(contentType);
 
             switch (mimeType)
             {
@@ -70,26 +71,36 @@ namespace MMarinov.WebCrawler.Indexer
             return mimeType;
         }
 
-        private static string ParseEncoding(System.Net.HttpWebResponse contentType)
+        internal static System.Text.Encoding ParseEncoding(string contentType)
         {
             string encoding = "";
-            string[] contentTypeArray = contentType.ToString().ToLower().Split(';');
-            // Set Encoding if it's blank
+            string[] contentTypeArray = contentType.ToLower().Split(';');
+            // Set _Encoding if it's blank
             if (encoding == "" && contentTypeArray.Length >= 2)
             {
                 int charsetpos = contentTypeArray[1].IndexOf("charset");
                 if (charsetpos > 0)
                 {
                     encoding = contentTypeArray[1].Substring(charsetpos + 8, contentTypeArray[1].Length - charsetpos - 8);
+
+                    if (encoding != "")
+                    {
+                        return System.Text.Encoding.GetEncoding(encoding);
+                    }
                 }
             }
 
-            if (encoding == "")
+            return null;
+        }
+
+        private static System.Text.Encoding ParseEncoding(System.Net.HttpWebResponse webResponse)
+        {
+            if (!string.IsNullOrEmpty(webResponse.CharacterSet))
             {
-                encoding = contentType.CharacterSet.ToLower();
+                return System.Text.Encoding.GetEncoding(webResponse.CharacterSet);
             }
 
-            return encoding;
+            return ParseEncoding(webResponse.ContentType);
         }
     }
 }
