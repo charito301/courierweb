@@ -8,7 +8,7 @@ namespace MMarinov.WebCrawler.Indexer
         {
             Document newDoc = null;
             string mimeType = ParseMimeType(contentType.ContentType.ToString()).ToLower();
-            string encoding = ParseEncoding(contentType.ToString()).ToLower();
+            string encoding = contentType.CharacterSet;
 
             switch (mimeType)
             {
@@ -50,7 +50,7 @@ namespace MMarinov.WebCrawler.Indexer
                     //newDoc = new HtmlDocument(uri);
                     if (mimeType.IndexOf("text") > -1)
                     {   // If we got 'text' data (not images)
-                        newDoc = new HtmlDocument(uri, mimeType);
+                        newDoc = new HtmlDocument(uri, mimeType, encoding);
                     }
                     break;
             } // switch
@@ -70,10 +70,10 @@ namespace MMarinov.WebCrawler.Indexer
             return mimeType;
         }
 
-        private static string ParseEncoding(string contentType)
+        private static string ParseEncoding(System.Net.HttpWebResponse contentType)
         {
             string encoding = "";
-            string[] contentTypeArray = contentType.Split(';');
+            string[] contentTypeArray = contentType.ToString().ToLower().Split(';');
             // Set Encoding if it's blank
             if (encoding == "" && contentTypeArray.Length >= 2)
             {
@@ -83,6 +83,12 @@ namespace MMarinov.WebCrawler.Indexer
                     encoding = contentTypeArray[1].Substring(charsetpos + 8, contentTypeArray[1].Length - charsetpos - 8);
                 }
             }
+
+            if (encoding == "")
+            {
+                encoding = contentType.CharacterSet.ToLower();
+            }
+
             return encoding;
         }
     }
