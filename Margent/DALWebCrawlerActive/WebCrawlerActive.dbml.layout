@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="WebCrawlerActive">
+  <DataContextMoniker Name="/WebCrawlerActiveDataContext" />
+  <nestedChildShapes>
+    <classShape Id="b5174f38-d743-4d01-89e1-2ddad703f70e" absoluteBounds="3.75, 3.75, 2, 2.5401025390625005">
+      <DataClassMoniker Name="/WebCrawlerActiveDataContext/Statistic" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ac8d20c2-75b0-4a82-8886-61de5ef18ce7" absoluteBounds="3.765, 4.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e2de2073-0692-4398-b063-5937a011cdd6" absoluteBounds="6.25, 2, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/WebCrawlerActiveDataContext/Word" />
+      <nestedChildShapes>
+        <elementListCompartment Id="262abb31-89eb-416f-8b72-9ed8f3632ee2" absoluteBounds="6.265, 2.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2b226eda-c3d3-4513-a65f-7d8de18b3603" absoluteBounds="3.75, 2, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/WebCrawlerActiveDataContext/WordsInFile" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6920dbb7-e9b4-4e19-bbd3-ece16bd26124" absoluteBounds="3.7649999999999997, 2.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6.25 : 2.78125); (5.885 : 2.78125); (5.885 : 2.97916666666667); (5.75 : 2.97916666666667)]" fixedFrom="Caller" fixedTo="Caller">
+      <AssociationMoniker Name="/WebCrawlerActiveDataContext/Word/Word_WordsInFile" />
+      <nodes>
+        <classShapeMoniker Id="e2de2073-0692-4398-b063-5937a011cdd6" />
+        <classShapeMoniker Id="2b226eda-c3d3-4513-a65f-7d8de18b3603" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="8f0e9cb2-d1aa-4caa-8467-d9992a0f9002" absoluteBounds="6.25, 3.75, 2, 1.9631982421875">
+      <DataClassMoniker Name="/WebCrawlerActiveDataContext/File" />
+      <nestedChildShapes>
+        <elementListCompartment Id="94ade798-8260-4efc-813a-1bee0f33e890" absoluteBounds="6.265, 4.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6.25 : 4.53125); (6.01 : 4.53125); (6.01 : 3.19791666666667); (5.75 : 3.19791666666667)]" fixedFrom="Caller" fixedTo="Caller">
+      <AssociationMoniker Name="/WebCrawlerActiveDataContext/File/File_WordsInFile" />
+      <nodes>
+        <classShapeMoniker Id="8f0e9cb2-d1aa-4caa-8467-d9992a0f9002" />
+        <classShapeMoniker Id="2b226eda-c3d3-4513-a65f-7d8de18b3603" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
