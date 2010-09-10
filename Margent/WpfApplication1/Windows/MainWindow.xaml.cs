@@ -20,6 +20,15 @@ namespace MMarinov.WebCrawler.UI
             InitializeComponent();
 
             btnStop.IsEnabled = false;
+
+            try
+            {
+                DBLibrary.StoredProceduresManager.InitAllStoredProcedures();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                MessageBox.Show("Error connection the database:" + Environment.NewLine + ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Stop);
+            }
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
@@ -67,18 +76,7 @@ namespace MMarinov.WebCrawler.UI
             System.ComponentModel.BackgroundWorker worker = (System.ComponentModel.BackgroundWorker)sender;
 
             System.Threading.Thread.Sleep(600);
-            try
-            {
-                DBLibrary.StoredProceduresManager.InitAllStoredProcedures();
-            }
-            catch (System.Data.SqlClient.SqlException ex)
-            {
-                _isWorking = false;
-                MessageBox.Show("Error connection the database:" + Environment.NewLine + ex.Message, "Error!", MessageBoxButton.OK, MessageBoxImage.Stop);
-                worker.ReportProgress(100);
-                return;
-            }
-
+           
             Library.DBCopier.TruncateDBTables();
 
             worker.ReportProgress(30, "Initializing crawling process...");
