@@ -27,7 +27,7 @@ namespace Margent
             gvKeywords.RowDataBound += new GridViewRowEventHandler(gvKeywords_RowDataBound);
             gvKeywords.PageIndexChanging += new GridViewPageEventHandler(gvKeywords_PageIndexChanging);
             gvKeywords.RowCommand += new GridViewCommandEventHandler(gvKeywords_RowCommand);
-
+            
             btnDoSearch.Click += new ImageClickEventHandler(btnDoSearch_Click);
 
             lblSearch.Focus();
@@ -206,7 +206,7 @@ namespace Margent
                 //btnLastLinks.Attributes["OnClick"] = "return false;";
             }
         }
-
+     
         private void FetchData(string query)
         {
             if (query == "")
