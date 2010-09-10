@@ -55,7 +55,7 @@
 
 .Keywords a:hover
 {
-    text-decoration: underline;
+    text-decoration: none;
     color: #333198;
 }
 
