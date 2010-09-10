@@ -17,7 +17,7 @@ namespace MMarinov.WebCrawler.DBLibrary
                 cm.Connection = cn;
                 cm.CommandType = CommandType.Text;
 
-                cm.CommandText = dropIfExists("sp_CopyFromDBToActiveDB") + dropIfExists("sp_InsertFile") + dropIfExists("sp_InsertStatistics") + dropIfExists("sp_InsertWord") + dropIfExists("sp_InsertWordInFile") + dropIfExists("sp_SelectWordsAll") +dropIfExists("sp_TruncateTables");
+                cm.CommandText = dropIfExists("sp_CopyFromDBToActiveDB") + dropIfExists("sp_InsertFile") + dropIfExists("sp_InsertStatistics") + dropIfExists("sp_InsertWord") + dropIfExists("sp_InsertWordInFile") + dropIfExists("sp_SelectWordsAll") + dropIfExists("sp_TruncateTables") + dropIfExists("sp_SelectStatisticsAll");
                 cm.ExecuteNonQuery();
 
                 cm.CommandText = sp_CopyFromDBToActiveDB;
@@ -33,6 +33,8 @@ namespace MMarinov.WebCrawler.DBLibrary
                 cm.CommandText = sp_SelectWordsAll;
                 cm.ExecuteNonQuery();
                 cm.CommandText = sp_TruncateTables;
+                cm.ExecuteNonQuery();
+                cm.CommandText = sp_SelectStatisticsAll;
                 cm.ExecuteNonQuery();
             }
             finally
@@ -260,5 +262,24 @@ SELECT
 	[WordName]
 FROM
 	[dbo].[Words]";
+
+        private static string sp_SelectStatisticsAll = @"
+CREATE PROCEDURE [dbo].[sp_SelectStatisticsAll]
+AS
+
+SET NOCOUNT ON
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+
+SELECT ID
+      ,[StartDate]
+      ,[Duration]
+      ,[Words]
+      ,[FoundTotalLinks]
+      ,[FoundValidLinks]
+      ,[CrawledTotalLinks]
+      ,[CrawledSuccessfulLinks]
+      ,[ProcessDescription]
+FROM
+	[dbo].[Statistics]";
     }
 }
